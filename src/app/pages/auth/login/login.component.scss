@@ -1,0 +1,325 @@
+.login-wrapper {
+  min-height: 100vh;
+  background: var(--main-bg);
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+
+  /* Decorative background circles */
+  &::before, &::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    background: var(--primary);
+    filter: blur(80px);
+    opacity: 0.4;
+    z-index: 0;
+  }
+
+  &::before {
+    width: 500px;
+    height: 500px;
+    top: -150px;
+    left: -150px;
+  }
+
+  &::after {
+    width: 400px;
+    height: 400px;
+    bottom: -100px;
+    right: -50px;
+    background: #7c4dff;
+    opacity: 0.2;
+  }
+}
+
+.login-split-layout {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 1200px;
+  min-height: 700px;
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 24px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  margin: 20px;
+}
+
+/* ---- Left Column ---- */
+.login-left {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  background: rgba(0, 0, 0, 0.1); /* Slight darkening for form area */
+}
+
+.login-glass-card {
+  width: 100%;
+  max-width: 400px;
+}
+
+/* ---- Right Column ---- */
+.login-right {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  background: linear-gradient(135deg, rgba(93, 135, 255, 0.1) 0%, rgba(124, 77, 255, 0.05) 100%);
+  border-left: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.illustration-wrapper {
+  text-align: center;
+  max-width: 500px;
+
+  .login-illustration {
+    width: 100%;
+    max-width: 350px;
+    height: auto;
+    margin-bottom: 40px;
+    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.15));
+  }
+
+  .illustration-text {
+    h3 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin: 0 0 16px;
+      color: var(--text-primary);
+    }
+
+    p {
+      font-size: 1.05rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin: 0;
+    }
+  }
+}
+
+/* ---- Shared Elements ---- */
+.brand-logo {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+  margin-bottom: 30px;
+  
+  .logo-icon {
+    width: 44px;
+    height: 44px;
+    background: var(--primary);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(93, 135, 255, 0.3);
+    
+    i {
+      font-size: 1.8rem;
+      color: #fff;
+    }
+  }
+
+  .logo-text {
+    font-size: 1.6rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: var(--text-primary);
+  }
+}
+
+.welcome-text {
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin: 0 0 8px;
+  color: var(--text-primary);
+}
+
+.subtitle {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: 30px;
+}
+
+/* ---- Form Styles ---- */
+.login-form {
+  text-align: left;
+}
+
+.input-group {
+  margin-bottom: 20px;
+
+  label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-bottom: 8px;
+    color: var(--text-primary);
+  }
+}
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  
+  &:focus-within {
+    border-color: var(--primary);
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 0 0 3px rgba(93, 135, 255, 0.2);
+  }
+
+  i {
+    position: absolute;
+    left: 14px;
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+  }
+
+  input {
+    width: 100%;
+    padding: 12px 14px 12px 42px;
+    border: none;
+    background: transparent;
+    color: var(--text-primary);
+    font-size: 0.95rem;
+    outline: none;
+    font-family: inherit;
+
+    &::placeholder {
+      color: var(--text-secondary);
+      opacity: 0.6;
+    }
+  }
+}
+
+.form-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  font-size: 0.85rem;
+
+  .remember-me {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-primary);
+    cursor: pointer;
+
+    input[type="checkbox"] {
+      accent-color: var(--primary);
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+    }
+  }
+
+  .forgot-password {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 500;
+    
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.btn-submit {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  background: var(--primary);
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s;
+  box-shadow: 0 4px 12px rgba(93, 135, 255, 0.3);
+
+  &:hover {
+    background: #4a74e8;
+    transform: translateY(-2px);
+  }
+  
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+.register-prompt {
+  margin-top: 24px;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+
+  a {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 500;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+/* ---- Theme Toggle Button ---- */
+.theme-toggle-btn {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  z-index: 10;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  i {
+    font-size: 1.4rem;
+  }
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: scale(1.05);
+    border-color: var(--primary);
+  }
+}
+
+/* ---- Responsive Layout ---- */
+@media (max-width: 900px) {
+  .login-split-layout {
+    grid-template-columns: 1fr;
+    max-width: 500px;
+    min-height: auto;
+  }
+  
+  .login-right {
+    display: none; /* Hide illustration on small screens */
+  }
+}

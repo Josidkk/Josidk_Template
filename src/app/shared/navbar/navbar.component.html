@@ -1,0 +1,39 @@
+<!-- Left side -->
+<div class="nav-left">
+  <button class="icon-btn menu-toggle" id="sidebar-toggle" (click)="onToggle()">
+    <i class="ti ti-menu-2"></i>
+  </button>
+
+  <button class="icon-btn search-btn">
+    <i class="ti ti-search"></i>
+  </button>
+
+  <nav class="nav-links">
+    <a class="nav-link" href="#">
+      Apps <i class="ti ti-chevron-down"></i>
+    </a>
+    <a class="nav-link" href="#">Chat</a>
+    <a class="nav-link" href="#">Calendar</a>
+    <a class="nav-link" href="#">Email</a>
+  </nav>
+</div>
+
+<!-- Right side -->
+<div class="nav-right">
+  <button class="icon-btn" title="Dark mode" (click)="toggleDarkMode()">
+    <i class="ti" [ngClass]="isDarkMode ? 'ti-sun' : 'ti-moon'"></i>
+  </button>
+
+  <button class="icon-btn" title="Language">
+    <i class="ti ti-language"></i>
+  </button>
+
+  <button class="icon-btn notification-btn" title="Notifications">
+    <i class="ti ti-bell"></i>
+    <span class="notif-badge">5</span>
+  </button>
+
+  <div class="user-avatar-nav">
+    <i class="ti ti-user-circle"></i>
+  </div>
+</div>

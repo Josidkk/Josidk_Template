@@ -1,0 +1,32 @@
+<div class="breadcrumb-card">
+  <div class="breadcrumb-content">
+    <div class="breadcrumb-icon" *ngIf="icon">
+      <i [class]="icon"></i>
+    </div>
+    <div class="breadcrumb-text">
+      <h1 class="page-title">{{ pageTitle }}</h1>
+      <ul class="breadcrumb-list">
+        <li *ngFor="let item of breadcrumbs; let last = last">
+          <i *ngIf="item.label === 'Inicio'" class="ti ti-home breadcrumb-home"></i>
+          
+          <ng-container *ngIf="!last && item.route">
+            <a [routerLink]="item.route">{{ item.label }}</a>
+          </ng-container>
+          
+          <ng-container *ngIf="!last && !item.route">
+            <span>{{ item.label }}</span>
+          </ng-container>
+
+          <span *ngIf="last" class="current">{{ item.label }}</span>
+          <i *ngIf="!last" class="ti ti-chevron-right separator"></i>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="breadcrumb-action" *ngIf="actionButtonText">
+    <button class="btn-primary">
+      <i *ngIf="actionButtonIcon" [class]="actionButtonIcon"></i>
+      {{ actionButtonText }}
+    </button>
+  </div>
+</div>

@@ -1,0 +1,125 @@
+.breadcrumb-card {
+  background: var(--content-bg);
+  border-radius: var(--content-radius);
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+  border: 1px solid var(--glass-border);
+
+  .breadcrumb-content {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .breadcrumb-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 14px;
+    background: var(--primary-light);
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    i {
+      font-size: 1.8rem;
+    }
+  }
+
+  .breadcrumb-text {
+    .page-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin: 0 0 6px;
+    }
+
+    .breadcrumb-list {
+      display: flex;
+      align-items: center;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      font-size: 0.85rem;
+
+      li {
+        display: flex;
+        align-items: center;
+
+        .breadcrumb-home {
+          margin-right: 6px;
+          font-size: 1rem;
+          color: var(--primary);
+        }
+
+        a {
+          color: var(--primary);
+          text-decoration: none;
+          font-weight: 500;
+          transition: color 0.2s;
+
+          &:hover {
+            color: #4a74e8;
+            text-decoration: underline;
+          }
+        }
+
+        .current {
+          color: var(--text-secondary);
+        }
+
+        .separator {
+          margin: 0 8px;
+          font-size: 0.75rem;
+          color: var(--text-secondary);
+          opacity: 0.5;
+        }
+      }
+    }
+  }
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  background: var(--primary);
+  color: #fff;
+  transition: all 0.2s;
+
+  i {
+    font-size: 1.1rem;
+  }
+
+  &:hover {
+    background: #4a74e8;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(93, 135, 255, 0.3);
+  }
+}
+
+/* ---- Responsive adjustments ---- */
+@media (max-width: 768px) {
+  .breadcrumb-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    
+    .breadcrumb-action {
+      width: 100%;
+      button {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+  }
+}

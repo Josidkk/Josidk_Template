@@ -1,0 +1,108 @@
+<div class="page-container">
+  
+  <app-breadcrumb 
+    [pageTitle]="'Gestión de Usuarios'" 
+    [icon]="'ti ti-users'" 
+    [breadcrumbs]="breadcrumbs"
+    [actionButtonText]="'Exportar Datos'"
+    [actionButtonIcon]="'ti ti-file-export'">
+  </app-breadcrumb>
+
+  <!-- Datatable Card -->
+  <div class="datatable-card">
+    
+    <!-- Toolbar -->
+    <div class="toolbar">
+      <div class="search-box">
+        <i class="ti ti-search"></i>
+        <input type="text" placeholder="Buscar usuarios..." (keyup)="applyFilter($event)">
+      </div>
+      <div class="toolbar-actions">
+        <button class="btn-secondary">
+          <i class="ti ti-filter"></i>
+          Filtros
+        </button>
+        <button class="btn-primary">
+          <i class="ti ti-plus"></i>
+          Nuevo Usuario
+        </button>
+      </div>
+    </div>
+
+    <!-- Angular Material Table -->
+    <div class="table-responsive">
+      <table mat-table [dataSource]="dataSource" matSort class="erp-mat-table">
+
+        <!-- User Column -->
+        <ng-container matColumnDef="user">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Usuario </th>
+          <td mat-cell *matCellDef="let user">
+            <div class="user-cell">
+              <div class="avatar-box">
+                <i [class]="user.avatar ? user.avatar : 'ti ti-user'"></i>
+              </div>
+              <div class="user-info">
+                <span class="user-name">{{ user.name }}</span>
+                <span class="user-email">{{ user.email }}</span>
+              </div>
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- Role Column -->
+        <ng-container matColumnDef="role">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Rol </th>
+          <td mat-cell *matCellDef="let user">
+            <span class="role-badge">{{ user.role }}</span>
+          </td>
+        </ng-container>
+
+        <!-- Status Column -->
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Estado </th>
+          <td mat-cell *matCellDef="let user">
+            <span class="status-badge" [ngClass]="user.status.toLowerCase()">
+              {{ user.status }}
+            </span>
+          </td>
+        </ng-container>
+
+        <!-- Last Login Column -->
+        <ng-container matColumnDef="lastLogin">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Último Acceso </th>
+          <td mat-cell *matCellDef="let user">
+            <span class="text-muted">{{ user.lastLogin }}</span>
+          </td>
+        </ng-container>
+
+        <!-- Actions Column -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef class="text-right"> Acciones </th>
+          <td mat-cell *matCellDef="let user" class="text-right">
+            <div class="action-buttons">
+              <button class="action-btn edit" title="Editar" (click)="editUser(user)">
+                <i class="ti ti-edit"></i>
+              </button>
+              <button class="action-btn delete" title="Eliminar" (click)="deleteUser(user)">
+                <i class="ti ti-trash"></i>
+              </button>
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- Table Rows Configuration -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        
+        <!-- Row shown when there is no matching data -->
+        <tr class="mat-row empty-row" *matNoDataRow>
+          <td class="mat-cell" colspan="5">No se encontraron resultados para la búsqueda</td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- Material Paginator -->
+    <mat-paginator [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons class="erp-mat-paginator"></mat-paginator>
+
+  </div>
+</div>

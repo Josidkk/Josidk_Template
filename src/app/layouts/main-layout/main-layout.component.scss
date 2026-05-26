@@ -1,0 +1,33 @@
+/* =============================================
+   ERP Container — Main Layout
+   ============================================= */
+
+.erp-container {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+/* Main content area (navbar + page) */
+.main-layout {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0; // prevents flex children from overflowing
+  margin-left: var(--sidebar-width);
+  transition: margin-left var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* When sidebar is collapsed */
+.sidebar-collapsed .main-layout {
+  margin-left: var(--sidebar-collapsed-width);
+}
+
+/* Page content */
+.content {
+  flex: 1;
+  padding: 24px 30px;
+  overflow-y: auto;
+  background-color: var(--main-bg);
+}

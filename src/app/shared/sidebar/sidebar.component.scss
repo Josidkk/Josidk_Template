@@ -1,0 +1,363 @@
+/* =============================================
+   Sidebar Component Styles
+   ============================================= */
+
+/* Host: fixed sidebar */
+:host {
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 200;
+  height: 100vh;
+}
+
+.sidebar {
+  width: var(--sidebar-width);
+  height: 100%;
+  background: linear-gradient(180deg, var(--sidebar-bg-start) 0%, var(--sidebar-bg-end) 100%);
+  color: var(--sidebar-text);
+  display: flex;
+  flex-direction: column;
+  transition: width var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+
+/* ---- Collapsed state ---- */
+.sidebar.collapsed {
+  width: var(--sidebar-collapsed-width);
+}
+
+.sidebar.collapsed .logo-text,
+.sidebar.collapsed .nav-text,
+.sidebar.collapsed .badge,
+.sidebar.collapsed .chevron,
+.sidebar.collapsed .user-info,
+.sidebar.collapsed .logout-btn {
+  display: none !important;
+}
+
+/* Section titles: fully collapse height + margin */
+.sidebar.collapsed .section-title {
+  opacity: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.sidebar.collapsed .logo {
+  justify-content: center;
+  padding: 20px 0;
+  gap: 0;
+}
+
+.sidebar.collapsed .nav-scroll {
+  padding: 0 8px;
+}
+
+/* Force every nav item to be a uniform centered icon box */
+.sidebar.collapsed .nav-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  gap: 0;
+  min-height: 42px;
+  height: 42px;
+  border-radius: 10px;
+  margin-bottom: 2px;
+}
+
+/* has-children: reset block display, act like a regular nav-item */
+.sidebar.collapsed .nav-item.has-children {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  min-height: 42px;
+  height: 42px;
+  position: relative;
+  overflow: hidden;
+}
+
+.sidebar.collapsed .nav-item-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  gap: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.sidebar.collapsed .nav-item i,
+.sidebar.collapsed .nav-item-header i {
+  margin: 0;
+  font-size: 1.25rem;
+  width: 24px;
+  text-align: center;
+}
+
+.sidebar.collapsed .user-profile {
+  justify-content: center;
+  padding: 12px 8px;
+  margin: 8px 8px 16px;
+  gap: 0;
+}
+
+.sidebar.collapsed .avatar {
+  width: 36px;
+  height: 36px;
+}
+
+.sidebar.collapsed .sub-menu {
+  display: none;
+}
+
+/* ---- Logo ---- */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 20px 24px;
+  margin-bottom: 8px;
+  flex-shrink: 0;
+}
+
+.logo-icon {
+  width: 36px;
+  height: 36px;
+  background: var(--primary);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  i {
+    font-size: 1.4rem;
+    color: #fff;
+  }
+}
+
+.logo-text {
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  white-space: nowrap;
+  transition: opacity var(--transition-speed), width var(--transition-speed);
+}
+
+/* ---- Scrollable nav area ---- */
+.nav-scroll {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 0 12px;
+
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 2px;
+  }
+}
+
+/* ---- Section titles ---- */
+.section-title {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--sidebar-text-muted);
+  margin: 22px 0 8px 14px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transition: opacity var(--transition-speed);
+}
+
+/* ---- Nav links ---- */
+.nav-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  color: var(--sidebar-text);
+  font-size: 0.92rem;
+  font-weight: 400;
+  margin-bottom: 2px;
+  transition: background var(--transition-speed), color var(--transition-speed);
+  white-space: nowrap;
+
+  i {
+    font-size: 1.2rem;
+    flex-shrink: 0;
+    width: 22px;
+    text-align: center;
+    transition: margin var(--transition-speed);
+  }
+
+  &:hover {
+    background: var(--sidebar-hover);
+    color: #fff;
+  }
+
+  &.active {
+    background: var(--sidebar-active);
+    color: #fff;
+    font-weight: 500;
+  }
+}
+
+/* ---- Dropdown items ---- */
+.has-children {
+  display: block;
+}
+
+.nav-item-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  color: var(--sidebar-text);
+  font-size: 0.92rem;
+  transition: background var(--transition-speed);
+  white-space: nowrap;
+
+  i {
+    font-size: 1.2rem;
+    flex-shrink: 0;
+    width: 22px;
+    text-align: center;
+  }
+
+  &:hover {
+    background: var(--sidebar-hover);
+  }
+}
+
+.chevron {
+  margin-left: auto;
+  font-size: 1rem !important;
+  width: auto !important;
+  transition: transform var(--transition-speed);
+}
+
+.expanded .chevron {
+  transform: rotate(180deg);
+}
+
+.sub-menu {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 4px 0;
+
+  .sub-item {
+    padding: 8px 14px 8px 28px;
+    font-size: 0.85rem;
+
+    i {
+      font-size: 0.6rem;
+    }
+  }
+}
+
+/* ---- Badges ---- */
+.badge {
+  margin-left: auto;
+  background: var(--success);
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 10px;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+  transition: opacity var(--transition-speed);
+}
+
+/* ---- User profile (bottom) ---- */
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 18px;
+  margin: 8px 12px 16px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  flex-shrink: 0;
+  transition: padding var(--transition-speed), justify-content var(--transition-speed);
+}
+
+.avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  i {
+    font-size: 1.2rem;
+    color: #fff;
+  }
+}
+
+.user-info {
+  flex: 1;
+  min-width: 0;
+  transition: opacity var(--transition-speed), width var(--transition-speed);
+
+  .name {
+    font-size: 0.88rem;
+    font-weight: 600;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .role {
+    font-size: 0.75rem;
+    color: var(--sidebar-text-muted);
+    margin: 2px 0 0;
+    white-space: nowrap;
+  }
+}
+
+.logout-btn {
+  background: none;
+  border: none;
+  color: var(--sidebar-text);
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background var(--transition-speed), opacity var(--transition-speed);
+  flex-shrink: 0;
+
+  i {
+    font-size: 1.1rem;
+  }
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+}

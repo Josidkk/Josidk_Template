@@ -1,1 +1,102 @@
-/* You can add global styles to this file, and also import other style files */
+/* =============================================
+   JOSIDK ERP — Global Design Tokens & Reset
+   ============================================= */
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
+
+:root {
+  /* Sidebar */
+  --sidebar-width: 270px;
+  --sidebar-collapsed-width: 80px;
+  --sidebar-bg-start: #1a3a5c;
+  --sidebar-bg-end: #0f2744;
+  --sidebar-text: rgba(255, 255, 255, 0.85);
+  --sidebar-text-muted: rgba(255, 255, 255, 0.45);
+  --sidebar-hover: rgba(255, 255, 255, 0.08);
+  --sidebar-active: rgba(255, 255, 255, 0.15);
+
+  /* Navbar */
+  --navbar-height: 64px;
+
+  /* Layout */
+  --main-bg: #eef5fc;
+  --content-bg: #ffffff;
+  --content-radius: 12px;
+
+  /* Glassmorphism */
+  --glass-bg: rgba(255, 255, 255, 0.75);
+  --glass-border: rgba(255, 255, 255, 0.4);
+  --glass-blur: blur(14px);
+  --glass-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+
+  /* Typography */
+  --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  /* Colors */
+  --primary: #5d87ff;
+  --primary-light: #ecf2ff;
+  --success: #13deb9;
+  --success-light: #e6fffa;
+  --warning: #ffae1f;
+  --warning-light: #fef5e5;
+  --danger: #fa896b;
+  --danger-light: #fdede8;
+  --text-primary: #2a3547;
+  --text-secondary: #5a6a85;
+
+  /* Transitions */
+  --transition-speed: 0.3s;
+}
+
+body.dark-theme {
+  --main-bg: #111c2d;
+  --content-bg: #1a2a40;
+  
+  --glass-bg: rgba(26, 42, 64, 0.85);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+
+  --text-primary: #e6e8ec;
+  --text-secondary: #a0aec0;
+
+  --primary-light: rgba(93, 135, 255, 0.15);
+}
+
+/* Reset & Base */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--main-bg);
+  color: var(--text-primary);
+  overflow: hidden;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.25);
+}

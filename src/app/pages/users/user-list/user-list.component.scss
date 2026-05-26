@@ -1,0 +1,324 @@
+/* ---- Page Container ---- */
+.page-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* ---- Datatable Card ---- */
+.datatable-card {
+  background: var(--content-bg);
+  border-radius: var(--content-radius);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+  border: 1px solid var(--glass-border);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---- Toolbar ---- */
+.toolbar {
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  gap: 16px;
+  flex-wrap: wrap;
+
+  .search-box {
+    position: relative;
+    width: 100%;
+    max-width: 300px;
+
+    i {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-secondary);
+    }
+
+    input {
+      width: 100%;
+      padding: 10px 14px 10px 40px;
+      border-radius: 8px;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      background: rgba(0, 0, 0, 0.02);
+      color: var(--text-primary);
+      font-size: 0.9rem;
+      outline: none;
+      transition: all 0.2s;
+
+      &:focus {
+        border-color: var(--primary);
+        background: transparent;
+        box-shadow: 0 0 0 3px rgba(93, 135, 255, 0.15);
+      }
+    }
+  }
+
+  .toolbar-actions {
+    display: flex;
+    gap: 12px;
+  }
+}
+
+/* ---- Buttons ---- */
+.btn-primary, .btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s;
+
+  i {
+    font-size: 1.1rem;
+  }
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: #fff;
+  
+  &:hover {
+    background: #4a74e8;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(93, 135, 255, 0.3);
+  }
+}
+
+.btn-secondary {
+  background: var(--primary-light);
+  color: var(--primary);
+
+  &:hover {
+    background: rgba(93, 135, 255, 0.2);
+  }
+}
+
+/* ---- Material Table Overrides ---- */
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.erp-mat-table {
+  width: 100%;
+  background: transparent !important;
+  font-family: var(--font-family) !important;
+
+  .mat-mdc-header-cell {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    background: rgba(0, 0, 0, 0.01);
+    padding: 16px 20px;
+  }
+
+  .mat-mdc-cell {
+    font-size: 0.9rem;
+    color: var(--text-primary);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    padding: 16px 20px;
+    vertical-align: middle;
+  }
+
+  .mat-mdc-row {
+    transition: background 0.2s;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.01);
+    }
+    
+    &:last-child .mat-mdc-cell {
+      border-bottom: none;
+    }
+  }
+
+  .empty-row {
+    text-align: center;
+    color: var(--text-secondary);
+    padding: 30px;
+  }
+}
+
+/* Material Paginator Override */
+.erp-mat-paginator {
+  background: transparent !important;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  font-family: var(--font-family) !important;
+  color: var(--text-secondary) !important;
+
+  ::ng-deep .mat-mdc-paginator-container {
+    padding: 8px 20px;
+  }
+  ::ng-deep .mat-mdc-select-value {
+    color: var(--text-primary);
+  }
+  ::ng-deep .mat-mdc-icon-button {
+    color: var(--text-secondary);
+    &:hover {
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+  }
+}
+
+/* Body Dark Mode Overrides for Borders/Inputs */
+body.dark-theme {
+  .toolbar {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+  .search-box input {
+    border-color: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.02);
+  }
+  .erp-mat-table .mat-mdc-header-cell {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.02);
+  }
+  .erp-mat-table .mat-mdc-cell {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+  .erp-mat-table .mat-mdc-row:hover {
+    background: rgba(255, 255, 255, 0.02);
+  }
+  .erp-mat-paginator {
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+  }
+}
+
+/* ---- Table Cells & Content ---- */
+.user-cell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  .avatar-box {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background: var(--primary-light);
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    i {
+      font-size: 1.2rem;
+    }
+  }
+
+  .user-info {
+    display: flex;
+    flex-direction: column;
+
+    .user-name {
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .user-email {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+    }
+  }
+}
+
+.role-badge {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.status-badge {
+  display: inline-flex;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+
+  &.active {
+    background: var(--success-light);
+    color: var(--success);
+  }
+
+  &.pending {
+    background: var(--warning-light);
+    color: var(--warning);
+  }
+
+  &.inactive {
+    background: var(--danger-light);
+    color: var(--danger);
+  }
+}
+
+.text-muted {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+
+.text-right {
+  text-align: right;
+  justify-content: flex-end;
+}
+
+/* ---- Action Buttons ---- */
+.action-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+
+  .action-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    border: none;
+    background: transparent;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    i {
+      font-size: 1.1rem;
+    }
+
+    &.edit:hover {
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+
+    &.delete:hover {
+      background: var(--danger-light);
+      color: var(--danger);
+    }
+  }
+}
+
+/* ---- Responsive adjustments ---- */
+@media (max-width: 768px) {
+  .toolbar {
+    flex-direction: column;
+    align-items: flex-start;
+    
+    .search-box {
+      max-width: 100%;
+    }
+  }
+
+
+}

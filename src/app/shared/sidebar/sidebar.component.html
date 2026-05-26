@@ -1,0 +1,72 @@
+<nav class="sidebar" [class.collapsed]="isCollapsed">
+  <!-- Logo -->
+  <div class="logo">
+    <div class="logo-icon">
+      <i class="ti ti-hexagon-letter-j"></i>
+    </div>
+    <span class="logo-text">Josidk</span>
+  </div>
+
+  <!-- Navigation -->
+  <div class="nav-scroll">
+    <div class="menu-section" *ngFor="let section of menuSections">
+      <p class="section-title">{{ section.title }}</p>
+
+      <ul class="nav-links">
+        <ng-container *ngFor="let item of section.items">
+          <!-- Item sin hijos -->
+          <li
+            *ngIf="!item.children"
+            class="nav-item"
+            [class.active]="activeItem === item.id"
+            (click)="setActive(item.id)"
+            [routerLink]="item.route || null"
+          >
+            <i [class]="item.icon"></i>
+            <span class="nav-text">{{ item.label }}</span>
+            <span class="badge" *ngIf="item.badge">{{ item.badge }}</span>
+          </li>
+
+          <!-- Item con hijos (dropdown) -->
+          <li
+            *ngIf="item.children"
+            class="nav-item has-children"
+            [class.expanded]="isExpanded(item.id)"
+          >
+            <div class="nav-item-header" (click)="toggleExpand(item.id)">
+              <i [class]="item.icon"></i>
+              <span class="nav-text">{{ item.label }}</span>
+              <i class="ti ti-chevron-down chevron"></i>
+            </div>
+
+            <ul class="sub-menu" *ngIf="isExpanded(item.id)">
+              <li
+                *ngFor="let child of item.children"
+                class="nav-item sub-item"
+                [class.active]="activeItem === child.id"
+                (click)="setActive(child.id)"
+              >
+                <i [class]="child.icon"></i>
+                <span class="nav-text">{{ child.label }}</span>
+              </li>
+            </ul>
+          </li>
+        </ng-container>
+      </ul>
+    </div>
+  </div>
+
+  <!-- User Profile -->
+  <div class="user-profile">
+    <div class="avatar">
+      <i class="ti ti-user"></i>
+    </div>
+    <div class="user-info">
+      <p class="name">Deyby Josue</p>
+      <p class="role">Developer</p>
+    </div>
+    <button class="logout-btn">
+      <i class="ti ti-power"></i>
+    </button>
+  </div>
+</nav>
