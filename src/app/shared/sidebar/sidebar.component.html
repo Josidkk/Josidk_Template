@@ -2,7 +2,7 @@
   <!-- Logo -->
   <div class="logo">
     <div class="logo-icon">
-      <i class="ti ti-hexagon-letter-j"></i>
+      <img src="Josidk_Logo_W_.png" alt="Josidk Logo" class="logo-img" />
     </div>
     <span class="logo-text">Josidk</span>
   </div>
@@ -15,24 +15,15 @@
       <ul class="nav-links">
         <ng-container *ngFor="let item of section.items">
           <!-- Item sin hijos -->
-          <li
-            *ngIf="!item.children"
-            class="nav-item"
-            [class.active]="activeItem === item.id"
-            (click)="setActive(item.id)"
-            [routerLink]="item.route || null"
-          >
+          <li *ngIf="!item.children" class="nav-item" [class.active]="activeItem === item.id"
+            (click)="setActive(item.id)" [routerLink]="item.route || null">
             <i [class]="item.icon"></i>
             <span class="nav-text">{{ item.label }}</span>
             <span class="badge" *ngIf="item.badge">{{ item.badge }}</span>
           </li>
 
           <!-- Item con hijos (dropdown) -->
-          <li
-            *ngIf="item.children"
-            class="nav-item has-children"
-            [class.expanded]="isExpanded(item.id)"
-          >
+          <li *ngIf="item.children" class="nav-item has-children" [class.expanded]="isExpanded(item.id)">
             <div class="nav-item-header" (click)="toggleExpand(item.id)">
               <i [class]="item.icon"></i>
               <span class="nav-text">{{ item.label }}</span>
@@ -40,12 +31,8 @@
             </div>
 
             <ul class="sub-menu" *ngIf="isExpanded(item.id)">
-              <li
-                *ngFor="let child of item.children"
-                class="nav-item sub-item"
-                [class.active]="activeItem === child.id"
-                (click)="setActive(child.id)"
-              >
+              <li *ngFor="let child of item.children" class="nav-item sub-item" [class.active]="activeItem === child.id"
+                (click)="setActive(child.id)">
                 <i [class]="child.icon"></i>
                 <span class="nav-text">{{ child.label }}</span>
               </li>

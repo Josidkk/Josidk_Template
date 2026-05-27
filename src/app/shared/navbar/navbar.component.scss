@@ -116,22 +116,24 @@
   width: 38px;
   height: 38px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--primary) 0%, #7c4dff 100%);
+  background: transparent; /* Quitamos el fondo degradado */
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   margin-left: 8px;
-  transition: transform 0.2s, box-shadow 0.2s;
+  color: var(--text-secondary);
+  transition: background var(--transition-speed), color var(--transition-speed), transform var(--transition-speed);
 
   i {
-    font-size: 1.4rem;
-    color: #fff;
+    font-size: 1.75rem; /* Aumentamos un poco el tamaño del icono para que se vea claro sin el fondo sólido */
+    color: currentColor;
   }
 
   &:hover {
-    transform: scale(1.05);
-    box-shadow: 0 4px 12px rgba(93, 135, 255, 0.35);
+    background: var(--primary-light); /* Fondo sutil de cristal al hacer hover */
+    color: var(--primary);
+    transform: translateY(-1px);
   }
 }
 

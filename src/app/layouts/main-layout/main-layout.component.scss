@@ -31,3 +31,41 @@
   overflow-y: auto;
   background-color: var(--main-bg);
 }
+
+/* Responsive adjustments for mobile overlay layout */
+@media (max-width: 768px) {
+  .main-layout {
+    margin-left: 0 !important;
+  }
+
+  .content {
+    padding: 16px 12px;
+    /* Menor padding para ganar más espacio en celulares */
+  }
+}
+
+/* Backdrop visible solo en móviles cuando el sidebar está abierto */
+.sidebar-backdrop {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .sidebar-backdrop {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(15, 23, 42, 0.4); /* Fondo oscuro semitransparente slate */
+    backdrop-filter: blur(4px); /* Desenfoque elegante de fondo estilo cristal */
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 990; /* Justo debajo del z-index del sidebar (999) */
+    animation: fadeEffect 0.3s ease;
+  }
+}
+
+@keyframes fadeEffect {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}

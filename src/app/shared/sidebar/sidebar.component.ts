@@ -34,7 +34,6 @@ export class SidebarComponent {
       title: 'HOME',
       items: [
         { id: 'analytical', label: 'Analytical', icon: 'ti ti-chart-dots' },
-        { id: 'ecommerce', label: 'eCommerce', icon: 'ti ti-shopping-cart' },
         {
           id: 'frontend',
           label: 'Frontend pages',
@@ -49,16 +48,10 @@ export class SidebarComponent {
     {
       title: 'APPS',
       items: [
-        { id: 'chat', label: 'Chat', icon: 'ti ti-message-dots' },
-        { id: 'calendar', label: 'Calendar', icon: 'ti ti-calendar' },
-        { id: 'email', label: 'Email', icon: 'ti ti-mail' },
-        { id: 'kanban', label: 'Kanban', icon: 'ti ti-layout-kanban' },
-        { id: 'user-profile', label: 'User Profile', icon: 'ti ti-user-circle', badge: 'New' },
-        { id: 'ecommerce-app', label: 'Ecommerce', icon: 'ti ti-basket', badge: 'New' },
-        { id: 'users', label: 'Users', icon: 'ti ti-users', route: '/users' },
-        { id: 'courses', label: 'Courses', icon: 'ti ti-certificate' },
-        { id: 'employee', label: 'Employee', icon: 'ti ti-brand-ctemplar' },
-        { id: 'notes', label: 'Notes', icon: 'ti ti-note' }
+
+        { id: 'usuarios', label: 'Users', icon: 'ti ti-users', route: '/users' },
+        { id: 'login', label: 'Login', icon: 'ti ti-certificate', route:'/login' },
+
       ]
     }
   ];

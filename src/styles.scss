@@ -7,7 +7,7 @@
   /* Sidebar */
   --sidebar-width: 270px;
   --sidebar-collapsed-width: 80px;
-  --sidebar-bg-start: #1a3a5c;
+  --sidebar-bg-start: #000000;
   --sidebar-bg-end: #0f2744;
   --sidebar-text: rgba(255, 255, 255, 0.85);
   --sidebar-text-muted: rgba(255, 255, 255, 0.45);
@@ -32,7 +32,7 @@
   --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 
   /* Colors */
-  --primary: #5d87ff;
+  --primary: #0f2744;
   --primary-light: #ecf2ff;
   --success: #13deb9;
   --success-light: #e6fffa;
@@ -48,10 +48,11 @@
 }
 
 body.dark-theme {
-  --main-bg: #111c2d;
-  --content-bg: #1a2a40;
-  
-  --glass-bg: rgba(26, 42, 64, 0.85);
+  --primary: #add0fae3;
+  --main-bg: #0f2744;
+  --content-bg: #0a1a2c;
+
+  --glass-bg: rgb(0, 0, 0);
   --glass-border: rgba(255, 255, 255, 0.1);
   --glass-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
 

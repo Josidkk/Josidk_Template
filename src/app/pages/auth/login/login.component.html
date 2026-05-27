@@ -5,13 +5,13 @@
   </button>
 
   <div class="login-split-layout">
-    
+
     <!-- Left Column: Login Form -->
     <div class="login-left">
       <div class="login-glass-card">
         <div class="brand-logo">
           <div class="logo-icon">
-            <i class="ti ti-hexagon-letter-j"></i>
+            <img [src]="isDarkMode ? 'Josidk_Logo_W_.png' : 'Josidk_Logo_B.png'" alt="Josidk Logo" class="logo-img" />
           </div>
           <span class="logo-text">Josidk ERP</span>
         </div>
@@ -46,7 +46,7 @@
 
           <button type="button" class="btn-submit" (click)="login()">Iniciar Sesión</button>
         </form>
-        
+
         <div class="register-prompt">
           ¿No tienes una cuenta? <a href="#">Regístrate aquí</a>
         </div>

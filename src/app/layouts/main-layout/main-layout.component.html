@@ -1,4 +1,8 @@
 <div class="erp-container" [class.sidebar-collapsed]="isSidebarCollapsed">
+  @if (!isSidebarCollapsed) {
+  <div class="sidebar-backdrop" (click)="isSidebarCollapsed = true"></div>
+  }
+
   <app-sidebar [isCollapsed]="isSidebarCollapsed"></app-sidebar>
 
   <div class="main-layout">

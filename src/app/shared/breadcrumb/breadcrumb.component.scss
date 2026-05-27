@@ -94,6 +94,7 @@
   border: none;
   background: var(--primary);
   color: #fff;
+  white-space: nowrap; /* Evita saltos de línea molestos en el texto del botón */
   transition: all 0.2s;
 
   i {
