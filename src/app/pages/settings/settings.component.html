@@ -75,9 +75,12 @@
         @for (mod of availableModules; track mod.id) {
           <button class="module-card"
                   [class.selected]="isModuleSelected(mod.id)"
-                  (click)="toggleModule(mod.id)">
+                  [class.locked]="mod.alwaysEnabled"
+                  (click)="mod.alwaysEnabled ? null : toggleModule(mod.id)">
             <span class="module-checkbox">
-              @if (isModuleSelected(mod.id)) {
+              @if (mod.alwaysEnabled) {
+                <i class="ti ti-lock"></i>
+              } @else if (isModuleSelected(mod.id)) {
                 <i class="ti ti-checkbox"></i>
               } @else {
                 <i class="ti ti-square"></i>
@@ -85,7 +88,12 @@
             </span>
             <i [class]="'module-icon ti ' + mod.icon"></i>
             <div class="module-info">
-              <span class="module-name">{{ mod.name }}</span>
+              <span class="module-name">
+                {{ mod.name }}
+                @if (mod.alwaysEnabled) {
+                  <span class="module-locked-badge">Obligatorio</span>
+                }
+              </span>
               <span class="module-desc">{{ mod.description }}</span>
             </div>
             @if (mod.dependency) {
@@ -218,18 +226,18 @@
         </div>
       </div>
       <p class="download-hint">
-        <i class="ti ti-info-circle"></i>
-        Recibirás un ZIP con <strong>josidk-config.json</strong> + <strong>apply-config.mjs</strong> para aplicar la configuración automáticamente.
+        <i class="ti ti-package"></i>
+        Recibirás un ZIP con <strong>todo el proyecto</strong> listo para usar — colores, páginas, layout y dependencias ya configurados. Solo necesitas <code>npm install</code> y <code>npm start</code>.
       </p>
     </div>
 
     <button class="btn-download" (click)="downloadTemplate()" [disabled]="downloading()">
       @if (downloading()) {
         <i class="ti ti-loader"></i>
-        <span>Generando...</span>
+        <span>Generando proyecto...</span>
       } @else {
-        <i class="ti ti-download"></i>
-        <span>Descargar Package</span>
+        <i class="ti ti-package-export"></i>
+        <span>Descargar Proyecto</span>
       }
     </button>
   </div>

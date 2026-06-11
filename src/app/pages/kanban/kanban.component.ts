@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, signal, computed, ChangeDetectorRef, inject } from '@angular/core';
+import { Component, ChangeDetectionStrategy, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DragDropModule, CdkDragDrop, CdkDragMove, transferArrayItem, moveItemInArray } from '@angular/cdk/drag-drop';
@@ -32,7 +32,6 @@ export interface KanbanColumn {
   styleUrl: './kanban.component.scss'
 })
 export class KanbanComponent {
-  private cdr = inject(ChangeDetectorRef);
 
   breadcrumbs: BreadcrumbItem[] = [
     { label: 'Inicio', route: '/' },
@@ -55,7 +54,7 @@ export class KanbanComponent {
   formDueDate = '';
   formTags = '';
 
-  columns: KanbanColumn[] = [
+  columns = signal<KanbanColumn[]>([
     {
       id: 'todo',
       title: 'Por Hacer',
@@ -97,14 +96,15 @@ export class KanbanComponent {
         { id: '9', title: 'Responsive navbar', description: 'Menú adaptable para móvil', priority: 'baja', assignee: 'Luis', initials: 'L', dueDate: '2 Jun', tags: ['frontend'] },
       ]
     }
-  ];
+  ]);
 
-  totalTasks = computed(() => this.columns.reduce((sum, col) => sum + col.tasks.length, 0));
+  totalTasks = computed(() => this.columns().reduce((sum, col) => sum + col.tasks.length, 0));
 
   filteredColumns = computed(() => {
     const q = this.searchQuery().toLowerCase().trim();
-    if (!q) return this.columns;
-    return this.columns.map(col => ({
+    const cols = this.columns();
+    if (!q) return cols;
+    return cols.map(col => ({
       ...col,
       tasks: col.tasks.filter(t =>
         t.title.toLowerCase().includes(q) ||
@@ -166,7 +166,8 @@ export class KanbanComponent {
         event.currentIndex
       );
     }
-    this.cdr.markForCheck();
+    // Force signal update — CDK mutates arrays in-place, signal needs new reference
+    this.columns.update(cols => cols.map(c => ({ ...c, tasks: [...c.tasks] })));
   }
 
   // ── Create / Edit Modal ────────────────────────────────────────
@@ -199,17 +200,30 @@ export class KanbanComponent {
     const tags = this.formTags.split(',').map(t => t.trim()).filter(Boolean);
     const initials = this.formAssignee.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2) || '?';
 
-    if (this.editingTask()) {
-      // Edit existing
-      const task = this.editingTask()!;
-      task.title = this.formTitle.trim();
-      task.description = this.formDescription.trim();
-      task.priority = this.formPriority;
-      task.assignee = this.formAssignee.trim() || 'Sin asignar';
-      task.initials = initials;
-      task.dueDate = this.formDueDate || 'Sin fecha';
-      task.tags = tags;
-    } else {
+    this.columns.update(cols => cols.map(c => {
+      if (c.id !== col.id) return c;
+
+      if (this.editingTask()) {
+        // Edit existing
+        return {
+          ...c,
+          tasks: c.tasks.map(t =>
+            t.id === this.editingTask()!.id
+              ? {
+                  ...t,
+                  title: this.formTitle.trim(),
+                  description: this.formDescription.trim(),
+                  priority: this.formPriority,
+                  assignee: this.formAssignee.trim() || 'Sin asignar',
+                  initials,
+                  dueDate: this.formDueDate || 'Sin fecha',
+                  tags,
+                }
+              : t
+          ),
+        };
+      }
+
       // Create new
       const newTask: KanbanTask = {
         id: String(Date.now()),
@@ -221,11 +235,10 @@ export class KanbanComponent {
         dueDate: this.formDueDate || 'Sin fecha',
         tags,
       };
-      col.tasks.unshift(newTask);
-    }
+      return { ...c, tasks: [newTask, ...c.tasks] };
+    }));
 
     this.closeModal();
-    this.cdr.markForCheck();
   }
 
   closeModal(): void {
@@ -245,10 +258,13 @@ export class KanbanComponent {
   deleteTask(): void {
     const target = this.deleteTarget();
     if (!target) return;
-    target.column.tasks = target.column.tasks.filter(t => t.id !== target.task.id);
+    this.columns.update(cols => cols.map(c =>
+      c.id === target.column.id
+        ? { ...c, tasks: c.tasks.filter(t => t.id !== target.task.id) }
+        : c
+    ));
     this.showDeleteConfirm.set(false);
     this.deleteTarget.set(null);
-    this.cdr.markForCheck();
   }
 
   cancelDelete(): void {

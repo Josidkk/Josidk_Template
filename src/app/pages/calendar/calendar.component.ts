@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { BreadcrumbComponent, BreadcrumbItem } from '../../shared/breadcrumb/breadcrumb.component';
 import { CalendarEventDialogComponent, CalendarEventData, EVENT_COLORS } from '../../shared/calendar-event-dialog/calendar-event-dialog.component';
 import { NotificationService } from '../../core/services/notification.service';

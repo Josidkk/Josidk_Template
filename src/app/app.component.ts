@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { Title } from '@angular/platform-browser';
+import { APP_CONFIG } from './core/config/app-config';
 
 @Component({
   selector: 'app-root',
@@ -9,5 +11,9 @@ import { RouterOutlet } from '@angular/router';
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
-  title = 'Josidk ERP';
+  readonly title = APP_CONFIG.siteFullName;
+
+  constructor() {
+    inject(Title).setTitle(APP_CONFIG.siteFullName);
+  }
 }

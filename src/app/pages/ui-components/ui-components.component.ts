@@ -2,15 +2,13 @@ import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BreadcrumbComponent, BreadcrumbItem } from '../../shared/breadcrumb/breadcrumb.component';
 import { NotificationService } from '../../core/services/notification.service';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent, ConfirmDialogData } from '../../shared/confirm-dialog/confirm-dialog.component';
 import { InfoDialogComponent, InfoDialogData } from '../../shared/info-dialog/info-dialog.component';
 
 @Component({
   selector: 'app-ui-components',
-  standalone: true,
-  imports: [
-    CommonModule, BreadcrumbComponent, MatDialogModule,
+  standalone: true,imports: [CommonModule, BreadcrumbComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './ui-components.component.html',
@@ -24,8 +22,6 @@ export class UiComponentsComponent {
     { label: 'Inicio', route: '/' },
     { label: 'UI Components' },
   ];
-
-  readonly notifyService = this.notify;
 
   /* ── Snackbar demos ── */
   showSuccess(): void {

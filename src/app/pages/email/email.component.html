@@ -42,7 +42,7 @@
           </div>
         </div>
         <div class="list-body">
-          @for (email of emails; track email.id) {
+          @for (email of emails(); track email.id) {
             <div class="email-item" [class.unread]="!email.read" (click)="selectEmail(email)">
               <div class="email-avatar" [style.background]="email.color">{{ email.initials }}</div>
               <div class="email-content">

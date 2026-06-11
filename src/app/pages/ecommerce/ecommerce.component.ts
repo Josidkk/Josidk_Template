@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { BreadcrumbComponent, BreadcrumbItem } from '../../shared/breadcrumb/breadcrumb.component';
 import { ConfirmDialogComponent, ConfirmDialogData } from '../../shared/confirm-dialog/confirm-dialog.component';
 import { NotificationService } from '../../core/services/notification.service';
@@ -19,7 +19,7 @@ interface Product {
 @Component({
   selector: 'app-ecommerce',
   standalone: true,
-  imports: [CommonModule, MatDialogModule, BreadcrumbComponent, ProductFormDialogComponent],
+  imports: [CommonModule, BreadcrumbComponent, ProductFormDialogComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './ecommerce.component.html',
   styleUrl: './ecommerce.component.scss'

@@ -2,6 +2,7 @@ import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy, signal
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { SidebarConfigService } from '../../core/services/sidebar-config.service';
+import { APP_CONFIG } from '../../core/config/app-config';
 
 export interface MenuItem {
   id: string;
@@ -40,10 +41,12 @@ export class SidebarComponent {
   activeItem = signal('dashboard');
   expandedItems = signal<Set<string>>(new Set());
 
+  readonly siteName = APP_CONFIG.siteName;
+
   user = {
-    name: 'Deyby Josue',
-    role: 'Developer',
-    initials: 'DJ',
+    name: APP_CONFIG.user.name,
+    role: APP_CONFIG.user.role,
+    initials: APP_CONFIG.user.initials,
     avatarUrl: null as string | null,
   };
 
@@ -69,7 +72,7 @@ export class SidebarComponent {
       title: 'Gestión',
       items: [
         { id: 'usuarios', label: 'Empleados', icon: 'ti ti-users', route: '/users' },
-        { id: 'settings', label: 'Configuración', icon: 'ti ti-settings-2', route: '/settings' },
+        { id: 'settings', label: 'Configuración', icon: 'ti ti-settings-2', route: '/settings', badge: 'important' },
         { id: 'ui-components', label: 'UI Components', icon: 'ti ti-palette', route: '/ui-components' },
       ]
     },

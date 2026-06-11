@@ -18,7 +18,7 @@
         <span class="stat-num">{{ totalTasks() }}</span>
         <span class="stat-lbl">tareas</span>
       </div>
-      @for (col of columns; track col.id) {
+      @for (col of columns(); track col.id) {
         <div class="stat-pill" [style.--dot-color]="col.color">
           <span class="stat-dot"></span>
           <span class="stat-num">{{ col.tasks.length }}</span>

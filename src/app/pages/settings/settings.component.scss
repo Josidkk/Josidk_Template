@@ -296,6 +296,46 @@
   font-size: 0.82rem;
   font-weight: 600;
   color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.module-locked-badge {
+  font-size: 0.58rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(245, 158, 11, 0.15);
+  color: #f59e0b;
+  white-space: nowrap;
+}
+
+.module-card.locked {
+  cursor: default;
+  opacity: 0.75;
+  border-color: rgba(245, 158, 11, 0.25);
+  background: rgba(245, 158, 11, 0.04);
+
+  &:hover {
+    border-color: rgba(245, 158, 11, 0.35);
+    background: rgba(245, 158, 11, 0.06);
+  }
+
+  &.selected {
+    border-color: rgba(245, 158, 11, 0.4);
+    background: rgba(245, 158, 11, 0.08);
+  }
+
+  .module-checkbox {
+    color: #f59e0b;
+  }
+
+  .module-icon {
+    color: #f59e0b;
+  }
 }
 
 .module-desc {
@@ -825,6 +865,21 @@ body.dark-theme {
   .module-dep-tag {
     background: rgba(255, 255, 255, 0.06);
     color: var(--text-muted);
+  }
+
+  .module-card.locked {
+    border-color: rgba(245, 158, 11, 0.2);
+    background: rgba(245, 158, 11, 0.03);
+
+    &:hover {
+      border-color: rgba(245, 158, 11, 0.3);
+      background: rgba(245, 158, 11, 0.05);
+    }
+
+    &.selected {
+      border-color: rgba(245, 158, 11, 0.35);
+      background: rgba(245, 158, 11, 0.06);
+    }
   }
 
   .module-summary {

@@ -1,4 +1,5 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { APP_CONFIG } from '../../core/config/app-config';
 
 @Component({
   selector: 'app-footer',
@@ -8,5 +9,6 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
   styleUrl: './footer.component.scss'
 })
 export class FooterComponent {
+  readonly siteName = APP_CONFIG.siteFullName;
   readonly currentYear = new Date().getFullYear();
 }

@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { BreadcrumbComponent, BreadcrumbItem } from '../../shared/breadcrumb/breadcrumb.component';
 import { NotificationService } from '../../core/services/notification.service';
 import { ThemeService } from '../../core/services/theme.service';
@@ -9,6 +9,7 @@ import { SidebarConfigService } from '../../core/services/sidebar-config.service
 import { CustomColorDialogComponent, CustomColorData } from '../../shared/custom-color-dialog/custom-color-dialog.component';
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
+import { PROJECT_FILES, ProjectFile } from './project-sources';
 
 /* ─── Interfaces ─── */
 
@@ -31,6 +32,8 @@ interface AppModule {
   dependency?: string;
   folderPath?: string;
   routesToRemove?: string[];
+  /** Si es true, el módulo no se puede deseleccionar */
+  alwaysEnabled?: boolean;
 }
 
 /* ─── Component ─── */
@@ -490,7 +493,7 @@ export class SettingsComponent {
     { id: 'users', name: 'Usuarios', icon: 'ti ti-users', description: 'Tabla de usuarios con busqueda y paginacion', route: '/users' },
     { id: 'ui-components', name: 'UI Components', icon: 'ti ti-palette', description: 'Demostracion de componentes reutilizables', route: '/ui-components' },
     { id: 'material-ui-section', name: 'Material UI', icon: 'ti ti-components', description: 'Seccion completa: botones, graficas, tabs, inputs', route: '/material/buttons', folderPath: 'material', routesToRemove: ['material/buttons', 'material/data', 'material/feedback', 'material/inputs', 'material/navigation', 'material/charts', 'material'] },
-    { id: 'login', name: 'Login', icon: 'ti ti-login', description: 'Página de inicio de sesión premium', route: '/login', folderPath: 'auth/login' },
+    { id: 'login', name: 'Login', icon: 'ti ti-login', description: 'Página de inicio de sesión premium (siempre incluida)', route: '/login', folderPath: 'auth/login', alwaysEnabled: true },
     { id: 'register', name: 'Registro', icon: 'ti ti-user-plus', description: 'Página de registro premium', route: '/register', folderPath: 'auth/register' },
   ];
 
@@ -511,6 +514,10 @@ export class SettingsComponent {
   selectedModules = signal<Set<string>>(new Set(this.availableModules.map(m => m.id)));
 
   toggleModule(id: string): void {
+    // Login no se puede deseleccionar
+    const mod = this.availableModules.find(m => m.id === id);
+    if (mod?.alwaysEnabled) return;
+
     this.selectedModules.update(set => {
       const next = new Set(set);
       if (next.has(id)) {
@@ -524,6 +531,9 @@ export class SettingsComponent {
   }
 
   isModuleSelected(id: string): boolean {
+    // Login siempre está seleccionado
+    const mod = this.availableModules.find(m => m.id === id);
+    if (mod?.alwaysEnabled) return true;
     return this.selectedModules().has(id);
   }
 
@@ -594,7 +604,7 @@ export class SettingsComponent {
   }
 
   /* ================================================================
-     5. DESCARGA DEL PACKAGE
+     5. DESCARGA DEL PROYECTO COMPLETO
      ================================================================ */
 
   downloading = signal(false);
@@ -603,31 +613,80 @@ export class SettingsComponent {
     try {
       this.downloading.set(true);
 
-      const zip = new JSZip();
       const config = this.buildConfig();
 
-      zip.file('josidk-config.json', JSON.stringify(config, null, 2));
+      // 1. Clone all project files into a mutable map
+      const files = new Map<string, { content: string; binary: boolean }>();
+      PROJECT_FILES.forEach((file, path) => {
+        files.set(path, { ...file });
+      });
 
-      const scriptContent = generateApplyScript(config);
-      zip.file('apply-config.mjs', scriptContent);
+      // 2. Apply all transformations in-memory
+      this.applyThemeColors(files, config);
+      this.applyLayoutVariables(files, config);
+      this.removeExcludedPages(files, config);
+      this.cleanRoutes(files, config);
+      this.cleanSidebar(files, config);
+      this.applyDefaultTheme(files, config);
+      this.cleanDependencies(files, config);
+      this.cleanAppConfig(files, config);
+      this.removeSettingsPage(files);
+      this.removeEmbedArtifacts(files);
 
-      zip.file('LEEME.md', this.buildReadme(config));
+      // 3. Add config reference file
+      files.set('josidk-config.json', {
+        content: JSON.stringify(config, null, 2),
+        binary: false,
+      });
 
-      const blob = await zip.generateAsync({ type: 'blob', compression: 'DEFLATE' });
-      saveAs(blob, `josidk-template-config-${config.meta.date}.zip`);
+      // 4. Add README
+      files.set('LEEME.md', {
+        content: this.buildReadme(config),
+        binary: false,
+      });
 
-      this.notify.success('Package descargado', 'Incluye config JSON + script aplicador + instrucciones');
+      // 5. Build ZIP
+      const zip = new JSZip();
+      files.forEach((file, path) => {
+        if (file.binary) {
+          // Decode Base64 to binary
+          const binaryStr = atob(file.content);
+          const bytes = new Uint8Array(binaryStr.length);
+          for (let i = 0; i < binaryStr.length; i++) {
+            bytes[i] = binaryStr.charCodeAt(i);
+          }
+          zip.file(path, bytes);
+        } else {
+          zip.file(path, file.content);
+        }
+      });
+
+      const blob = await zip.generateAsync({
+        type: 'blob',
+        compression: 'DEFLATE',
+        compressionOptions: { level: 6 },
+      });
+
+      const sizeMB = (blob.size / (1024 * 1024)).toFixed(1);
+      saveAs(blob, `josidk-template-${config.meta.date}.zip`);
+
+      this.notify.success(
+        'Proyecto descargado',
+        `ZIP listo (${sizeMB} MB) con ${files.size} archivos y tu configuración aplicada`
+      );
     } catch (err) {
-      console.error(err);
+      console.error('Error generating project ZIP:', err);
       this.notify.error('Error', 'No se pudo generar la descarga');
     } finally {
       this.downloading.set(false);
     }
   }
 
+  // ─── Config Builder ───
+
   private buildConfig(): JosidkConfig {
     const selectedPages = this.availableModules
-      .filter(m => this.selectedModules().has(m.id))
+      .filter(m => this.isModuleSelected(m.id))
       .map(m => ({
         id: m.id,
         name: m.name,
@@ -650,7 +709,7 @@ export class SettingsComponent {
       modules: {
         selected: selectedPages,
         excluded: this.availableModules
-          .filter(m => !this.selectedModules().has(m.id))
+          .filter(m => !this.isModuleSelected(m.id))
           .map(m => ({
             id: m.id,
             folder: m.folderPath || m.id,
@@ -666,55 +725,457 @@ export class SettingsComponent {
   }
 
   private computeDependencies(): Record<string, boolean> {
+    const needsCharts = this.selectedModules().has('dashboard') ||
+                        this.selectedModules().has('material-ui-section');
     return {
-      'chart.js': this.selectedModules().has('dashboard'),
-      'ng2-charts': this.selectedModules().has('dashboard'),
+      'chart.js': needsCharts,
+      'ng2-charts': needsCharts,
     };
   }
+
+  // ─── In-Memory Transformations ───
+
+  /** Replace CSS variables in styles.scss with the selected palette colors */
+  private applyThemeColors(
+    files: Map<string, { content: string; binary: boolean }>,
+    config: JosidkConfig
+  ): void {
+    const stylesFile = files.get('src/styles.scss');
+    if (!stylesFile) return;
+
+    let styles = stylesFile.content;
+
+    // Apply light theme colors (in :root block)
+    for (const [varName, value] of Object.entries(config.theme.colors)) {
+      styles = this.replaceCSSVar(styles, varName, value);
+    }
+
+    // Apply dark theme colors (in body.dark-theme block)
+    const darkColors = config.theme.darkColors;
+    const darkMatch = styles.match(/body\s*\.dark-theme\s*\{([^}]*)\}/);
+    if (darkMatch && Object.keys(darkColors).length > 0) {
+      let block = darkMatch[1];
+      for (const [varName, value] of Object.entries(darkColors)) {
+        const regex = new RegExp('(' + this.escapeRegex(varName) + ':\\s*)[^;]+(;)', 'g');
+        block = block.replace(regex, '$1' + value + '$2');
+      }
+      styles = styles.replace(darkMatch[0], 'body.dark-theme {' + block + '}');
+    }
+
+    stylesFile.content = styles;
+  }
+
+  /** Apply layout CSS variables (sidebar width, radius, speed, font) */
+  private applyLayoutVariables(
+    files: Map<string, { content: string; binary: boolean }>,
+    config: JosidkConfig
+  ): void {
+    const stylesFile = files.get('src/styles.scss');
+    if (!stylesFile) return;
+
+    let styles = stylesFile.content;
+
+    const layoutVars: Record<string, string> = {
+      '--sidebar-width': config.layout.sidebarWidth + 'px',
+      '--sidebar-collapsed-width': config.layout.sidebarCollapsedWidth + 'px',
+      '--content-radius': config.layout.contentRadius + 'px',
+      '--transition-speed': config.layout.transitionSpeed + 's',
+      '--font-family': config.layout.font,
+    };
+
+    for (const [varName, value] of Object.entries(layoutVars)) {
+      styles = this.replaceCSSVar(styles, varName, value);
+    }
+
+    stylesFile.content = styles;
+  }
+
+  /** Remove all files belonging to excluded pages (login is never removed) */
+  private removeExcludedPages(
+    files: Map<string, { content: string; binary: boolean }>,
+    config: JosidkConfig
+  ): void {
+    for (const excluded of config.modules.excluded) {
+      // Login nunca se elimina
+      if (excluded.id === 'login') continue;
+
+      const folderPrefix = `src/app/pages/${excluded.folder}/`;
+      const keysToDelete: string[] = [];
+
+      files.forEach((_, path) => {
+        if (path.startsWith(folderPrefix)) {
+          keysToDelete.push(path);
+        }
+      });
+
+      keysToDelete.forEach(key => files.delete(key));
+    }
+  }
+
+  /** Rebuild app.routes.ts from scratch — only selected modules */
+  private cleanRoutes(
+    files: Map<string, { content: string; binary: boolean }>,
+    config: JosidkConfig
+  ): void {
+    const routesFile = files.get('src/app/app.routes.ts');
+    if (!routesFile) return;
+
+    const selectedIds = new Set(config.modules.selected.map(m => m.id));
+    // Login siempre está seleccionado (aunque el usuario lo intente deseleccionar)
+    selectedIds.add('login');
+
+    // Map: module ID → route definition
+    const routeMap: Record<string, { path: string; importPath: string; component: string }> = {
+      register: { path: 'register', importPath: './pages/auth/register/register.component', component: 'RegisterComponent' },
+      dashboard: { path: 'dashboard', importPath: './pages/dashboard/dashboard.component', component: 'DashboardComponent' },
+      users: { path: 'users', importPath: './pages/users/user-list/user-list.component', component: 'UserListComponent' },
+      profile: { path: 'profile', importPath: './pages/profile/profile.component', component: 'ProfileComponent' },
+      'ui-components': { path: 'ui-components', importPath: './pages/ui-components/ui-components.component', component: 'UiComponentsComponent' },
+      kanban: { path: 'kanban', importPath: './pages/kanban/kanban.component', component: 'KanbanComponent' },
+      calendar: { path: 'calendar', importPath: './pages/calendar/calendar.component', component: 'CalendarComponent' },
+      email: { path: 'email', importPath: './pages/email/email.component', component: 'EmailComponent' },
+      chat: { path: 'chat', importPath: './pages/chat/chat.component', component: 'ChatComponent' },
+      ecommerce: { path: 'ecommerce', importPath: './pages/ecommerce/ecommerce.component', component: 'EcommerceComponent' },
+    };
+
+    const lines: string[] = [];
+
+    lines.push("import { Routes } from '@angular/router';");
+    lines.push("import { AuthGuard } from './core/guards/auth.guard';");
+    lines.push('');
+    lines.push('export const routes: Routes = [');
+
+    // ── Login (siempre incluido) ──
+    lines.push('  {');
+    lines.push("    path: 'login',");
+    lines.push('    loadComponent: () =>');
+    lines.push("      import('./pages/auth/login/login.component').then(m => m.LoginComponent),");
+    lines.push('  },');
+
+    // ── Register (if selected) ──
+    if (selectedIds.has('register')) {
+      lines.push('  {');
+      lines.push("    path: 'register',");
+      lines.push('    loadComponent: () =>');
+      lines.push("      import('./pages/auth/register/register.component').then(m => m.RegisterComponent),");
+      lines.push('  },');
+    }
+
+    // ── Main layout with children ──
+    lines.push('  {');
+    lines.push("    path: '',");
+    lines.push('    loadComponent: () =>');
+    lines.push("      import('./layouts/main-layout/main-layout.component').then(m => m.MainLayoutComponent),");
+    lines.push('    canActivate: [AuthGuard],');
+    lines.push('    children: [');
+
+    // Redirect: dashboard → any other protected page (skip auth pages)
+    const authPages = new Set(['login', 'register']);
+    const firstChild = config.modules.selected.find(m => !authPages.has(m.id));
+    const firstRoute = firstChild ? firstChild.id : 'dashboard';
+    lines.push('      {');
+    lines.push("        path: '',");
+    lines.push(`        redirectTo: '${firstRoute}',`);
+    lines.push("        pathMatch: 'full',");
+    lines.push('      },');
+
+    // Selected module routes (login/register are top-level, not children)
+    for (const [moduleId, rc] of Object.entries(routeMap)) {
+      if (selectedIds.has(moduleId) && !authPages.has(moduleId)) {
+        lines.push('      {');
+        lines.push(`        path: '${rc.path}',`);
+        lines.push('        loadComponent: () =>');
+        lines.push(`          import('${rc.importPath}').then(m => m.${rc.component}),`);
+        lines.push('      },');
+      }
+    }
+
+    // Material UI routes (if section selected)
+    if (selectedIds.has('material-ui-section')) {
+      const matPaths = ['buttons', 'data', 'feedback', 'inputs', 'navigation', 'charts'];
+      const matComps = ['Buttons', 'Data', 'Feedback', 'Inputs', 'Navigation', 'Charts'];
+      for (let i = 0; i < matPaths.length; i++) {
+        lines.push('      {');
+        lines.push(`        path: 'material/${matPaths[i]}',`);
+        lines.push('        loadComponent: () =>');
+        lines.push(`          import('./pages/material/material-${matPaths[i]}.component').then(m => m.Material${matComps[i]}Component),`);
+        lines.push('      },');
+      }
+      // Redirect /material → /material/buttons
+      lines.push('      {');
+      lines.push("        path: 'material',");
+      lines.push("        redirectTo: 'material/buttons',");
+      lines.push("        pathMatch: 'full',");
+      lines.push('      },');
+    }
+
+    lines.push('    ],');
+    lines.push('  },');
+
+    // ── Not-found (always) ──
+    lines.push('  {');
+    lines.push("    path: '**',");
+    lines.push('    loadComponent: () =>');
+    lines.push("      import('./pages/not-found/not-found.component').then(m => m.NotFoundComponent),");
+    lines.push('  },');
+    lines.push('];');
+
+    routesFile.content = lines.join('\n');
+  }
+
+  /** Rebuild sidebar menuSections from scratch — only selected modules */
+  private cleanSidebar(
+    files: Map<string, { content: string; binary: boolean }>,
+    config: JosidkConfig
+  ): void {
+    const sidebarFile = files.get('src/app/shared/sidebar/sidebar.component.ts');
+    if (!sidebarFile) return;
+
+    const selectedIds = new Set(config.modules.selected.map(m => m.id));
+
+    // Map: module ID → sidebar item
+    const sidebarMap: Record<string, { section: string; id: string; label: string; icon: string; route: string; badge?: string }> = {
+      dashboard: { section: 'Dashboards', id: 'dashboard', label: 'Analytics', icon: 'ti ti-chart-bar', route: '/dashboard' },
+      ecommerce: { section: 'Dashboards', id: 'ecommerce', label: 'eCommerce', icon: 'ti ti-shopping-bag', route: '/ecommerce' },
+      chat: { section: 'Apps', id: 'chat', label: 'Chat', icon: 'ti ti-message-2', route: '/chat' },
+      calendar: { section: 'Apps', id: 'calendar', label: 'Calendario', icon: 'ti ti-calendar', route: '/calendar' },
+      email: { section: 'Apps', id: 'email', label: 'Email', icon: 'ti ti-mail', route: '/email' },
+      kanban: { section: 'Apps', id: 'kanban', label: 'Kanban', icon: 'ti ti-layout-kanban', route: '/kanban' },
+      profile: { section: 'Apps', id: 'profile', label: 'Perfil', icon: 'ti ti-user-circle', route: '/profile', badge: 'new' },
+      users: { section: 'Gestión', id: 'usuarios', label: 'Empleados', icon: 'ti ti-users', route: '/users' },
+      'ui-components': { section: 'Gestión', id: 'ui-components', label: 'UI Components', icon: 'ti ti-palette', route: '/ui-components' },
+    };
+
+    const materialItems = [
+      { id: 'mat-buttons', label: 'Botones', icon: 'ti ti-components', route: '/material/buttons' },
+      { id: 'mat-data', label: 'Visualización', icon: 'ti ti-credit-card', route: '/material/data' },
+      { id: 'mat-feedback', label: 'Feedback', icon: 'ti ti-bell-ringing', route: '/material/feedback' },
+      { id: 'mat-inputs', label: 'Inputs', icon: 'ti ti-toggle-left', route: '/material/inputs' },
+      { id: 'mat-navigation', label: 'Navegación', icon: 'ti ti-navigation', route: '/material/navigation' },
+      { id: 'mat-charts', label: 'Gráficas', icon: 'ti ti-chart-bar', route: '/material/charts' },
+    ];
+
+    // Group selected items by section
+    const sectionOrder = ['Dashboards', 'Apps', 'Gestión', 'Material UI'];
+    const sections = new Map<string, { id: string; label: string; icon: string; route: string; badge?: string }[]>();
+
+    for (const [moduleId, def] of Object.entries(sidebarMap)) {
+      if (selectedIds.has(moduleId)) {
+        if (!sections.has(def.section)) sections.set(def.section, []);
+        sections.get(def.section)!.push({ id: def.id, label: def.label, icon: def.icon, route: def.route, badge: def.badge });
+      }
+    }
+
+    if (selectedIds.has('material-ui-section')) {
+      sections.set('Material UI', materialItems);
+    }
+
+    // Generate TypeScript code for menuSections
+    const sb: string[] = [];
+    sb.push('  menuSections: MenuSection[] = [');
+    for (const section of sectionOrder) {
+      const items = sections.get(section);
+      if (!items || items.length === 0) continue;
+
+      sb.push('    {');
+      sb.push(`      title: '${section}',`);
+      sb.push('      items: [');
+      for (const item of items) {
+        const props = `id: '${item.id}', label: '${item.label}', icon: '${item.icon}', route: '${item.route}'`;
+        if (item.badge) {
+          sb.push(`        { ${props}, badge: '${item.badge}' },`);
+        } else {
+          sb.push(`        { ${props} },`);
+        }
+      }
+      sb.push('      ]');
+      sb.push('    },');
+    }
+    sb.push('  ];');
+
+    // Replace the old menuSections block
+    sidebarFile.content = sidebarFile.content.replace(
+      /menuSections:\s*MenuSection\[\]\s*=\s*\[[\s\S]*?\];/,
+      sb.join('\n')
+    );
+  }
+
+  /** Modify ThemeService to start with the user's selected default theme */
+  private applyDefaultTheme(
+    files: Map<string, { content: string; binary: boolean }>,
+    config: JosidkConfig
+  ): void {
+    const themeService = files.get('src/app/core/services/theme.service.ts');
+    if (!themeService) return;
+
+    const defaultMode = config.theme.defaultDarkMode; // 'light', 'dark', 'system'
+
+    // Replace the default localStorage hydration logic
+    const oldLogic = "const saved = localStorage.getItem('josidk-theme');\\s*if \\(saved === 'dark'\\) \\{";
+    
+    let newLogic = "const saved = localStorage.getItem('josidk-theme') || '" + defaultMode + "';\n";
+    if (defaultMode === 'system') {
+      newLogic += "      if (saved === 'dark' || (saved === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {";
+    } else {
+      newLogic += "      if (saved === 'dark') {";
+    }
+
+    themeService.content = themeService.content.replace(new RegExp(oldLogic, 'g'), newLogic);
+  }
+
+  /** Remove unneeded dependencies from package.json */
+  private cleanDependencies(
+    files: Map<string, { content: string; binary: boolean }>,
+    config: JosidkConfig
+  ): void {
+    const pkgFile = files.get('package.json');
+    if (!pkgFile) return;
+
+    try {
+      const pkg = JSON.parse(pkgFile.content);
+
+      // Remove chart.js deps if dashboard not selected
+      if (!config.dependencies['chart.js']) {
+        delete pkg.dependencies?.['chart.js'];
+        delete pkg.dependencies?.['ng2-charts'];
+      }
+
+      // Remove file-saver & jszip (only needed for this download feature)
+      delete pkg.dependencies?.['file-saver'];
+      delete pkg.dependencies?.['jszip'];
+      delete pkg.devDependencies?.['@types/file-saver'];
+
+      // Remove embed script hooks (no longer needed in downloaded project)
+      delete pkg.scripts?.['embed'];
+      delete pkg.scripts?.['prestart'];
+      delete pkg.scripts?.['prebuild'];
+
+      pkgFile.content = JSON.stringify(pkg, null, 2);
+    } catch {
+      // If JSON parsing fails, leave as-is
+    }
+  }
+
+  /** Remove ng2-charts/chart.js imports from app.config.ts if charts not needed */
+  private cleanAppConfig(
+    files: Map<string, { content: string; binary: boolean }>,
+    config: JosidkConfig
+  ): void {
+    const needsCharts = config.dependencies['chart.js'] && config.dependencies['ng2-charts'];
+    if (needsCharts) return; // keep charts imports
+
+    // Remove the import line and provideCharts provider from app.config.ts
+    const appConfigFile = files.get('src/app/app.config.ts');
+    if (!appConfigFile) return;
+
+    let content = appConfigFile.content;
+
+    // Remove: import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
+    content = content.replace(
+      /import\s*\{[^}]*provideCharts[^}]*\}\s*from\s*['"]ng2-charts['"];\n?/g,
+      ''
+    );
+
+    // Remove: provideCharts(withDefaultRegisterables()),
+    content = content.replace(
+      /\s*provideCharts\(withDefaultRegisterables\(\)\),?\n?/g,
+      ''
+    );
+
+    appConfigFile.content = content;
+  }
+
+  /** Remove the Settings page itself and related files from the download */
+  private removeSettingsPage(
+    files: Map<string, { content: string; binary: boolean }>
+  ): void {
+    const keysToDelete: string[] = [];
+    files.forEach((_, path) => {
+      if (
+        path.startsWith('src/app/pages/settings/') ||
+        path === 'scripts/embed-sources.mjs'
+      ) {
+        keysToDelete.push(path);
+      }
+    });
+    keysToDelete.forEach(key => files.delete(key));
+    // Note: settings route & sidebar item are already excluded
+    // because cleanRoutes()/cleanSidebar() build from scratch
+  }
+
+  /** Remove embed artifacts (project-sources.ts, custom-color-dialog, apply-config.mjs) that are only for the configurator */
+  private removeEmbedArtifacts(
+    files: Map<string, { content: string; binary: boolean }>
+  ): void {
+    const keysToDelete: string[] = [];
+    files.forEach((_, path) => {
+      if (
+        path.includes('project-sources.ts') ||
+        path.startsWith('scripts/apply-config.mjs') ||
+        path.startsWith('src/app/shared/custom-color-dialog/')
+      ) {
+        keysToDelete.push(path);
+      }
+    });
+    keysToDelete.forEach(key => files.delete(key));
+  }
+
+  // ─── Helpers ───
+
+  private replaceCSSVar(content: string, varName: string, newValue: string): string {
+    const regex = new RegExp('(' + this.escapeRegex(varName) + ':\\s*)[^;]+(;)', 'g');
+    return content.replace(regex, '$1' + newValue + '$2');
+  }
+
+  private escapeRegex(str: string): string {
+    return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  }
+
+  // ─── README Builder ───
 
   private buildReadme(config: JosidkConfig): string {
     const pages = config.modules.selected.map(m => `  - ${m.name} (\`${m.route}\`)`).join('\n');
 
-    return `# Josidk Template - Configuracion Personalizada
+    return `# Josidk Template — Tu Proyecto Personalizado
 
 Generado el: ${config.meta.date}
 
-## Resumen de tu configuracion
+> Este proyecto ya tiene tu configuración aplicada. Solo necesitas instalar dependencias y arrancar.
+
+## Inicio rápido
+
+\`\`\`bash
+npm install
+npm start
+\`\`\`
+
+## Resumen de tu configuración
 
 ### Tema
 - Paleta: ${config.theme.palette}
 - Modo oscuro por defecto: ${config.theme.defaultDarkMode}
 
-### Paginas incluidas (${config.modules.selected.length}):
+### Páginas incluidas (${config.modules.selected.length}):
 ${pages}
 
 ### Layout
 - Sidebar: ${config.layout.sidebarWidth}px expandido / ${config.layout.sidebarCollapsedWidth}px colapsado
 - Fuente: ${config.layout.font}
 - Radio bordes: ${config.layout.contentRadius}px
-- Velocidad animacion: ${config.layout.transitionSpeed}s
+- Velocidad animación: ${config.layout.transitionSpeed}s
 
 ---
 
-## Como aplicar esta configuracion
+## Configuración guardada
 
-### Opcion 1: Script automatico (recomendado)
-Requiere Node.js 18+.
+El archivo \`josidk-config.json\` contiene un respaldo de tu configuración completa para referencia.
 
-\`\`\`bash
-git clone <url-del-template> mi-proyecto
-cd mi-proyecto
-# Copia josidk-config.json a la raiz
-node apply-config.mjs
-\`\`\`
+## Siguientes pasos
 
-### Opcion 2: Manual
-1. Copia los colores del tema a src/styles.scss
-2. Elimina las carpetas de paginas no deseadas en src/app/pages/
-3. Actualiza src/app/app.routes.ts
-4. Actualiza src/app/shared/sidebar/sidebar.component.ts
-5. Actualiza package.json
-6. Ejecuta npm install
+1. Ejecuta \`npm install\` para instalar dependencias
+2. Ejecuta \`npm start\` para iniciar el servidor de desarrollo
+3. Personaliza las páginas con tu lógica de negocio
+4. Consulta \`DOCUMENTACION.md\` para guías detalladas
 `;
   }
 }
@@ -745,127 +1206,4 @@ export interface JosidkConfig {
     font: string;
   };
   dependencies: Record<string, boolean>;
-}
-
-/* ─── Script Generator ─── */
-
-function generateApplyScript(config: JosidkConfig): string {
-  const excluded = JSON.stringify(config.modules.excluded);
-  const sidebarWidth = config.layout.sidebarWidth;
-  const sidebarCollapsed = config.layout.sidebarCollapsedWidth;
-  const contentRadius = config.layout.contentRadius;
-  const transitionSpeed = config.layout.transitionSpeed;
-  const font = config.layout.font.replace(/'/g, "\\'");
-
-  const lines: string[] = [];
-  const push = (s: string) => lines.push(s);
-
-  push("// Josidk Template - apply-config.mjs");
-  push("// Aplica automaticamente la configuracion descargada al proyecto base.");
-  push("// Uso: node apply-config.mjs");
-  push("");
-  push("import { readFileSync, writeFileSync, existsSync, rmSync, readdirSync } from 'fs';");
-  push("import { join, dirname } from 'path';");
-  push("import { fileURLToPath } from 'url';");
-  push("");
-  push("const __dirname = dirname(fileURLToPath(import.meta.url));");
-  push("const CONFIG_PATH = join(__dirname, 'josidk-config.json');");
-  push("");
-  push("if (!existsSync(CONFIG_PATH)) {");
-  push("  console.error('No se encuentra josidk-config.json en el directorio actual.');");
-  push("  process.exit(1);");
-  push("}");
-  push("");
-  push("const config = JSON.parse(readFileSync(CONFIG_PATH, 'utf-8'));");
-  push("");
-  push("// --- Helper ---");
-  push("function replaceCSSVar(content, varName, newValue) {");
-  push("  const regex = new RegExp('(' + varName + ':\\\\s*)[^;]+(;)', 'g');");
-  push("  return content.replace(regex, '$1' + newValue + '$2');");
-  push("}");
-  push("");
-  push("console.log('Aplicando configuracion de Josidk Template...\\n');");
-  push("");
-  push("// 1. Colores / Tema");
-  push("console.log('Aplicando paleta de colores...');");
-  push("const stylesPath = join(__dirname, 'src', 'styles.scss');");
-  push("if (existsSync(stylesPath)) {");
-  push("  let styles = readFileSync(stylesPath, 'utf-8');");
-  push("  for (const [key, value] of Object.entries(config.theme.colors || {})) {");
-  push("    styles = replaceCSSVar(styles, key, value);");
-  push("  }");
-  push("  const darkColors = config.theme.darkColors || {};");
-  push("  const darkMatch = styles.match(/body\\s*\\.dark-theme\\s*\\{([^}]*)\\}/);");
-  push("  if (darkMatch && Object.keys(darkColors).length > 0) {");
-  push("    let block = darkMatch[1];");
-  push("    for (const [key, value] of Object.entries(darkColors)) {");
-  push("      block = block.replace(new RegExp('(' + key + ':\\\\s*)[^;]+(;)', 'g'), '$1' + value + '$2');");
-  push("    }");
-  push("    styles = styles.replace(darkMatch[0], 'body.dark-theme {' + block + '}');");
-  push("  }");
-  push("  writeFileSync(stylesPath, styles, 'utf-8');");
-  push("  console.log('  Colores aplicados en src/styles.scss');");
-  push("} else {");
-  push("  console.warn('  No se encontro src/styles.scss');");
-  push("}");
-  push("");
-  push("const excludedPages = " + excluded + ";");
-  push("if (excludedPages.length > 0) {");
-  push("  console.log('Eliminando ' + excludedPages.length + ' pagina(s)...');");
-  push("  const pagesDir = join(__dirname, 'src', 'app', 'pages');");
-  push("  for (const page of excludedPages) {");
-  push("    const pagePath = join(pagesDir, page.folder);");
-  push("    if (existsSync(pagePath)) {");
-  push("      rmSync(pagePath, { recursive: true, force: true });");
-  push("      console.log('  Eliminado: src/app/pages/' + page.folder);");
-  push("    }");
-  push("  }");
-  push("}");
-  push("");
-  push("const routesPath = join(__dirname, 'src', 'app', 'app.routes.ts');");
-  push("if (existsSync(routesPath)) {");
-  push("  let routes = readFileSync(routesPath, 'utf-8');");
-  push("  for (const page of excludedPages) {");
-  push("    for (const routePath of page.routes) {");
-  push("      routes = routes.replace(new RegExp('\\\\s*\\\\{[^}]*path: [\\'\\\"]' + routePath + '[\\'\\\"][^}]*\\\\}(\\\\n?\\\\s*,)?', 'gs'), '');");
-  push("    }");
-  push("  }");
-  push("  writeFileSync(routesPath, routes, 'utf-8');");
-  push("  console.log('  Rutas actualizadas');");
-  push("}");
-  push("");
-  push("const sidebarPath = join(__dirname, 'src', 'app', 'shared', 'sidebar', 'sidebar.component.ts');");
-  push("if (existsSync(sidebarPath)) {");
-  push("  let sidebar = readFileSync(sidebarPath, 'utf-8');");
-  push("  for (const page of excludedPages) {");
-  push("    sidebar = sidebar.replace(new RegExp('\\\\s*\\\\{[^}]*id: [\\'\\\"]' + page.id + '[\\'\\\"][^}]*\\\\}(\\\\n?\\\\s*,)?', 'gs'), '');");
-  push("  }");
-  push("  writeFileSync(sidebarPath, sidebar, 'utf-8');");
-  push("  console.log('  Sidebar actualizado');");
-  push("}");
-  push("");
-  push("if (existsSync(stylesPath)) {");
-  push("  let styles = readFileSync(stylesPath, 'utf-8');");
-  push("  styles = styles.replace(new RegExp('(--sidebar-width:\\\\s*)[^;]+(;)', 'g'), '$1" + sidebarWidth + "px$2');");
-  push("  styles = styles.replace(new RegExp('(--sidebar-collapsed-width:\\\\s*)[^;]+(;)', 'g'), '$1" + sidebarCollapsed + "px$2');");
-  push("  styles = styles.replace(new RegExp('(--content-radius:\\\\s*)[^;]+(;)', 'g'), '$1" + contentRadius + "px$2');");
-  push("  styles = styles.replace(new RegExp('(--transition-speed:\\\\s*)[^;]+(;)', 'g'), '$1" + transitionSpeed + "s$2');");
-  push("  writeFileSync(stylesPath, styles, 'utf-8');");
-  push("  console.log('  Layout aplicado');");
-  push("}");
-  push("");
-  push("const pkgPath = join(__dirname, 'package.json');");
-  push("if (existsSync(pkgPath)) {");
-  push("  const pkg = JSON.parse(readFileSync(pkgPath, 'utf-8'));");
-  push("  if (!config.dependencies['chart.js']) {");
-  push("    delete pkg.dependencies['chart.js']; delete pkg.dependencies['ng2-charts'];");
-  push("    console.log('  Dependencias eliminadas: chart.js, ng2-charts');");
-  push("  }");
-  push("  writeFileSync(pkgPath, JSON.stringify(pkg, null, 2), 'utf-8');");
-  push("}");
-  push("");
-  push("console.log('Configuracion aplicada correctamente!');");
-  push("console.log('Ejecuta npm install si se eliminaron dependencias.');");
-
-  return lines.join('\n');
 }

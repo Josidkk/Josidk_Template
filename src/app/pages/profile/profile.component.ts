@@ -1,7 +1,8 @@
-import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
+import { Component, ChangeDetectionStrategy, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { BreadcrumbComponent, BreadcrumbItem } from '../../shared/breadcrumb/breadcrumb.component';
+import { APP_CONFIG } from '../../core/config/app-config';
 
 interface Skill {
   name: string;
@@ -30,25 +31,15 @@ export class ProfileComponent {
     { label: 'Mi Perfil' },
   ];
 
-  user = signal({
-    name: 'Deyby Josue',
-    email: 'deyby@josidk.com',
-    role: 'Developer',
-    phone: '+1 (809) 555-1234',
-    department: 'Tecnología',
-    location: 'Santo Domingo, RD',
-    joinDate: '15 Mar 2023',
-    bio: 'Desarrollador Full Stack apasionado por crear soluciones ERP modernas y eficientes. Especializado en Angular, TypeScript y arquitectura de software.',
+  user = signal({ ...APP_CONFIG.user });
+
+  /** Iniciales del usuario (primeras 2 letras del nombre) */
+  userInitials = computed(() => {
+    const parts = this.user().name.split(' ');
+    return parts.map(p => p[0]).join('').toUpperCase().slice(0, 2);
   });
 
-  skills: Skill[] = [
-    { name: 'Angular / TypeScript', level: 92, color: '#dd0031' },
-    { name: 'React / Next.js', level: 78, color: '#61dafb' },
-    { name: 'Node.js / NestJS', level: 85, color: '#339933' },
-    { name: 'PostgreSQL / MongoDB', level: 80, color: '#336791' },
-    { name: 'UI/UX Design', level: 70, color: '#f59e0b' },
-    { name: 'DevOps / Docker', level: 65, color: '#2496ed' },
-  ];
+  skills: Skill[] = [...APP_CONFIG.skills];
 
   activities: Activity[] = [
     { action: 'Completó tarea', detail: 'Diseñar landing page', time: 'Hace 2h', icon: 'ti ti-check' },

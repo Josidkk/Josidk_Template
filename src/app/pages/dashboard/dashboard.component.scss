@@ -131,6 +131,15 @@
   color: white;
   letter-spacing: -0.3px;
   line-height: 1.2;
+
+  i {
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 22px;
+    margin-left: 6px;
+    margin-top: -3px;
+    opacity: 0.85;
+  }
 }
 
 .greeting-text {

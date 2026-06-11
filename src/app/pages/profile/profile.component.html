@@ -5,171 +5,224 @@
     [breadcrumbs]="breadcrumbs">
   </app-breadcrumb>
 
-  <div class="profile-grid">
-    <!-- Left Column: Avatar & Info -->
-    <div class="profile-sidebar card-3d">
-      <div class="avatar-wrapper">
-        <div class="avatar-large">
-          <i class="ti ti-user"></i>
+  <!-- Cover / Banner -->
+  <div class="profile-cover card-3d">
+    <div class="cover-gradient"></div>
+    <div class="cover-content">
+      <div class="cover-avatar-wrapper">
+        <div class="cover-avatar">
+          <span class="cover-avatar-text">{{ userInitials() }}</span>
         </div>
         <button class="avatar-upload-btn" title="Cambiar foto">
           <i class="ti ti-camera"></i>
         </button>
       </div>
-      <h2 class="user-name">{{ user().name }}</h2>
-      <span class="user-role">{{ user().role }}</span>
-      <span class="user-dept">{{ user().department }}</span>
-      <span class="user-location"><i class="ti ti-map-pin"></i> {{ user().location }}</span>
-
-      <div class="profile-stats">
-        <div class="p-stat">
-          <span class="p-stat-value">156</span>
-          <span class="p-stat-label">Tareas</span>
-        </div>
-        <div class="p-stat">
-          <span class="p-stat-value">42</span>
-          <span class="p-stat-label">Proyectos</span>
-        </div>
-        <div class="p-stat">
-          <span class="p-stat-value">98%</span>
-          <span class="p-stat-label">Asistencia</span>
-        </div>
-      </div>
-
-      <!-- Contact quick info -->
-      <div class="contact-info-box">
-        <div class="contact-row">
-          <i class="ti ti-mail"></i>
-          <span>{{ user().email }}</span>
-        </div>
-        <div class="contact-row">
-          <i class="ti ti-phone"></i>
-          <span>{{ user().phone }}</span>
-        </div>
-        <div class="contact-row">
-          <i class="ti ti-calendar"></i>
-          <span>Ingreso: {{ user().joinDate }}</span>
+      <div class="cover-info">
+        <h1 class="cover-name">{{ user().name }}</h1>
+        <div class="cover-meta">
+          <span class="cover-role">{{ user().role }}</span>
+          <span class="cover-divider">•</span>
+          <span class="cover-dept">{{ user().department }}</span>
+          <span class="cover-divider">•</span>
+          <span class="cover-location"><i class="ti ti-map-pin"></i> {{ user().location }}</span>
         </div>
       </div>
     </div>
+  </div>
 
-    <!-- Right Column -->
-    <div class="profile-main">
-      <!-- Personal Info Card -->
-      <div class="info-card card-3d">
-        <div class="card-header-line">
-          <div class="card-header-left">
-            <div class="card-header-icon"><i class="ti ti-user-edit"></i></div>
-            <h3>Información Personal</h3>
-          </div>
-          @if (!editMode()) {
-            <button class="btn-edit" (click)="toggleEdit()">
-              <i class="ti ti-edit"></i> Editar
-            </button>
-          }
+  <!-- Stats Row -->
+  <div class="stats-row">
+    <div class="stat-card card-3d">
+      <div class="stat-icon stat-icon--tasks"><i class="ti ti-checklist"></i></div>
+      <div class="stat-body">
+        <span class="stat-value">156</span>
+        <span class="stat-label">Tareas</span>
+      </div>
+      <span class="stat-trend up">+12%</span>
+    </div>
+    <div class="stat-card card-3d">
+      <div class="stat-icon stat-icon--projects"><i class="ti ti-folder"></i></div>
+      <div class="stat-body">
+        <span class="stat-value">42</span>
+        <span class="stat-label">Proyectos</span>
+      </div>
+      <span class="stat-trend up">+5%</span>
+    </div>
+    <div class="stat-card card-3d">
+      <div class="stat-icon stat-icon--attendance"><i class="ti ti-calendar-stats"></i></div>
+      <div class="stat-body">
+        <span class="stat-value">98%</span>
+        <span class="stat-label">Asistencia</span>
+      </div>
+      <span class="stat-trend up">+2%</span>
+    </div>
+    <div class="stat-card card-3d">
+      <div class="stat-icon stat-icon--streak"><i class="ti ti-flame"></i></div>
+      <div class="stat-body">
+        <span class="stat-value">23</span>
+        <span class="stat-label">Días activo</span>
+      </div>
+      <span class="stat-trend up">Racha</span>
+    </div>
+  </div>
+
+  <div class="profile-grid">
+    <!-- Left Column: Contact & Quick Info -->
+    <div class="profile-left">
+      <!-- Contact Card -->
+      <div class="profile-card card-3d">
+        <div class="card-heading">
+          <div class="card-heading-icon"><i class="ti ti-address-book"></i></div>
+          <h3>Contacto</h3>
         </div>
-
-        @if (!editMode()) {
-          <div class="details-grid">
-            <div class="detail-item">
-              <span class="detail-label">Nombre completo</span>
-              <span class="detail-value">{{ user().name }}</span>
-            </div>
-            <div class="detail-item">
-              <span class="detail-label">Correo electrónico</span>
-              <span class="detail-value">{{ user().email }}</span>
-            </div>
-            <div class="detail-item">
-              <span class="detail-label">Teléfono</span>
-              <span class="detail-value">{{ user().phone }}</span>
-            </div>
-            <div class="detail-item">
-              <span class="detail-label">Departamento</span>
-              <span class="detail-value">{{ user().department }}</span>
-            </div>
-            <div class="detail-item full-width">
-              <span class="detail-label">Biografía</span>
-              <span class="detail-value bio-text">{{ user().bio }}</span>
+        <div class="contact-list">
+          <div class="contact-item">
+            <div class="contact-icon"><i class="ti ti-mail"></i></div>
+            <div class="contact-detail">
+              <span class="contact-label">Email</span>
+              <span class="contact-value">{{ user().email }}</span>
             </div>
           </div>
-        } @else {
-          <div class="edit-form">
-            <div class="form-row">
-              <div class="form-group">
-                <label>Nombre</label>
-                <input type="text" [(ngModel)]="editedUser.name">
-              </div>
-              <div class="form-group">
-                <label>Correo</label>
-                <input type="email" [(ngModel)]="editedUser.email">
-              </div>
-            </div>
-            <div class="form-row">
-              <div class="form-group">
-                <label>Teléfono</label>
-                <input type="text" [(ngModel)]="editedUser.phone">
-              </div>
-              <div class="form-group">
-                <label>Departamento</label>
-                <input type="text" [(ngModel)]="editedUser.department">
-              </div>
-            </div>
-            <div class="form-group">
-              <label>Biografía</label>
-              <textarea [(ngModel)]="editedUser.bio" rows="3"></textarea>
-            </div>
-            <div class="form-actions">
-              <button class="btn-cancel" (click)="cancelEdit()">Cancelar</button>
-              <button class="btn-save" (click)="saveProfile()">Guardar Cambios</button>
+          <div class="contact-item">
+            <div class="contact-icon"><i class="ti ti-phone"></i></div>
+            <div class="contact-detail">
+              <span class="contact-label">Teléfono</span>
+              <span class="contact-value">{{ user().phone }}</span>
             </div>
           </div>
-        }
+          <div class="contact-item">
+            <div class="contact-icon"><i class="ti ti-calendar"></i></div>
+            <div class="contact-detail">
+              <span class="contact-label">Ingreso</span>
+              <span class="contact-value">{{ user().joinDate }}</span>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon"><i class="ti ti-map-pin"></i></div>
+            <div class="contact-detail">
+              <span class="contact-label">Ubicación</span>
+              <span class="contact-value">{{ user().location }}</span>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- Skills Card -->
-      <div class="info-card card-3d">
-        <div class="card-header-line">
-          <div class="card-header-left">
-            <div class="card-header-icon"><i class="ti ti-code"></i></div>
-            <h3>Habilidades</h3>
-          </div>
+      <div class="profile-card card-3d">
+        <div class="card-heading">
+          <div class="card-heading-icon"><i class="ti ti-code"></i></div>
+          <h3>Habilidades</h3>
         </div>
-        <div class="skills-grid">
+        <div class="skills-list">
           @for (skill of skills; track skill.name) {
             <div class="skill-item">
-              <div class="skill-header">
+              <div class="skill-top">
                 <span class="skill-name">{{ skill.name }}</span>
-                <span class="skill-percent">{{ skill.level }}%</span>
+                <span class="skill-pct">{{ skill.level }}%</span>
               </div>
-              <div class="skill-bar-bg">
+              <div class="skill-bar-track">
                 <div class="skill-bar-fill" [style.width.%]="skill.level" [style.background]="skill.color"></div>
               </div>
             </div>
           }
         </div>
       </div>
+    </div>
+
+    <!-- Right Column: Personal Info + Activity -->
+    <div class="profile-right">
+      <!-- Personal Info Card -->
+      <div class="profile-card card-3d" [class.editing]="editMode()">
+        <div class="card-heading">
+          <div class="card-heading-icon"><i class="ti ti-user-edit"></i></div>
+          <h3>Información Personal</h3>
+          @if (!editMode()) {
+            <button class="btn-edit" (click)="toggleEdit()">
+              <i class="ti ti-pencil"></i> Editar
+            </button>
+          }
+        </div>
+
+        @if (!editMode()) {
+          <div class="info-grid">
+            <div class="info-field">
+              <span class="info-label">Nombre completo</span>
+              <span class="info-value">{{ user().name }}</span>
+            </div>
+            <div class="info-field">
+              <span class="info-label">Correo electrónico</span>
+              <span class="info-value">{{ user().email }}</span>
+            </div>
+            <div class="info-field">
+              <span class="info-label">Teléfono</span>
+              <span class="info-value">{{ user().phone }}</span>
+            </div>
+            <div class="info-field">
+              <span class="info-label">Departamento</span>
+              <span class="info-value">{{ user().department }}</span>
+            </div>
+            <div class="info-field info-field--full">
+              <span class="info-label">Biografía</span>
+              <p class="info-bio">{{ user().bio }}</p>
+            </div>
+          </div>
+        } @else {
+          <div class="edit-form" [class.visible]="editMode()">
+            <div class="form-row">
+              <div class="form-group">
+                <label>Nombre completo</label>
+                <input type="text" [(ngModel)]="editedUser.name" placeholder="Tu nombre" />
+              </div>
+              <div class="form-group">
+                <label>Correo electrónico</label>
+                <input type="email" [(ngModel)]="editedUser.email" placeholder="email@ejemplo.com" />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Teléfono</label>
+                <input type="text" [(ngModel)]="editedUser.phone" placeholder="+1 (000) 000-0000" />
+              </div>
+              <div class="form-group">
+                <label>Departamento</label>
+                <input type="text" [(ngModel)]="editedUser.department" placeholder="Departamento" />
+              </div>
+            </div>
+            <div class="form-group form-group--full">
+              <label>Biografía</label>
+              <textarea [(ngModel)]="editedUser.bio" rows="3" placeholder="Cuéntanos sobre ti..."></textarea>
+            </div>
+            <div class="form-actions">
+              <button class="btn-cancel" (click)="cancelEdit()">Cancelar</button>
+              <button class="btn-save" (click)="saveProfile()">
+                <i class="ti ti-check"></i> Guardar Cambios
+              </button>
+            </div>
+          </div>
+        }
+      </div>
 
       <!-- Activity Card -->
-      <div class="info-card card-3d">
-        <div class="card-header-line">
-          <div class="card-header-left">
-            <div class="card-header-icon"><i class="ti ti-activity"></i></div>
-            <h3>Actividad Reciente</h3>
-          </div>
+      <div class="profile-card card-3d">
+        <div class="card-heading">
+          <div class="card-heading-icon"><i class="ti ti-activity"></i></div>
+          <h3>Actividad Reciente</h3>
         </div>
-        <div class="activity-timeline">
+        <div class="timeline">
           @for (act of activities; track act.action + act.time; let last = $last) {
-            <div class="activity-item">
-              <div class="activity-dot">
-                <i [class]="act.icon"></i>
+            <div class="timeline-item">
+              <div class="timeline-marker">
+                <div class="timeline-dot">
+                  <i [class]="act.icon"></i>
+                </div>
+                @if (!last) {
+                  <div class="timeline-line"></div>
+                }
               </div>
-              @if (!last) {
-                <div class="activity-line"></div>
-              }
-              <div class="activity-content">
-                <span class="activity-action">{{ act.action }}</span>
-                <span class="activity-detail">{{ act.detail }}</span>
-                <span class="activity-time">{{ act.time }}</span>
+              <div class="timeline-content">
+                <span class="timeline-action">{{ act.action }}</span>
+                <span class="timeline-detail">{{ act.detail }}</span>
+                <span class="timeline-time">{{ act.time }}</span>
               </div>
             </div>
           }

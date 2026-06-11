@@ -1,0 +1,80 @@
+<div class="product-dialog">
+  <div class="dialog-header-bg" [style.background-image]="form.image ? 'url(' + form.image + ')' : null" [class.has-bg]="!!form.image">
+    <div class="dialog-header-overlay">
+      <div class="dialog-icon">
+        <i class="ti" [ngClass]="isEdit() ? 'ti-pencil' : 'ti-package'"></i>
+      </div>
+      <h2 class="dialog-title">{{ isEdit() ? 'Editar Producto' : 'Nuevo Producto' }}</h2>
+      <button class="dialog-close" (click)="dialogRef.close()" title="Cerrar">
+        <i class="ti ti-x"></i>
+      </button>
+    </div>
+  </div>
+
+  <div class="dialog-body">
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Nombre del producto</label>
+        <input class="form-input" type="text" [(ngModel)]="form.name" placeholder="Ej: MacBook Pro 16 pulg" autofocus />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Categoría</label>
+        <select class="form-input" [(ngModel)]="form.category">
+          <option value="Electrónica">Electrónica</option>
+          <option value="Accesorios">Accesorios</option>
+          <option value="Wearables">Wearables</option>
+          <option value="Audio">Audio</option>
+          <option value="Ropa">Ropa</option>
+          <option value="Hogar">Hogar</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Precio ($)</label>
+        <input class="form-input" type="number" [(ngModel)]="form.price" placeholder="0" min="0" step="0.01" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Stock</label>
+        <input class="form-input" type="number" [(ngModel)]="form.stock" placeholder="0" min="0" />
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">URL de la imagen</label>
+        <div class="image-url-input">
+          <input class="form-input" type="url" [(ngModel)]="form.image" placeholder="https://ejemplo.com/imagen.jpg" />
+          @if (form.image && isValidUrl(form.image)) {
+            <div class="image-preview">
+              <img [src]="form.image" alt="Preview" />
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Estado</label>
+        <div class="status-selector">
+          <button class="status-opt" [class.active]="form.status === 'active'" (click)="form.status = 'active'">
+            <span class="status-dot active"></span> Activo
+          </button>
+          <button class="status-opt" [class.active]="form.status === 'inactive'" (click)="form.status = 'inactive'">
+            <span class="status-dot inactive"></span> Inactivo
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="dialog-footer">
+    <button class="btn-cancel" (click)="dialogRef.close()">Cancelar</button>
+    <button class="btn-save" (click)="save()" [disabled]="!isValid()">
+      <i class="ti ti-check"></i>
+      {{ isEdit() ? 'Guardar cambios' : 'Crear producto' }}
+    </button>
+  </div>
+</div>

@@ -1,163 +1,119 @@
-# 🚀 Josidk ERP Template
+# Josidk ERP Template
 
-> **Angular 18** · **Angular Material** · **Chart.js** · **Tabler Icons**  
-> Plantilla de dashboard administrativo moderna, modular y lista para personalizar.
+> **Angular 18** · **Angular Material** · **Chart.js** · **Tabler Icons**
+> Dashboard administrativo moderno, modular y listo para personalizar.
 
 ---
 
-## ⚡ Quick Start
+## En 30 segundos
 
 ```bash
-git clone <url>
-cd Josidk_Template
 npm install
-npm start          # → http://localhost:4200
+npm start        # -> http://localhost:4200
 ```
 
-> La app inicia en `/login`. Usa cualquier email/contraseña para entrar.
+Inicia sesion en `/login` con cualquier email y contrasena.
 
 ---
 
-## ✨ Features
+## Que incluye?
 
-| | | |
-|---|---|---|
-| ✅ Layout completo | Sidebar colapsable + Navbar + Footer | Responsive (móvil/tablet/desktop) |
-| ✅ 13 páginas demo | Dashboard, eCommerce, Kanban, Chat, Email, Calendario y más | Lazy loading |
-| ✅ Angular Material | Botones, Tabs, Chips, Badges, Sliders, Expansion Panels y más | 7 páginas demo |
-| ✅ Modo oscuro | Con persistencia en localStorage | Alterna desde el navbar |
-| ✅ 6 paletas de color | Tierra, Océano, Bosque, Púrpura, Atardecer, Minimal | + editor personalizado |
-| ✅ Configurador visual | Activa/desactiva módulos, cambia colores, descarga package | `/settings` |
-| ✅ CRUD de productos | Diálogo con formulario para crear/editar/eliminar | eCommerce |
-| ✅ Gráficas (Chart.js) | Bar, Line, Pie, Doughnut, Radar, PolarArea | Dashboard + Material |
-| ✅ Componentes compartidos | Breadcrumb, ConfirmDialog, NotificationService, SidebarConfig | Reutilizables |
-| ✅ CSS Variables | Tema centralizado en `styles.scss` | Fácil de personalizar |
+| Para que | Que hay |
+|---|---|
+| **Ver datos** | Dashboard con graficas (Chart.js), tabla de usuarios, eCommerce con CRUD |
+| **Gestionar tareas** | Kanban con drag & drop, calendario de eventos |
+| **Comunicacion** | Chat, Email (interfaces demo) |
+| **Autenticacion** | Login + Register (opcionales en el configurador) |
+| **UI Components** | 6 paginas con ejemplos de Angular Material |
+| **Componentes reutilizables** | Sidebar, Navbar, Breadcrumb, ConfirmDialog, NotificationService |
 
 ---
 
-## 📁 Estructura
+## Personalizacion (sin tocar codigo)
+
+Entra a **Configuracion** (`/settings`) y puedes:
+
+- **Paletas de color** — 6 temas predefinidos + editor personalizado (vista previa en vivo)
+- **Modulos** — Activa/desactiva paginas. Login es obligatorio, Register opcional
+- **Layout** — Ancho del sidebar, radio de bordes, velocidad de animacion, tipografia
+- **Tema oscuro** — Claro, oscuro o seguir el sistema (por defecto)
+
+Cuando termines, **Descargar Proyecto** genera un ZIP listo para usar.
+
+---
+
+## Personalizacion (editando codigo)
+
+### Marca, usuario y datos demo
+
+Todo en un solo archivo: `src/app/core/config/app-config.ts`
+
+```typescript
+export const APP_CONFIG = {
+  siteName: 'Tu Empresa',
+  siteFullName: 'Tu Empresa ERP',
+  user: {
+    name: 'Tu Nombre',
+    email: 'tu@email.com',
+    role: 'Admin',
+    initials: 'TN',
+  },
+  skills: [
+    { name: 'Angular', level: 90, color: '#dd0031' },
+  ],
+};
+```
+
+Los cambios se reflejan automaticamente en sidebar, navbar, perfil, footer y titulo de pagina.
+
+### Colores
+
+En `src/styles.scss` — variables CSS globales en `:root` (claro) y `body.dark-theme` (oscuro).
+
+---
+
+## Estructura rapida
 
 ```
 src/
 ├── app/
-│   ├── core/services/         → ThemeService, NotificationService, SidebarConfigService
-│   ├── core/guards/           → AuthGuard (protección de rutas)
-│   ├── layouts/main-layout/   → Layout con sidebar + navbar + router-outlet
-│   ├── pages/                 → 13 páginas demo (lazy loading)
-│   │   ├── auth/login/        → 🔐 Login
-│   │   ├── dashboard/         → 📊 Dashboard con gráficas
-│   │   ├── ecommerce/         → 🛒 Catálogo con CRUD
-│   │   ├── users/             → 👥 Tabla con MatTable
-│   │   ├── kanban/            → 📋 Kanban drag & drop
-│   │   ├── chat/ + email/     → 💬✉️ Comunicación
-│   │   ├── calendar/          → 📅 Calendario
-│   │   ├── profile/           → 👤 Perfil
-│   │   ├── settings/          → ⚙️ Configurador
-│   │   ├── material/          → 🎨 7 páginas Material UI
-│   │   └── ui-components/     → Demos de componentes compartidos
-│   └── shared/                → Sidebar, Navbar, Breadcrumb, Footer, ConfirmDialog
-├── styles.scss                → Variables CSS globales (colores, layout)
-└── index.html                 → Fuentes + Tabler Icons CDN
+│   ├── core/config/app-config.ts       <- Configuracion centralizada
+│   ├── core/services/                  -> ThemeService, NotificationService
+│   ├── core/guards/auth.guard.ts       -> Proteccion de rutas
+│   ├── layouts/main-layout/            -> Sidebar + Navbar + Footer
+│   ├── pages/                          -> 14 paginas (lazy loading)
+│   └── shared/                         -> Sidebar, Navbar, Breadcrumb, dialogos
+└── styles.scss                         -> Variables CSS globales
 ```
 
----
-
-## 🎨 Personalización Rápida
-
-### 1. Colores
-
-**Desde el Configurador** → `/settings` → selecciona una paleta de color.
-
-**O editando** `src/styles.scss`:
-```scss
-:root {
-  --primary: #1A1208;       // Color principal
-  --sidebar-bg: #0F0F0E;   // Fondo del menú
-  --main-bg: #F4F2ED;      // Fondo general
-}
-```
-
-### 2. Módulos (páginas)
-
-**Desde el Configurador** → `/settings` → Módulos del Sistema:
-- Activa/desactiva páginas individuales
-- La sección Material UI tiene su propio toggle
-- Descarga un package con `apply-config.mjs` para aplicar los cambios
-
-### 3. Componentes reutilizables
-
-| Componente | Cómo usarlo |
-|------------|-------------|
-| **Breadcrumb** | `<app-breadcrumb [pageTitle]="'Título'" [icon]="'ti ti-star'" [breadcrumbs]="bc"></app-breadcrumb>` |
-| **ConfirmDialog** | `this.dialog.open(ConfirmDialogComponent, { data: { title, message, type: 'danger' } })` |
-| **Notification** | `this.notify.success('Título', 'Mensaje')` — inyecta `NotificationService` |
-| **Card** | `<div class="card-3d">` — clase CSS global |
-| **SidebarConfig** | Toggle "Material UI" en Settings — oculta/muestra la sección del menú |
-
-### 4. Menú lateral
-
-Edita `src/app/shared/sidebar/sidebar.component.ts`:
-```typescript
-menuSections: MenuSection[] = [
-  {
-    title: 'Mi Sección',
-    items: [
-      { id: 'pagina', label: 'Mi Página', icon: 'ti ti-star', route: '/mi-pagina' },
-    ]
-  }
-];
-```
+> Documentacion completa de componentes, servicios y guias: [`DOCUMENTACION.md`](./DOCUMENTACION.md)
 
 ---
 
-## 🧩 Documentación Detallada
+## Stack
 
-Para documentación completa de cada componente, servicios, API y guías de personalización:
-
-👉 **[DOCUMENTACION.md](./DOCUMENTACION.md)**
-
-Incluye:
-- API de todos los componentes compartidos (inputs/outputs)
-- Cómo agregar una página nueva (paso a paso)
-- Cómo eliminar páginas
-- Lista de verificación para migrar a producción
-- FAQ y solución de problemas
+| Tecnologia | Version |
+|---|---|
+| Angular | 18 |
+| Angular Material | 18 |
+| Chart.js / ng2-charts | 4.5 / 6.0 |
+| Tabler Icons | CDN |
+| Plus Jakarta Sans | Google Fonts |
 
 ---
 
-## 🛠 Stack Tecnológico
+## Comandos utiles
 
-| Tecnología | Versión | Uso |
-|-----------|---------|-----|
-| Angular | 18 | Framework |
-| Angular Material | 18 | Componentes UI |
-| Chart.js + ng2-charts | 4.5 + 6.0 | Gráficas |
-| Tabler Icons | CDN | Iconos |
-| Plus Jakarta Sans | Google Fonts | Tipografía |
-| TypeScript | 5.5 | Lenguaje |
-
----
-
-## 📋 Comandos
-
-| Comando | Descripción |
-|---------|-------------|
-| `npm start` | Servidor de desarrollo (hot reload) |
-| `npm run build` | Compilar para producción |
-| `npm test` | Ejecutar pruebas |
-| `ng generate component pages/mi-pagina` | Nueva página |
-
----
-
-## ⚠️ Notas
-
-- `notification-new.service.ts` es un **duplicado con import roto**. Usa siempre `notification.service.ts`.
-- Las páginas Kanban, Chat, Email y Calendario son **demostraciones visuales** con datos mock. No son funcionales sin backend.
-- Si no usas Dashboard, desinstala `chart.js` y `ng2-charts` para reducir el bundle.
+| Comando | Para |
+|---|---|
+| `npm start` | Desarrollo con hot reload |
+| `npm run build` | Build de produccion |
+| `npm test` | Ejecutar tests |
+| `ng generate component pages/mi-pagina` | Crear nueva pagina |
 
 ---
 
 <div align="center">
-  <p>Hecho con ❤️ por <strong>Josidk</strong></p>
+  <p>Hecho con <3 por <strong>Josidk</strong></p>
   <p><em>Angular 18 · Angular Material · SCSS · Tabler Icons</em></p>
 </div>

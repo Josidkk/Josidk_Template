@@ -2,6 +2,7 @@ import { Component, EventEmitter, Output, ChangeDetectionStrategy, inject } from
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ThemeService } from '../../core/services/theme.service';
+import { APP_CONFIG } from '../../core/config/app-config';
 
 @Component({
   selector: 'app-navbar',
@@ -21,8 +22,8 @@ export class NavbarComponent {
   searchQuery = '';
 
   user = {
-    name: 'Deyby Josue',
-    initials: 'DJ',
+    name: APP_CONFIG.user.name,
+    initials: APP_CONFIG.user.initials,
     avatarUrl: null as string | null,
   };
 
