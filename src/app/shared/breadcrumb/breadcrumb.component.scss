@@ -1,40 +1,56 @@
 .breadcrumb-card {
   background: var(--content-bg);
   border-radius: var(--content-radius);
-  padding: 24px;
+  padding: 24px 28px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
   border: 1px solid var(--glass-border);
+  position: relative;
+  overflow: hidden;
+
+  /* Subtle left accent bar */
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: linear-gradient(180deg, var(--primary), var(--accent-warm-dark));
+    border-radius: 0 2px 2px 0;
+  }
 
   .breadcrumb-content {
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 18px;
   }
 
   .breadcrumb-icon {
-    width: 56px;
-    height: 56px;
+    width: 52px;
+    height: 52px;
     border-radius: 14px;
-    background: var(--primary-light);
+    background: linear-gradient(135deg, var(--primary-light), rgba(42, 122, 68, 0.08));
     color: var(--primary);
     display: flex;
     align-items: center;
     justify-content: center;
+    border: 1px solid var(--glass-border);
+    flex-shrink: 0;
 
     i {
-      font-size: 1.8rem;
+      font-size: 1.6rem;
     }
   }
 
   .breadcrumb-text {
     .page-title {
-      font-size: 1.4rem;
+      font-size: 1.35rem;
       font-weight: 700;
       color: var(--text-primary);
-      margin: 0 0 6px;
+      margin: 0 0 5px;
+      letter-spacing: -0.01em;
     }
 
     .breadcrumb-list {
@@ -43,39 +59,36 @@
       list-style: none;
       padding: 0;
       margin: 0;
-      font-size: 0.85rem;
+      font-size: 0.82rem;
 
       li {
         display: flex;
         align-items: center;
 
         .breadcrumb-home {
-          margin-right: 6px;
-          font-size: 1rem;
+          margin-right: 5px;
+          font-size: 0.95rem;
           color: var(--primary);
+          opacity: 0.7;
         }
 
         a {
-          color: var(--primary);
+          color: var(--text-muted);
           text-decoration: none;
           font-weight: 500;
-          transition: color 0.2s;
-
-          &:hover {
-            color: #4a74e8;
-            text-decoration: underline;
-          }
+          transition: color 0.15s;
         }
 
         .current {
           color: var(--text-secondary);
+          font-weight: 600;
         }
 
         .separator {
           margin: 0 8px;
-          font-size: 0.75rem;
-          color: var(--text-secondary);
-          opacity: 0.5;
+          font-size: 0.65rem;
+          color: var(--text-muted);
+          opacity: 0.6;
         }
       }
     }
@@ -94,17 +107,11 @@
   border: none;
   background: var(--primary);
   color: #fff;
-  white-space: nowrap; /* Evita saltos de línea molestos en el texto del botón */
+  white-space: nowrap;
   transition: all 0.2s;
 
   i {
     font-size: 1.1rem;
-  }
-
-  &:hover {
-    background: #4a74e8;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 10px rgba(93, 135, 255, 0.3);
   }
 }
 

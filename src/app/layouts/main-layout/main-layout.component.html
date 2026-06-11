@@ -1,15 +1,15 @@
-<div class="erp-container" [class.sidebar-collapsed]="isSidebarCollapsed">
-  @if (!isSidebarCollapsed) {
-  <div class="sidebar-backdrop" (click)="isSidebarCollapsed = true"></div>
-  }
+<div class="erp-container" [class.sidebar-collapsed]="isSidebarCollapsed()" (touchstart)="onTouchStart($event)" (touchend)="onTouchEnd($event)">
+  <div class="sidebar-backdrop" [class.show]="!isSidebarCollapsed()" (click)="isSidebarCollapsed.set(true)"></div>
 
-  <app-sidebar [isCollapsed]="isSidebarCollapsed"></app-sidebar>
+  <app-sidebar [isCollapsed]="isSidebarCollapsed()" (toggleCollapse)="toggleSidebar()"></app-sidebar>
 
   <div class="main-layout">
-    <app-navbar (toggleSidebar)="isSidebarCollapsed = !isSidebarCollapsed"></app-navbar>
+    <app-navbar (toggleSidebar)="toggleSidebar()"></app-navbar>
 
     <main class="content">
       <router-outlet></router-outlet>
     </main>
+
+    <app-footer></app-footer>
   </div>
 </div>

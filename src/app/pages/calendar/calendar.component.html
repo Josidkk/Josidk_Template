@@ -1,0 +1,125 @@
+<div class="page-container">
+  <app-breadcrumb
+    [pageTitle]="'Calendario'"
+    [icon]="'ti ti-calendar'"
+    [breadcrumbs]="breadcrumbs">
+  </app-breadcrumb>
+
+  <div class="calendar-layout">
+    <!-- Calendar Grid -->
+    <div class="calendar-card card-3d">
+      <div class="calendar-nav">
+        <button class="nav-btn" (click)="prevMonth()">
+          <i class="ti ti-chevron-left"></i>
+        </button>
+        <div class="month-title-wrap">
+          <h2 class="month-title" (click)="openMonthPicker()">{{ monthName }}</h2>
+          <i class="ti ti-chevron-down month-title-arrow"></i>
+        </div>
+        <button class="nav-btn" (click)="nextMonth()">
+          <i class="ti ti-chevron-right"></i>
+        </button>
+      </div>
+
+      <!-- Month Picker Overlay -->
+      @if (showMonthPicker()) {
+        <div class="month-picker-overlay" (click)="closeMonthPicker()">
+          <div class="month-picker" (click)="$event.stopPropagation()">
+            <div class="picker-header">
+              <button class="picker-nav" (click)="prevPickerYear()">
+                <i class="ti ti-chevron-left"></i>
+              </button>
+              <span class="picker-year">{{ pickerYear() }}</span>
+              <button class="picker-nav" (click)="nextPickerYear()">
+                <i class="ti ti-chevron-right"></i>
+              </button>
+            </div>
+            <div class="picker-grid">
+              @for (month of months; track month; let i = $index) {
+                <button class="picker-month"
+                  [class.today]="isCurrentMonth(i)"
+                  [class.active]="isActiveMonth(i)"
+                  (click)="selectPickerMonth(i)">
+                  {{ month }}
+                </button>
+              }
+            </div>
+          </div>
+        </div>
+      }
+
+      <div class="calendar-grid">
+        @for (day of weekDays; track day) {
+          <div class="weekday-label">{{ day }}</div>
+        }
+
+        @for (day of calendarDays; track $index) {
+          <div class="day-cell"
+            [class.empty]="day === null"
+            [class.today]="isToday(day)"
+            [class.selected]="day === selectedDay()"
+            [class.has-event]="day !== null && events()[day]"
+            (click)="selectDay(day)">
+            @if (day !== null) {
+              <span class="day-num">{{ day }}</span>
+              @if (events()[day]) {
+                <div class="day-dots">
+                  @for (ev of events()[day]; track ev.id) {
+                    <span class="dot" [style.background]="ev.color"></span>
+                  }
+                </div>
+              }
+            }
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- Events Panel -->
+    <div class="events-panel card-3d">
+      <div class="events-header">
+        <div class="events-header-left">
+          <h3>Eventos del {{ selectedDayTitle }}</h3>
+          @if (selectedEvents.length > 0) {
+            <span class="events-count">{{ selectedEvents.length }}</span>
+          }
+        </div>
+        <button class="add-event-btn" (click)="openAddDialog()">
+          <i class="ti ti-plus"></i>
+          Nuevo
+        </button>
+      </div>
+
+      <div class="events-list">
+        @if (selectedEvents.length === 0) {
+          <div class="no-events">
+            <i class="ti ti-calendar-off"></i>
+            <p>Sin eventos programados</p>
+            <button class="no-events-add" (click)="openAddDialog()">
+              <i class="ti ti-plus"></i> Agregar evento
+            </button>
+          </div>
+        }
+        @for (event of selectedEvents; track event.id) {
+          <div class="event-item" (click)="openEditDialog(event)">
+            <div class="event-indicator" [style.background]="event.color"></div>
+            <div class="event-info">
+              <span class="event-title">{{ event.title }}</span>
+              <span class="event-time">
+                <i class="ti ti-clock"></i> {{ event.time }}
+              </span>
+              @if (event.description) {
+                <span class="event-desc">{{ event.description }}</span>
+              }
+            </div>
+            <div class="event-actions">
+              <button class="event-delete-btn" (click)="deleteEvent(event.id, selectedDay()); $event.stopPropagation()" title="Eliminar evento">
+                <i class="ti ti-x"></i>
+              </button>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>

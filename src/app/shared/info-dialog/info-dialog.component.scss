@@ -1,0 +1,171 @@
+.info-dialog {
+  padding: 40px 36px 32px;
+  text-align: center;
+  min-width: 380px;
+  max-width: 440px;
+  position: relative;
+  border-radius: 20px;
+  background: #FDFAF5;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+}
+
+body.dark-theme .info-dialog {
+  background: #1C1C1A;
+  border-color: rgba(255, 255, 255, 0.07);
+}
+
+.info-dialog-glow {
+  position: absolute;
+  top: -80px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(212, 168, 83, 0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+body.dark-theme .info-dialog-glow {
+  background: radial-gradient(circle, rgba(212, 168, 83, 0.12) 0%, transparent 70%);
+}
+
+.info-dialog-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, color 0.2s;
+  z-index: 2;
+}
+.info-dialog-close i { font-size: 1rem; }
+.info-dialog-close:hover {
+  background: rgba(0, 0, 0, 0.06);
+  color: var(--text-primary);
+}
+body.dark-theme .info-dialog-close:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.info-dialog-icon-wrap {
+  margin: 0 auto 22px;
+}
+
+.info-dialog-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  background: var(--primary-light);
+  color: var(--primary);
+  border: 2px solid color-mix(in srgb, var(--primary) 15%, transparent);
+}
+.info-dialog-icon i { font-size: 1.6rem; }
+
+.info-dialog-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 10px;
+}
+
+.info-dialog-message {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.65;
+  margin: 0 0 28px;
+  padding: 0 8px;
+}
+
+.info-dialog-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.info-btn-cancel,
+.info-btn-confirm {
+  padding: 11px 26px;
+  border-radius: 10px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+.info-btn-cancel i,
+.info-btn-confirm i { font-size: 0.95rem; }
+
+.info-btn-cancel {
+  background: rgba(0, 0, 0, 0.05);
+  color: var(--text-secondary);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+.info-btn-cancel:hover { background: rgba(0, 0, 0, 0.08); }
+
+body.dark-theme .info-btn-cancel {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.08);
+  color: var(--text-secondary);
+}
+body.dark-theme .info-btn-cancel:hover {
+  background: rgba(255, 255, 255, 0.10);
+}
+
+.info-btn-confirm {
+  background: var(--primary);
+  color: #fff;
+}
+.info-btn-confirm:hover { opacity: 0.88; }
+
+@media (max-width: 480px) {
+  .info-dialog {
+    padding: 32px 20px 24px;
+    min-width: unset;
+    max-width: unset;
+  }
+  .info-dialog-close {
+    top: 10px;
+    right: 10px;
+    width: 28px;
+    height: 28px;
+  }
+  .info-dialog-icon {
+    width: 56px;
+    height: 56px;
+    i { font-size: 1.4rem; }
+  }
+  .info-dialog-icon-wrap { margin-bottom: 18px; }
+  .info-dialog-title { font-size: 1.1rem; }
+  .info-dialog-message {
+    font-size: 0.82rem;
+    margin-bottom: 22px;
+    padding: 0 2px;
+  }
+  .info-dialog-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+  .info-btn-cancel,
+  .info-btn-confirm {
+    width: 100%;
+    justify-content: center;
+  }
+}

@@ -1,7 +1,3 @@
-/* =============================================
-   ERP Container — Main Layout
-   ============================================= */
-
 .erp-container {
   display: flex;
   height: 100vh;
@@ -9,22 +5,19 @@
   overflow: hidden;
 }
 
-/* Main content area (navbar + page) */
 .main-layout {
   flex: 1;
   display: flex;
   flex-direction: column;
-  min-width: 0; // prevents flex children from overflowing
+  min-width: 0;
   margin-left: var(--sidebar-width);
   transition: margin-left var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* When sidebar is collapsed */
 .sidebar-collapsed .main-layout {
   margin-left: var(--sidebar-collapsed-width);
 }
 
-/* Page content */
 .content {
   flex: 1;
   padding: 24px 30px;
@@ -32,7 +25,28 @@
   background-color: var(--main-bg);
 }
 
-/* Responsive adjustments for mobile overlay layout */
+.content > * {
+  animation: fadeSlideIn 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+body.dark-theme ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+}
+body.dark-theme ::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
 @media (max-width: 768px) {
   .main-layout {
     margin-left: 0 !important;
@@ -40,28 +54,32 @@
 
   .content {
     padding: 16px 12px;
-    /* Menor padding para ganar más espacio en celulares */
   }
 }
 
-/* Backdrop visible solo en móviles cuando el sidebar está abierto */
 .sidebar-backdrop {
-  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(15, 15, 14, 0.4);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 990;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.28s ease;
+
+  &.show {
+    opacity: 1;
+    pointer-events: auto;
+  }
 }
 
-@media (max-width: 768px) {
+@media (min-width: 769px) {
   .sidebar-backdrop {
-    display: block;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(15, 23, 42, 0.4); /* Fondo oscuro semitransparente slate */
-    backdrop-filter: blur(4px); /* Desenfoque elegante de fondo estilo cristal */
-    -webkit-backdrop-filter: blur(4px);
-    z-index: 990; /* Justo debajo del z-index del sidebar (999) */
-    animation: fadeEffect 0.3s ease;
+    display: none !important;
   }
 }
 

@@ -9,7 +9,7 @@
 .datatable-card {
   background: var(--content-bg);
   border-radius: var(--content-radius);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+  /* box-shadow handled by .card-3d */
   border: 1px solid var(--glass-border);
   overflow: hidden;
   display: flex;
@@ -53,7 +53,7 @@
       &:focus {
         border-color: var(--primary);
         background: transparent;
-        box-shadow: 0 0 0 3px rgba(93, 135, 255, 0.15);
+        box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 15%, transparent);
       }
     }
   }
@@ -87,9 +87,9 @@
   color: #fff;
   
   &:hover {
-    background: #4a74e8;
+    filter: brightness(1.1);
     transform: translateY(-1px);
-    box-shadow: 0 4px 10px rgba(93, 135, 255, 0.3);
+    box-shadow: 0 4px 10px color-mix(in srgb, var(--primary) 30%, transparent);
   }
 }
 
@@ -98,7 +98,7 @@
   color: var(--primary);
 
   &:hover {
-    background: rgba(93, 135, 255, 0.2);
+    background: color-mix(in srgb, var(--primary) 20%, transparent);
   }
 }
 
@@ -133,12 +133,6 @@
   }
 
   .mat-mdc-row {
-    transition: background 0.2s;
-
-    &:hover {
-      background: rgba(0, 0, 0, 0.01);
-    }
-    
     &:last-child .mat-mdc-cell {
       border-bottom: none;
     }
@@ -188,9 +182,6 @@ body.dark-theme {
   }
   .erp-mat-table .mat-mdc-cell {
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  }
-  .erp-mat-table .mat-mdc-row:hover {
-    background: rgba(255, 255, 255, 0.02);
   }
   .erp-mat-paginator {
     border-top: 1px solid rgba(255, 255, 255, 0.05);

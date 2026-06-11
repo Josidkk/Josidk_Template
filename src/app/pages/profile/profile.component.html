@@ -1,0 +1,180 @@
+<div class="page-container">
+  <app-breadcrumb
+    [pageTitle]="'Mi Perfil'"
+    [icon]="'ti ti-user-circle'"
+    [breadcrumbs]="breadcrumbs">
+  </app-breadcrumb>
+
+  <div class="profile-grid">
+    <!-- Left Column: Avatar & Info -->
+    <div class="profile-sidebar card-3d">
+      <div class="avatar-wrapper">
+        <div class="avatar-large">
+          <i class="ti ti-user"></i>
+        </div>
+        <button class="avatar-upload-btn" title="Cambiar foto">
+          <i class="ti ti-camera"></i>
+        </button>
+      </div>
+      <h2 class="user-name">{{ user().name }}</h2>
+      <span class="user-role">{{ user().role }}</span>
+      <span class="user-dept">{{ user().department }}</span>
+      <span class="user-location"><i class="ti ti-map-pin"></i> {{ user().location }}</span>
+
+      <div class="profile-stats">
+        <div class="p-stat">
+          <span class="p-stat-value">156</span>
+          <span class="p-stat-label">Tareas</span>
+        </div>
+        <div class="p-stat">
+          <span class="p-stat-value">42</span>
+          <span class="p-stat-label">Proyectos</span>
+        </div>
+        <div class="p-stat">
+          <span class="p-stat-value">98%</span>
+          <span class="p-stat-label">Asistencia</span>
+        </div>
+      </div>
+
+      <!-- Contact quick info -->
+      <div class="contact-info-box">
+        <div class="contact-row">
+          <i class="ti ti-mail"></i>
+          <span>{{ user().email }}</span>
+        </div>
+        <div class="contact-row">
+          <i class="ti ti-phone"></i>
+          <span>{{ user().phone }}</span>
+        </div>
+        <div class="contact-row">
+          <i class="ti ti-calendar"></i>
+          <span>Ingreso: {{ user().joinDate }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column -->
+    <div class="profile-main">
+      <!-- Personal Info Card -->
+      <div class="info-card card-3d">
+        <div class="card-header-line">
+          <div class="card-header-left">
+            <div class="card-header-icon"><i class="ti ti-user-edit"></i></div>
+            <h3>Información Personal</h3>
+          </div>
+          @if (!editMode()) {
+            <button class="btn-edit" (click)="toggleEdit()">
+              <i class="ti ti-edit"></i> Editar
+            </button>
+          }
+        </div>
+
+        @if (!editMode()) {
+          <div class="details-grid">
+            <div class="detail-item">
+              <span class="detail-label">Nombre completo</span>
+              <span class="detail-value">{{ user().name }}</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Correo electrónico</span>
+              <span class="detail-value">{{ user().email }}</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Teléfono</span>
+              <span class="detail-value">{{ user().phone }}</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Departamento</span>
+              <span class="detail-value">{{ user().department }}</span>
+            </div>
+            <div class="detail-item full-width">
+              <span class="detail-label">Biografía</span>
+              <span class="detail-value bio-text">{{ user().bio }}</span>
+            </div>
+          </div>
+        } @else {
+          <div class="edit-form">
+            <div class="form-row">
+              <div class="form-group">
+                <label>Nombre</label>
+                <input type="text" [(ngModel)]="editedUser.name">
+              </div>
+              <div class="form-group">
+                <label>Correo</label>
+                <input type="email" [(ngModel)]="editedUser.email">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Teléfono</label>
+                <input type="text" [(ngModel)]="editedUser.phone">
+              </div>
+              <div class="form-group">
+                <label>Departamento</label>
+                <input type="text" [(ngModel)]="editedUser.department">
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Biografía</label>
+              <textarea [(ngModel)]="editedUser.bio" rows="3"></textarea>
+            </div>
+            <div class="form-actions">
+              <button class="btn-cancel" (click)="cancelEdit()">Cancelar</button>
+              <button class="btn-save" (click)="saveProfile()">Guardar Cambios</button>
+            </div>
+          </div>
+        }
+      </div>
+
+      <!-- Skills Card -->
+      <div class="info-card card-3d">
+        <div class="card-header-line">
+          <div class="card-header-left">
+            <div class="card-header-icon"><i class="ti ti-code"></i></div>
+            <h3>Habilidades</h3>
+          </div>
+        </div>
+        <div class="skills-grid">
+          @for (skill of skills; track skill.name) {
+            <div class="skill-item">
+              <div class="skill-header">
+                <span class="skill-name">{{ skill.name }}</span>
+                <span class="skill-percent">{{ skill.level }}%</span>
+              </div>
+              <div class="skill-bar-bg">
+                <div class="skill-bar-fill" [style.width.%]="skill.level" [style.background]="skill.color"></div>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Activity Card -->
+      <div class="info-card card-3d">
+        <div class="card-header-line">
+          <div class="card-header-left">
+            <div class="card-header-icon"><i class="ti ti-activity"></i></div>
+            <h3>Actividad Reciente</h3>
+          </div>
+        </div>
+        <div class="activity-timeline">
+          @for (act of activities; track act.action + act.time; let last = $last) {
+            <div class="activity-item">
+              <div class="activity-dot">
+                <i [class]="act.icon"></i>
+              </div>
+              @if (!last) {
+                <div class="activity-line"></div>
+              }
+              <div class="activity-content">
+                <span class="activity-action">{{ act.action }}</span>
+                <span class="activity-detail">{{ act.detail }}</span>
+                <span class="activity-time">{{ act.time }}</span>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

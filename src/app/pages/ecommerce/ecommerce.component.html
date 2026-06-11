@@ -1,0 +1,61 @@
+<div class="page-container">
+  <app-breadcrumb [breadcrumbs]="breadcrumbs" pageTitle="eCommerce" icon="ti ti-shopping-bag"></app-breadcrumb>
+
+  <!-- Stats Grid -->
+  <div class="stats-grid">
+    @for (stat of stats; track stat.label) {
+    <div class="stat-card card-3d">
+      <div class="stat-icon">
+        <i class="ti" [ngClass]="stat.icon"></i>
+      </div>
+      <div class="stat-info">
+        <span class="stat-label">{{ stat.label }}</span>
+        <span class="stat-value">{{ stat.value }}</span>
+      </div>
+      <span class="stat-change" [class.positive]="stat.positive" [class.negative]="!stat.positive">
+        {{ stat.change }}
+      </span>
+    </div>
+    }
+  </div>
+
+  <!-- Products Section -->
+  <div class="products-section card-3d">
+    <div class="section-header">
+      <h2 class="section-title">Productos</h2>
+      <button class="btn-primary" (click)="openNewProduct()">
+        <i class="ti ti-plus"></i>
+        Nuevo Producto
+      </button>
+    </div>
+
+    <div class="products-grid">
+      @for (product of products(); track product.id) {
+      <div class="product-card" [class.inactive]="product.status === 'inactive'">
+        <div class="product-image">
+          <img [src]="product.image" [alt]="product.name" class="product-img" loading="lazy" />
+          @if (product.stock === 0) {
+          <span class="stock-badge out">Agotado</span>
+          }
+        </div>
+        <div class="product-info">
+          <h3 class="product-name">{{ product.name }}</h3>
+          <span class="product-category">{{ product.category }}</span>
+          <div class="product-footer">
+            <span class="product-price">${{ product.price | number }}</span>
+            <span class="product-stock">Stock: {{ product.stock }}</span>
+          </div>
+        </div>
+        <div class="product-actions">
+          <button class="action-btn" title="Editar" (click)="editProduct(product)">
+            <i class="ti ti-pencil"></i>
+          </button>
+          <button class="action-btn delete" title="Eliminar" (click)="deleteProduct(product)">
+            <i class="ti ti-trash"></i>
+          </button>
+        </div>
+      </div>
+      }
+    </div>
+  </div>
+</div>

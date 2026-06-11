@@ -1,145 +1,239 @@
-/* =============================================
-   Navbar Component Styles
-   ============================================= */
-
-:host {
+.navbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: var(--navbar-height);
   padding: 0 24px;
-  background: var(--glass-bg);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  border-bottom: 1px solid var(--glass-border);
-  box-shadow: var(--glass-shadow);
-  position: sticky;
-  top: 0;
-  z-index: 100;
+  height: var(--navbar-height);
+  background: var(--card-bg);
+  border-bottom: 1px solid var(--card-border);
   flex-shrink: 0;
 }
 
-/* ---- Left section ---- */
-.nav-left {
+.navbar-left {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 16px;
 }
 
-/* ---- Icon buttons (shared) ---- */
-.icon-btn {
-  width: 38px;
+/* Search Box - Pill Shape */
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 999px;
+  padding: 8px 16px;
+  width: 240px;
   height: 38px;
+  transition: all 0.2s ease;
+}
+
+.search-box:focus-within {
+  border-color: rgba(0, 0, 0, 0.14);
+  background: var(--card-bg);
+  box-shadow: none;
+}
+
+.search-icon {
+  font-size: 18px;
+  color: var(--text-muted);
+}
+
+.search-input {
+  flex: 1;
   border: none;
   background: transparent;
-  border-radius: 8px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--text-secondary);
-  transition: background 0.2s, color 0.2s;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--text-primary);
+  outline: none;
 
-  i {
-    font-size: 1.25rem;
-  }
-
-  &:hover {
-    background: var(--primary-light);
-    color: var(--primary);
+  &::placeholder {
+    color: var(--text-muted);
   }
 }
 
-/* ---- Nav links ---- */
-.nav-links {
+.navbar-right {
   display: flex;
   align-items: center;
-  gap: 2px;
-  margin-left: 8px;
+  gap: 8px;
 }
 
-.nav-link {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  padding: 8px 14px;
-  border-radius: 8px;
-  text-decoration: none;
-  color: var(--text-secondary);
-  font-size: 0.9rem;
-  font-weight: 500;
-  transition: background 0.2s, color 0.2s;
-  white-space: nowrap;
-
-  i {
-    font-size: 0.85rem;
-  }
-
-  &:hover {
-    background: var(--primary-light);
-    color: var(--primary);
-  }
-}
-
-/* ---- Right section ---- */
-.nav-right {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-/* ---- Notification badge ---- */
-.notification-btn {
+/* Action Buttons - Pill Shape */
+.action-btn {
   position: relative;
-}
-
-.notif-badge {
-  position: absolute;
-  top: 4px;
-  right: 4px;
-  width: 18px;
-  height: 18px;
-  background: var(--primary);
-  color: #fff;
-  font-size: 0.65rem;
-  font-weight: 700;
-  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 2px solid #fff;
-  line-height: 1;
-}
-
-/* ---- User avatar ---- */
-.user-avatar-nav {
   width: 38px;
   height: 38px;
-  border-radius: 50%;
-  background: transparent; /* Quitamos el fondo degradado */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  margin-left: 8px;
+  border-radius: 999px;
+  border: none;
+  background: rgba(0, 0, 0, 0.04);
   color: var(--text-secondary);
-  transition: background var(--transition-speed), color var(--transition-speed), transform var(--transition-speed);
-
-  i {
-    font-size: 1.75rem; /* Aumentamos un poco el tamaño del icono para que se vea claro sin el fondo sólido */
-    color: currentColor;
-  }
+  cursor: pointer;
+  transition: all 0.2s ease;
 
   &:hover {
-    background: var(--primary-light); /* Fondo sutil de cristal al hacer hover */
-    color: var(--primary);
-    transform: translateY(-1px);
+    background: rgba(0, 0, 0, 0.08);
+    color: var(--text-primary);
+  }
+
+  i {
+    font-size: 18px;
   }
 }
 
-/* ---- Responsive: hide nav links on small screens ---- */
+/* Menu Toggle Button */
+.menu-toggle {
+  flex-shrink: 0;
+}
+
+/* Notification Dot */
+.notification-dot {
+  position: absolute;
+  top: 7px;
+  right: 9px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--danger);
+  border: 2px solid var(--card-bg);
+}
+
+.has-notification .notification-dot {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+/* User Avatar */
+.user-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent-warm) 100%);
+  margin-left: 8px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  overflow: hidden;
+}
+
+.user-avatar:hover {
+  transform: scale(1.05);
+}
+
+.avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.avatar-text {
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.5px;
+}
+
+/* =============================================
+   Responsive — Móvil
+   ============================================= */
 @media (max-width: 768px) {
-  .nav-links {
+  .navbar {
+    padding: 0 12px;
+  }
+
+  .navbar-left {
+    gap: 8px;
+  }
+
+  /* Ocultar buscador en móvil — ocupa demasiado espacio */
+  .search-box {
     display: none;
+  }
+
+  .navbar-right {
+    gap: 4px;
+  }
+
+  /* Ocultar botones secundarios en móvil */
+  .hide-mobile {
+    display: none;
+  }
+
+  .action-btn {
+    width: 34px;
+    height: 34px;
+
+    i { font-size: 16px; }
+  }
+
+  .user-avatar {
+    width: 34px;
+    height: 34px;
+    margin-left: 4px;
+  }
+
+  .avatar-text {
+    font-size: 11px;
+  }
+}
+
+/* Dark Mode Overrides */
+:host-context(.dark-theme) {
+  .navbar {
+    background: var(--card-bg);
+    border-bottom-color: rgba(255, 255, 255, 0.10);
+  }
+
+  .search-box {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.12);
+
+    &:focus-within {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 255, 255, 0.22);
+    }
+  }
+
+  .search-input {
+    color: var(--dark-text-primary);
+
+    &::placeholder {
+      color: rgba(233, 227, 214, 0.38);
+    }
+  }
+
+  .search-icon {
+    color: rgba(233, 227, 214, 0.42);
+  }
+
+  .action-btn {
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--dark-text-secondary);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.12);
+      color: var(--dark-text-primary);
+    }
+  }
+
+  .notification-dot {
+    border-color: var(--card-bg);
+  }
+
+  .avatar-text {
+    color: #fff;
   }
 }

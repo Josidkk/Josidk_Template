@@ -1,0 +1,169 @@
+<div class="dashboard">
+  <!-- Greeting Card -->
+  <div class="greeting-card card-3d">
+    <!-- Decorative background blobs -->
+    <div class="greeting-blob blob-1"></div>
+    <div class="greeting-blob blob-2"></div>
+    <div class="greeting-blob blob-3"></div>
+
+    <!-- Shine sweep line -->
+    <div class="greeting-shine"></div>
+
+    <div class="greeting-content">
+      <div class="greeting-badge">
+        <span class="greeting-badge-dot"></span>
+        Dashboard general
+      </div>
+      <h1 class="greeting-title">{{ greeting }}, Deyby {{ greetingEmoji }}</h1>
+      <p class="greeting-text">Aquí tenés un resumen de tu tienda. Revisá las métricas clave de hoy.</p>
+      <div class="greeting-actions">
+        <button class="greeting-btn-primary">
+          <span>Ver reporte completo</span>
+          <i class="ti ti-arrow-right"></i>
+        </button>
+        <button class="greeting-btn-secondary" title="Agregar nuevo">
+          <i class="ti ti-plus"></i>
+          <span>Nuevo reporte</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="greeting-decoration">
+      <div class="bar bar-1"></div>
+      <div class="bar bar-2"></div>
+      <div class="bar bar-3"></div>
+      <div class="bar bar-4"></div>
+      <div class="bar bar-5"></div>
+      <div class="bar bar-6"></div>
+    </div>
+
+    <!-- Mini stats inline -->
+    <div class="greeting-mini-stats">
+      <div class="mini-stat">
+        <span class="mini-stat-value">+8</span>
+        <span class="mini-stat-label">Hoy</span>
+      </div>
+      <div class="mini-stat">
+        <span class="mini-stat-value">+24</span>
+        <span class="mini-stat-label">Semana</span>
+      </div>
+      <div class="mini-stat">
+        <span class="mini-stat-value">+156</span>
+        <span class="mini-stat-label">Mes</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="stats-grid">
+    <div class="stat-card card-3d">
+      <div class="stat-header">
+        <div class="stat-icon orange">
+          <i class="ti ti-trending-up"></i>
+        </div>
+        <span class="stat-delta positive">+12.5%</span>
+      </div>
+      <div class="stat-label">Ventas totales</div>
+      <div class="stat-value">$48,352</div>
+    </div>
+
+    <div class="stat-card card-3d">
+      <div class="stat-header">
+        <div class="stat-icon teal">
+          <i class="ti ti-users"></i>
+        </div>
+        <span class="stat-delta positive">+8.2%</span>
+      </div>
+      <div class="stat-label">Usuarios activos</div>
+      <div class="stat-value">2,845</div>
+    </div>
+
+    <div class="stat-card card-3d">
+      <div class="stat-header">
+        <div class="stat-icon coral">
+          <i class="ti ti-shopping-bag"></i>
+        </div>
+        <span class="stat-delta negative">-3.1%</span>
+      </div>
+      <div class="stat-label">Pedidos</div>
+      <div class="stat-value">1,230</div>
+    </div>
+
+    <div class="stat-card card-3d">
+      <div class="stat-header">
+        <div class="stat-icon blue">
+          <i class="ti ti-credit-card"></i>
+        </div>
+        <span class="stat-delta positive">+5.7%</span>
+      </div>
+      <div class="stat-label">Ingresos</div>
+      <div class="stat-value">$15,890</div>
+    </div>
+  </div>
+
+  <!-- Charts Section -->
+  <div class="charts-section">
+    <!-- Bar Chart Card -->
+    <div class="chart-card bar-chart-card card-3d">
+      <div class="chart-header">
+        <div class="chart-title-group">
+          <h3 class="chart-title">Ingresos anuales</h3>
+          <span class="chart-subtitle">$395.7k  · +18% vs año pasado</span>
+        </div>
+        <div class="chart-filter">
+          <select [(ngModel)]="selectedYear" class="year-select">
+            <option value="2026">2026</option>
+            <option value="2025">2025</option>
+            <option value="2024">2024</option>
+          </select>
+        </div>
+      </div>
+      <div class="chart-body bar-chart-body">
+        <canvas baseChart
+          [data]="barChartData"
+          [options]="barChartOptions"
+          [type]="'bar'">
+        </canvas>
+      </div>
+    </div>
+
+    <!-- Donut Chart Card -->
+    <div class="chart-card donut-chart-card card-3d">
+      <div class="chart-header">
+        <div class="chart-title-group">
+          <h3 class="chart-title">Visitas actuales</h3>
+          <span class="chart-subtitle">Total: 2,458</span>
+        </div>
+      </div>
+      <div class="chart-body donut-chart-body">
+        <canvas baseChart
+          [data]="doughnutChartData"
+          [options]="doughnutChartOptions"
+          [type]="'doughnut'">
+        </canvas>
+        <div class="donut-total">
+          <span class="donut-total-value">2,458</span>
+        </div>
+      </div>        <div class="donut-legend">
+        <div class="legend-item">
+          <span class="legend-dot legend-dark"></span>
+          <span class="legend-label">América</span>
+          <span class="legend-value">1,650</span>
+          <span class="legend-delta positive">+4.7%</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-dot legend-orange"></span>
+          <span class="legend-label">Asia</span>
+          <span class="legend-value">350</span>
+          <span class="legend-delta positive">+2.1%</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-dot legend-teal"></span>
+          <span class="legend-label">Europa</span>
+          <span class="legend-value">458</span>
+          <span class="legend-delta positive">+3.4%</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

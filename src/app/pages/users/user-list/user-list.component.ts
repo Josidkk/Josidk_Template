@@ -1,9 +1,12 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatPaginatorModule, MatPaginator } from '@angular/material/paginator';
 import { MatSortModule, MatSort } from '@angular/material/sort';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { BreadcrumbComponent, BreadcrumbItem } from '../../../shared/breadcrumb/breadcrumb.component';
+import { NotificationService } from '../../../core/services/notification.service';
+import { ConfirmDialogComponent, ConfirmDialogData } from '../../../shared/confirm-dialog/confirm-dialog.component';
 
 export interface User {
   id: string;
@@ -18,26 +21,28 @@ export interface User {
 @Component({
   selector: 'app-user-list',
   standalone: true,
-  imports: [CommonModule, MatTableModule, MatPaginatorModule, MatSortModule, BreadcrumbComponent],
+  imports: [CommonModule, MatTableModule, MatPaginatorModule, MatSortModule, BreadcrumbComponent, MatDialogModule],
   templateUrl: './user-list.component.html',
   styleUrl: './user-list.component.scss'
 })
+
 export class UserListComponent implements OnInit, AfterViewInit {
-  // Breadcrumb structure
+  private notify = inject(NotificationService);
+  private dialog = inject(MatDialog);
+
   breadcrumbs: BreadcrumbItem[] = [
     { label: 'Inicio', route: '/' },
-    { label: 'Apps', route: '/users' },
+    { label: 'Aplicaciones', route: '/users' },
     { label: 'Usuarios' }
   ];
 
-  // Material Table configuration
   displayedColumns: string[] = ['user', 'role', 'status', 'lastLogin', 'actions'];
   dataSource = new MatTableDataSource<User>([]);
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  // Mock Data
+  // Mock data for demo
   users: User[] = [
     { id: 'USR-001', name: 'Deyby Josue', email: 'deyby@josidk.com', role: 'Admin', status: 'Active', lastLogin: 'Hace 2 horas', avatar: 'ti ti-user-circle' },
     { id: 'USR-002', name: 'Ana Rodriguez', email: 'ana.r@josidk.com', role: 'Editor', status: 'Active', lastLogin: 'Hace 5 horas' },
@@ -57,7 +62,6 @@ export class UserListComponent implements OnInit, AfterViewInit {
     this.dataSource.sort = this.sort;
   }
 
-  // Filter method for the search box
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
@@ -67,14 +71,27 @@ export class UserListComponent implements OnInit, AfterViewInit {
     }
   }
 
-  // Method simulating an API call or action
   editUser(user: User) {
-    console.log('Editing user:', user.name);
-    // TODO: Open modal or navigate to edit form
+    this.notify.info(`Editando usuario: ${user.name}`);
   }
 
   deleteUser(user: User) {
-    console.log('Deleting user:', user.name);
-    // TODO: Confirm deletion and call API
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        title: 'Eliminar usuario',
+        message: `¿Estás seguro de que deseas eliminar a ${user.name}? Esta acción no se puede deshacer.`,
+        confirmText: 'Eliminar',
+        cancelText: 'Cancelar',
+        type: 'danger',
+      } as ConfirmDialogData,
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.users = this.users.filter(u => u.id !== user.id);
+        this.dataSource.data = this.users;
+        this.notify.success(`Usuario ${user.name} eliminado correctamente`);
+      }
+    });
   }
 }

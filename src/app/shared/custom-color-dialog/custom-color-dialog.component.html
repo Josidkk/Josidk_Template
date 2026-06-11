@@ -1,0 +1,126 @@
+<div class="custom-color-dialog">
+
+  <!-- HEADER -->
+  <div class="ccd-header">
+    <div class="ccd-header-icon"><i class="ti ti-palette"></i></div>
+    <div>
+      <h2>Editor de colores personalizado</h2>
+      <p>Selecciona los colores para modo claro y oscuro. La vista previa se actualiza en vivo.</p>
+    </div>
+    <button class="ccd-close" (click)="cancel()"><i class="ti ti-x"></i></button>
+  </div>
+
+  <div class="ccd-body">
+
+    <!-- ─── LEFT: LIGHT MODE ─── -->
+    <div class="ccd-panel">
+      <div class="ccd-panel-title">
+        <i class="ti ti-sun"></i>
+        <span>Modo claro</span>
+      </div>
+      <div class="ccd-field-group">
+        @for (field of lightFields; track field.key) {
+          <label class="ccd-field">
+            <span class="ccd-field-swatch"
+                  [style.background]="lightColors[field.key]"
+                  [style.borderColor]="lightColors[field.key] === '#FDFAF5' ? '#ccc' : lightColors[field.key]">
+            </span>
+            <div class="ccd-field-info">
+              <span class="ccd-field-label">{{ field.label }}</span>
+              <span class="ccd-field-desc">{{ field.description }}</span>
+            </div>
+            <input type="color"
+                   class="ccd-color-input"
+                   [ngModel]="lightColors[field.key]"
+                   (ngModelChange)="updateLight(field.key, $event)">
+          </label>
+        }
+      </div>
+    </div>
+
+    <!-- ─── RIGHT: DARK MODE ─── -->
+    <div class="ccd-panel">
+      <div class="ccd-panel-title">
+        <i class="ti ti-moon"></i>
+        <span>Modo oscuro</span>
+      </div>
+      <div class="ccd-field-group">
+        @for (field of darkFields; track field.key) {
+          <label class="ccd-field">
+            <span class="ccd-field-swatch"
+                  [style.background]="darkColors[field.key]"
+                  [style.borderColor]="darkColors[field.key] === '#0C0C0B' ? '#333' : darkColors[field.key]">
+            </span>
+            <div class="ccd-field-info">
+              <span class="ccd-field-label">{{ field.label }}</span>
+              <span class="ccd-field-desc">{{ field.description }}</span>
+            </div>
+            <input type="color"
+                   class="ccd-color-input"
+                   [ngModel]="darkColors[field.key]"
+                   (ngModelChange)="updateDark(field.key, $event)">
+          </label>
+        }
+      </div>
+    </div>
+
+    <!-- ─── BOTTOM: PREVIEW ─── -->
+    <div class="ccd-preview">
+      <div class="ccd-panel-title">
+        <i class="ti ti-eye"></i>
+        <span>Vista previa en vivo</span>
+      </div>
+
+      <div class="ccd-preview-box" [ngStyle]="previewStyles">
+        <div class="ccd-preview-navbar">
+          <div class="ccd-preview-dot"></div>
+          <div class="ccd-preview-dot"></div>
+          <div class="ccd-preview-dot"></div>
+        </div>
+        <div class="ccd-preview-body">
+          <div class="ccd-preview-sidebar">
+            <div class="ccd-preview-sidebar-item active"></div>
+            <div class="ccd-preview-sidebar-item"></div>
+            <div class="ccd-preview-sidebar-item"></div>
+            <div class="ccd-preview-sidebar-item short"></div>
+          </div>
+          <div class="ccd-preview-content">
+            <div class="ccd-preview-header-row">
+              <div class="ccd-preview-title"></div>
+              <div class="ccd-preview-badge"></div>
+            </div>
+            <div class="ccd-preview-card-row">
+              <div class="ccd-preview-card"></div>
+              <div class="ccd-preview-card"></div>
+              <div class="ccd-preview-card"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- COLOR STRIP -->
+      <div class="ccd-preview-colors">
+        <span class="ccd-preview-color-label">Colores activos:</span>
+        <span class="ccd-color-chip" [style.background]="lightColors['--primary']" title="Primario"></span>
+        <span class="ccd-color-chip" [style.background]="lightColors['--sidebar-bg']" title="Sidebar"></span>
+        <span class="ccd-color-chip" [style.background]="lightColors['--main-bg']" title="Fondo ppal."></span>
+        <span class="ccd-color-chip" [style.background]="lightColors['--content-bg']" title="Fondo contenido"></span>
+        <span class="ccd-color-chip" [style.background]="lightColors['--accent-warm']" title="Acento"></span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <div class="ccd-footer">
+    <button class="ccd-btn ccd-btn-cancel" (click)="cancel()">
+      <i class="ti ti-x"></i>
+      Cancelar
+    </button>
+    <button class="ccd-btn ccd-btn-apply" (click)="apply()">
+      <i class="ti ti-check"></i>
+      Aplicar colores
+    </button>
+  </div>
+
+</div>

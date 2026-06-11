@@ -1,0 +1,184 @@
+<div class="page-container">
+  <app-breadcrumb
+    [pageTitle]="'Tablero Kanban'"
+    [icon]="'ti ti-layout-kanban'"
+    [breadcrumbs]="breadcrumbs">
+  </app-breadcrumb>
+
+  <!-- Toolbar -->
+  <div class="toolbar">
+    <div class="search-box">
+      <i class="ti ti-search"></i>
+      <input type="text" placeholder="Buscar tareas..."
+        [value]="searchQuery()"
+        (input)="onSearchChange($any($event.target).value)">
+    </div>
+    <div class="toolbar-stats">
+      <div class="stat-pill">
+        <span class="stat-num">{{ totalTasks() }}</span>
+        <span class="stat-lbl">tareas</span>
+      </div>
+      @for (col of columns; track col.id) {
+        <div class="stat-pill" [style.--dot-color]="col.color">
+          <span class="stat-dot"></span>
+          <span class="stat-num">{{ col.tasks.length }}</span>
+          <span class="stat-lbl">{{ col.title }}</span>
+        </div>
+      }
+    </div>
+  </div>
+
+  <!-- Kanban Board -->
+  <div class="kanban-board" cdkDropListGroup>
+    @for (column of filteredColumns(); track column.id) {
+      <div class="kanban-column">
+        <div class="column-header">
+          <div class="column-title-row">
+            <i [class]="column.icon" [style.color]="column.color"></i>
+            <h3>{{ column.title }}</h3>
+            <span class="column-count">{{ column.tasks.length }}</span>
+          </div>
+          <button class="add-task-btn" (click)="openNewTask(column)" title="Nueva tarea">
+            <i class="ti ti-plus"></i>
+          </button>
+        </div>
+
+        <!-- Drop zone -->
+        <div class="task-list"
+          cdkDropList
+          [cdkDropListData]="column.tasks"
+          (cdkDropListDropped)="drop($event)">
+
+          @for (task of column.tasks; track task.id) {
+            <div class="task-card card-3d" cdkDrag (cdkDragMoved)="onDragMoved($event)">
+              <!-- Drag preview -->
+              <div class="drag-placeholder" *cdkDragPlaceholder></div>
+
+              <div class="task-top-row">
+                <div class="task-priority" [attr.data-priority]="task.priority">
+                  {{ task.priority }}
+                </div>
+                <div class="task-actions-inline">
+                  <button class="task-action-btn" (click)="openEditTask(column, task); $event.stopPropagation()" title="Editar">
+                    <i class="ti ti-pencil"></i>
+                  </button>
+                  <button class="task-action-btn danger" (click)="confirmDelete(column, task); $event.stopPropagation()" title="Eliminar">
+                    <i class="ti ti-trash"></i>
+                  </button>
+                </div>
+              </div>
+
+              <h4 class="task-title">{{ task.title }}</h4>
+              <p class="task-desc">{{ task.description }}</p>
+
+              @if (task.tags && task.tags.length > 0) {
+                <div class="task-tags">
+                  @for (tag of task.tags; track tag) {
+                    <span class="tag">{{ tag }}</span>
+                  }
+                </div>
+              }
+
+              <div class="task-footer">
+                <div class="task-assignee">
+                  <div class="assignee-avatar" [style.background]="column.color">{{ task.initials }}</div>
+                  <span class="assignee-name">{{ task.assignee }}</span>
+                </div>
+                <span class="task-due">
+                  <i class="ti ti-calendar-event"></i>
+                  {{ task.dueDate }}
+                </span>
+              </div>
+            </div>
+          }
+
+          @if (column.tasks.length === 0) {
+            <div class="empty-column">
+              <i class="ti ti-inbox"></i>
+              <p>Sin tareas</p>
+            </div>
+          }
+        </div>
+      </div>
+    }
+  </div>
+</div>
+
+<!-- ═══════════════ Task Modal ═══════════════ -->
+@if (showModal()) {
+  <div class="modal-overlay" (click)="closeModal()">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>{{ editingTask() ? 'Editar tarea' : 'Nueva tarea' }}</h3>
+        <button class="modal-close" (click)="closeModal()">
+          <i class="ti ti-x"></i>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Título *</label>
+          <input type="text" [(ngModel)]="formTitle" placeholder="Nombre de la tarea" class="form-input">
+        </div>
+
+        <div class="form-group">
+          <label>Descripción</label>
+          <textarea [(ngModel)]="formDescription" placeholder="Describe la tarea..." class="form-input form-textarea" rows="3"></textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Prioridad</label>
+            <select [(ngModel)]="formPriority" class="form-input">
+              <option value="alta">🔴 Alta</option>
+              <option value="media">🟡 Media</option>
+              <option value="baja">🟢 Baja</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Fecha límite</label>
+            <input type="text" [(ngModel)]="formDueDate" placeholder="Ej: 15 Jun" class="form-input">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Asignado a</label>
+            <input type="text" [(ngModel)]="formAssignee" placeholder="Nombre del responsable" class="form-input">
+          </div>
+          <div class="form-group">
+            <label>Etiquetas (separadas por coma)</label>
+            <input type="text" [(ngModel)]="formTags" placeholder="frontend, backend, diseño" class="form-input">
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-cancel" (click)="closeModal()">Cancelar</button>
+        <button class="btn-save" (click)="saveTask()" [disabled]="!formTitle.trim()">
+          {{ editingTask() ? 'Guardar cambios' : 'Crear tarea' }}
+        </button>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- ═══════════════ Delete Confirmation ═══════════════ -->
+@if (showDeleteConfirm()) {
+  <div class="modal-overlay" (click)="cancelDelete()">
+    <div class="modal modal-sm" (click)="$event.stopPropagation()">
+      <div class="modal-header danger">
+        <i class="ti ti-alert-triangle"></i>
+        <h3>Eliminar tarea</h3>
+      </div>
+      <div class="modal-body">
+        <p>¿Estás seguro de que deseas eliminar <strong>{{ deleteTarget()?.task?.title }}</strong>?</p>
+        <p class="text-muted">Esta acción no se puede deshacer.</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" (click)="cancelDelete()">Cancelar</button>
+        <button class="btn-danger" (click)="deleteTask()">Eliminar</button>
+      </div>
+    </div>
+  </div>
+}

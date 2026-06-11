@@ -1,0 +1,214 @@
+import { Component, inject, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+
+export interface ProductFormData {
+  id?: number;
+  name: string;
+  price: number;
+  image: string;
+  category: string;
+  stock: number;
+  status: 'active' | 'inactive';
+}
+
+export interface ProductDialogResult {
+  action: 'save' | 'delete';
+  data: ProductFormData;
+}
+
+@Component({
+  selector: 'app-product-form-dialog',
+  standalone: true,
+  imports: [CommonModule, FormsModule, MatDialogModule],
+  template: `
+    <div class="product-dialog">
+      <div class="dialog-header-bg" [style.background-image]="form.image ? 'url(' + form.image + ')' : null" [class.has-bg]="!!form.image">
+        <div class="dialog-header-overlay">
+          <div class="dialog-icon">
+            <i class="ti" [ngClass]="isEdit() ? 'ti-pencil' : 'ti-package'"></i>
+          </div>
+          <h2 class="dialog-title">{{ isEdit() ? 'Editar Producto' : 'Nuevo Producto' }}</h2>
+          <button class="dialog-close" (click)="dialogRef.close()" title="Cerrar">
+            <i class="ti ti-x"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="dialog-body">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Nombre del producto</label>
+            <input class="form-input" type="text" [(ngModel)]="form.name" placeholder="Ej: MacBook Pro 16 pulg" autofocus />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Categoría</label>
+            <select class="form-input" [(ngModel)]="form.category">
+              <option value="Electrónica">Electrónica</option>
+              <option value="Accesorios">Accesorios</option>
+              <option value="Wearables">Wearables</option>
+              <option value="Audio">Audio</option>
+              <option value="Ropa">Ropa</option>
+              <option value="Hogar">Hogar</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Precio ($)</label>
+            <input class="form-input" type="number" [(ngModel)]="form.price" placeholder="0" min="0" step="0.01" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Stock</label>
+            <input class="form-input" type="number" [(ngModel)]="form.stock" placeholder="0" min="0" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">URL de la imagen</label>
+            <div class="image-url-input">
+              <input class="form-input" type="url" [(ngModel)]="form.image" placeholder="https://ejemplo.com/imagen.jpg" />
+              @if (form.image && isValidUrl(form.image)) {
+                <div class="image-preview">
+                  <img [src]="form.image" alt="Preview" />
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Estado</label>
+            <div class="status-selector">
+              <button class="status-opt" [class.active]="form.status === 'active'" (click)="form.status = 'active'">
+                <span class="status-dot active"></span> Activo
+              </button>
+              <button class="status-opt" [class.active]="form.status === 'inactive'" (click)="form.status = 'inactive'">
+                <span class="status-dot inactive"></span> Inactivo
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="dialog-footer">
+        <button class="btn-cancel" (click)="dialogRef.close()">Cancelar</button>
+        <button class="btn-save" (click)="save()" [disabled]="!isValid()">
+          <i class="ti ti-check"></i>
+          {{ isEdit() ? 'Guardar cambios' : 'Crear producto' }}
+        </button>
+      </div>
+    </div>
+  `,
+  styles: [`
+    :host { display: block; }
+    .product-dialog { background: var(--content-bg); border-radius: 16px; overflow: hidden; min-width: 480px; }
+    .dialog-header-bg {
+      position: relative;
+      background-size: cover;
+      background-position: center;
+      min-height: 80px;
+      &:not(.has-bg) { background: var(--primary-light); min-height: 0; }
+    }
+    .dialog-header-overlay {
+      display: flex; align-items: center; gap: 12px;
+      padding: 20px 24px;
+      background: linear-gradient(135deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.25) 100%);
+      backdrop-filter: blur(2px);
+    }
+    .dialog-icon {
+      width: 40px; height: 40px; border-radius: 12px;
+      background: rgba(255,255,255,0.20); color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; flex-shrink: 0;
+      backdrop-filter: blur(4px);
+    }
+    .dialog-title { font-size: 1.1rem; font-weight: 600; color: #fff; margin: 0; flex: 1; text-shadow: 0 1px 4px rgba(0,0,0,0.3); }
+    .dialog-close {
+      width: 32px; height: 32px; border-radius: 8px; border: none;
+      background: rgba(255,255,255,0.15); color: #fff;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s; flex-shrink: 0;
+      &:hover { background: rgba(255,255,255,0.30); }
+      i { font-size: 18px; }
+    }
+    .dialog-body { padding: 20px 24px; display: flex; flex-direction: column; gap: 16px; }
+    .form-row { display: flex; gap: 16px; }
+    .form-group { flex: 1; display: flex; flex-direction: column; gap: 6px; }
+    .form-label { font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; }
+    .form-input {
+      width: 100%; padding: 10px 12px; border-radius: 10px;
+      border: 1px solid var(--card-border); background: var(--card-bg);
+      color: var(--text-primary); font-size: 0.9rem; font-family: inherit;
+      transition: border-color 0.2s; box-sizing: border-box;
+      &:focus { outline: none; border-color: var(--primary); }
+      &::placeholder { color: var(--text-muted); }
+    }
+    select.form-input { cursor: pointer; appearance: auto; }
+    .image-url-input { display: flex; flex-direction: column; gap: 10px; }
+    .image-preview {
+      width: 100%; height: 120px; border-radius: 10px; overflow: hidden;
+      border: 1px solid var(--card-border); background: var(--card-bg);
+      img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    }
+    .status-selector { display: flex; gap: 8px; }
+    .status-opt {
+      display: flex; align-items: center; gap: 6px;
+      padding: 8px 14px; border-radius: 8px; border: 1px solid var(--card-border);
+      background: var(--card-bg); color: var(--text-secondary); font-size: 0.85rem;
+      cursor: pointer; transition: all 0.15s; font-family: inherit;
+      &.active { border-color: var(--primary); color: var(--primary); background: var(--primary-light); }
+    }
+    .status-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      &.active { background: #4ade80; }
+      &.inactive { background: var(--text-muted); }
+    }
+    .dialog-footer {
+      display: flex; justify-content: flex-end; gap: 10px;
+      padding: 16px 24px 20px; border-top: 1px solid var(--card-border);
+    }
+    .btn-cancel {
+      padding: 10px 20px; border-radius: 10px; border: 1px solid var(--card-border);
+      background: transparent; color: var(--text-secondary); font-size: 0.85rem;
+      cursor: pointer; transition: background 0.2s; font-family: inherit;
+      &:hover { background: var(--primary-light); color: var(--text-primary); }
+    }
+    .btn-save {
+      display: flex; align-items: center; gap: 6px;
+      padding: 10px 20px; border-radius: 10px; border: none;
+      background: var(--primary); color: #fff; font-size: 0.85rem; font-weight: 500;
+      cursor: pointer; transition: background 0.2s; font-family: inherit;
+      &:hover { opacity: 0.9; }
+      &:disabled { opacity: 0.4; cursor: not-allowed; }
+      i { font-size: 16px; }
+    }
+  `]
+})
+export class ProductFormDialogComponent {
+  dialogRef = inject(MatDialogRef<ProductFormDialogComponent>);
+  data = inject<{ product?: ProductFormData }>(MAT_DIALOG_DATA);
+
+  isEdit = signal(!!this.data?.product);
+
+  form: ProductFormData = this.data?.product
+    ? { ...this.data.product }
+    : { name: '', price: 0, image: '', category: 'Electrónica', stock: 0, status: 'active' };
+
+  isValidUrl(url: string): boolean {
+    return url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:image');
+  }
+
+  isValid(): boolean {
+    return this.form.name.trim().length > 0 && this.form.price > 0;
+  }
+
+  save(): void {
+    if (!this.isValid()) return;
+    this.dialogRef.close({ action: 'save', data: this.form });
+  }
+}

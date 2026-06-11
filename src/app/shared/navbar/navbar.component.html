@@ -1,39 +1,44 @@
-<!-- Left side -->
-<div class="nav-left">
-  <button class="icon-btn menu-toggle" id="sidebar-toggle" (click)="onToggle()">
-    <i class="ti ti-menu-2"></i>
-  </button>
+<nav class="navbar">
+  <div class="navbar-left">
+    <button class="action-btn menu-toggle" (click)="onToggle()" aria-label="Toggle sidebar">
+      <i class="ti ti-menu-2"></i>
+    </button>
 
-  <button class="icon-btn search-btn">
-    <i class="ti ti-search"></i>
-  </button>
-
-  <nav class="nav-links">
-    <a class="nav-link" href="#">
-      Apps <i class="ti ti-chevron-down"></i>
-    </a>
-    <a class="nav-link" href="#">Chat</a>
-    <a class="nav-link" href="#">Calendar</a>
-    <a class="nav-link" href="#">Email</a>
-  </nav>
-</div>
-
-<!-- Right side -->
-<div class="nav-right">
-  <button class="icon-btn" title="Dark mode" (click)="toggleDarkMode()">
-    <i class="ti" [ngClass]="isDarkMode ? 'ti-sun' : 'ti-moon'"></i>
-  </button>
-
-  <button class="icon-btn" title="Language">
-    <i class="ti ti-language"></i>
-  </button>
-
-  <button class="icon-btn notification-btn" title="Notifications">
-    <i class="ti ti-bell"></i>
-    <span class="notif-badge">5</span>
-  </button>
-
-  <div class="user-avatar-nav">
-    <i class="ti ti-user-circle"></i>
+    <div class="search-box">
+      <i class="ti ti-search search-icon"></i>
+      <input
+        type="text"
+        class="search-input"
+        placeholder="Buscar..."
+        [(ngModel)]="searchQuery"
+      />
+    </div>
   </div>
-</div>
+
+  <div class="navbar-right">
+    <button class="action-btn" (click)="toggleTheme()" [attr.aria-label]="isDark() ? 'Modo claro' : 'Modo oscuro'">
+      <i class="ti" [ngClass]="isDark() ? 'ti-sun' : 'ti-moon'"></i>
+    </button>
+
+    <button class="action-btn has-notification" aria-label="Notificaciones">
+      <i class="ti ti-bell"></i>
+      <span class="notification-dot"></span>
+    </button>
+
+    <button class="action-btn hide-mobile" aria-label="Idioma">
+      <i class="ti ti-world"></i>
+    </button>
+
+    <button class="action-btn hide-mobile" aria-label="Email">
+      <i class="ti ti-mail"></i>
+    </button>
+
+    <div class="user-avatar">
+      @if (user.avatarUrl) {
+        <img [src]="user.avatarUrl" [alt]="user.name" class="avatar-img" />
+      } @else {
+        <span class="avatar-text">{{ user.initials }}</span>
+      }
+    </div>
+  </div>
+</nav>

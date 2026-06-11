@@ -1,0 +1,237 @@
+<div class="page-container">
+
+  <!-- ================================
+       BREADCRUMB
+       ================================ -->
+  <app-breadcrumb
+    [pageTitle]="'Configurador'"
+    [icon]="'ti ti-settings'"
+    [breadcrumbs]="breadcrumbs">
+  </app-breadcrumb>
+
+  <!-- ================================
+       INTRO
+       ================================ -->
+  <div class="config-intro card-3d">
+    <div class="intro-icon"><i class="ti ti-wand"></i></div>
+    <div class="intro-text">
+      <h2>Personaliza tu template</h2>
+      <p>Selecciona colores, páginas y opciones de layout. Los cambios se aplican en vivo y puedes descargar un package listo para usar.</p>
+    </div>
+  </div>
+
+  <!-- ================================
+       GRID DE CONFIGURACIÓN
+       ================================ -->
+  <div class="settings-grid">
+
+    <!-- ─── 1. PALETAS DE COLOR ─── -->
+    <div class="settings-card card-3d section-palette">
+      <div class="card-header">
+        <div class="card-icon"><i class="ti ti-palette"></i></div>
+        <div>
+          <h3>Colores y Marca</h3>
+          <p>Selecciona una paleta de colores para toda la aplicación</p>
+        </div>
+      </div>
+
+      <div class="palette-grid">
+        @for (pal of paletas; track pal.id) {
+          <button class="palette-card"
+                  [class.selected]="selectedPaletteId() === pal.id"
+                  [class.custom-card]="pal.custom"
+                  (click)="selectPalette(pal.id)">
+            @if (pal.custom) {
+              <span class="palette-swatch custom-swatch"><i class="ti ti-palette"></i></span>
+            } @else {
+              <span class="palette-swatch" [style.background]="pal.previewColor"></span>
+            }
+            <div class="palette-info">
+              <span class="palette-name">
+                {{ pal.name }}
+                @if (pal.custom) { <span class="palette-badge"><i class="ti ti-wand"></i> Editor</span> }
+              </span>
+              <span class="palette-desc">{{ pal.description }}</span>
+            </div>
+            @if (selectedPaletteId() === pal.id) {
+              <span class="palette-check"><i class="ti ti-check"></i></span>
+            }
+          </button>
+        }
+      </div>
+    </div>
+
+    <!-- ─── 2. MÓDULOS ─── -->
+    <div class="settings-card card-3d section-modules">
+      <div class="card-header">
+        <div class="card-icon"><i class="ti ti-apps"></i></div>
+        <div>
+          <h3>Módulos del Sistema</h3>
+          <p>Selecciona las páginas que quieres incluir</p>
+        </div>
+      </div>
+
+      <div class="module-grid">
+        @for (mod of availableModules; track mod.id) {
+          <button class="module-card"
+                  [class.selected]="isModuleSelected(mod.id)"
+                  (click)="toggleModule(mod.id)">
+            <span class="module-checkbox">
+              @if (isModuleSelected(mod.id)) {
+                <i class="ti ti-checkbox"></i>
+              } @else {
+                <i class="ti ti-square"></i>
+              }
+            </span>
+            <i [class]="'module-icon ti ' + mod.icon"></i>
+            <div class="module-info">
+              <span class="module-name">{{ mod.name }}</span>
+              <span class="module-desc">{{ mod.description }}</span>
+            </div>
+            @if (mod.dependency) {
+              <span class="module-dep-tag">{{ mod.dependency }}</span>
+            }
+          </button>
+        }
+      </div>
+
+      <div class="module-summary">
+        <i class="ti ti-checkup-list"></i>
+        <span>{{ selectedModules().size }} de {{ availableModules.length }} módulos seleccionados</span>
+      </div>
+
+      <!-- Toggle: Ocultar sección Material UI del sidebar -->
+      <div class="setting-row" style="margin-top: 1rem; border-top: 1px solid var(--card-border); padding-top: 1rem;">
+        <div class="setting-info">
+          <span class="setting-label">
+            <i class="ti ti-components" style="margin-right: 0.35rem; font-size: 1rem;"></i>
+            Sección Material UI
+          </span>
+          <span class="setting-desc">Mostrar/ocultar la sección completa en el menú lateral</span>
+        </div>
+        <button class="toggle-btn"
+                [class.active]="materialUIVisible()"
+                (click)="toggleMaterialUISection()"
+                [title]="materialUIVisible() ? 'Ocultar sección' : 'Mostrar sección'">
+          <span class="toggle-track"><span class="toggle-thumb"></span></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ─── 3. LAYOUT ─── -->
+    <div class="settings-card card-3d section-layout">
+      <div class="card-header">
+        <div class="card-icon"><i class="ti ti-layout"></i></div>
+        <div>
+          <h3>Layout y Apariencia</h3>
+          <p>Presets de layout rápido</p>
+        </div>
+      </div>
+
+      <!-- Presets -->
+      <div class="layout-presets">
+        @for (preset of layoutPresets; track preset.label) {
+          <button class="preset-btn"
+                  [class.active]="layoutOptions().sidebarWidth === preset.sidebarWidth"
+                  (click)="applyLayoutPreset(preset)">
+            <span class="preset-icon">
+              @if (preset.label === 'Clásico') {
+                <i class="ti ti-layout-distribute-horizontal"></i>
+              } @else if (preset.label === 'Compacto') {
+                <i class="ti ti-layout-columns"></i>
+              } @else {
+                <i class="ti ti-layout-board"></i>
+              }
+            </span>
+            <span class="preset-label">{{ preset.label }}</span>
+          </button>
+        }
+      </div>
+
+      <!-- Tipografía -->
+      <div class="setting-row">
+        <div class="setting-info">
+          <span class="setting-label">Tipografía</span>
+          <span class="setting-desc">Fuente principal de la aplicación</span>
+        </div>
+        <select [ngModel]="selectedFont()" (ngModelChange)="changeFont($event)">
+          @for (font of fontOptions; track font.value) {
+            <option [value]="font.value">{{ font.label }}</option>
+          }
+        </select>
+      </div>
+
+      <!-- Tema por defecto -->
+      <div class="setting-row">
+        <div class="setting-info">
+          <span class="setting-label">Tema por defecto</span>
+          <span class="setting-desc">Qué tema usar al abrir la app</span>
+        </div>
+        <div class="theme-default-selector">
+          @for (opt of defaultThemeOptions; track opt.value) {
+            <button class="theme-opt-btn"
+                    [class.active]="defaultTheme() === opt.value"
+                    (click)="setDefaultTheme(opt.value)">
+              @if (opt.value === 'light') {
+                <i class="ti ti-sun"></i>
+              } @else if (opt.value === 'dark') {
+                <i class="ti ti-moon"></i>
+              } @else {
+                <i class="ti ti-monitor"></i>
+              }
+              {{ opt.label }}
+            </button>
+          }
+        </div>
+      </div>
+
+      <!-- Modo oscuro toggle actual -->
+      <div class="setting-row">
+        <div class="setting-info">
+          <span class="setting-label">Modo Oscuro (ahora)</span>
+          <span class="setting-desc">Alterna entre tema claro y oscuro en vivo</span>
+        </div>
+        <button class="toggle-btn" [class.active]="isDark()" (click)="toggleTheme()">
+          <span class="toggle-track"><span class="toggle-thumb"></span></span>
+        </button>
+      </div>
+    </div>
+  </div> <!-- /settings-grid -->
+
+  <!-- ================================
+       BOTÓN DE DESCARGA
+       ================================ -->
+  <div class="download-section">
+    <div class="download-info">
+      <div class="download-stats">
+        <div class="stat-item">
+          <span class="stat-value">{{ paletas.length }}</span>
+          <span class="stat-label">Paletas</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value">{{ selectedModules().size }}</span>
+          <span class="stat-label">Módulos</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value">{{ layoutPresets.length }}</span>
+          <span class="stat-label">Layouts</span>
+        </div>
+      </div>
+      <p class="download-hint">
+        <i class="ti ti-info-circle"></i>
+        Recibirás un ZIP con <strong>josidk-config.json</strong> + <strong>apply-config.mjs</strong> para aplicar la configuración automáticamente.
+      </p>
+    </div>
+
+    <button class="btn-download" (click)="downloadTemplate()" [disabled]="downloading()">
+      @if (downloading()) {
+        <i class="ti ti-loader"></i>
+        <span>Generando...</span>
+      } @else {
+        <i class="ti ti-download"></i>
+        <span>Descargar Package</span>
+      }
+    </button>
+  </div>
+
+</div> <!-- /page-container -->

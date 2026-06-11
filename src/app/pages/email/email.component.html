@@ -1,0 +1,91 @@
+<div class="page-container">
+  <app-breadcrumb
+    [pageTitle]="'Email'"
+    [icon]="'ti ti-mail'"
+    [breadcrumbs]="breadcrumbs">
+  </app-breadcrumb>
+
+  <div class="email-layout"
+    [class.show-folders]="!selectedEmail() && mobileShowFolders()"
+    [class.show-list]="!selectedEmail() && !mobileShowFolders()"
+    [class.show-detail]="!!selectedEmail()">
+    <!-- Sidebar Folders -->
+    <div class="email-sidebar card-3d">
+      <button class="compose-btn" (click)="openCompose()">
+        <i class="ti ti-pencil"></i>
+        Redactar
+      </button>
+      <div class="folder-list">
+        @for (folder of folders; track folder.id) {
+          <div class="folder-item" [class.active]="activeFolder() === folder.id" (click)="selectFolder(folder.id)">
+            <i [class]="folder.icon"></i>
+            <span class="folder-label">{{ folder.label }}</span>
+            @if (folder.count > 0) {
+              <span class="folder-count">{{ folder.count }}</span>
+            }
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- Email Content -->
+    @if (!selectedEmail()) {
+      <div class="email-list card-3d">
+        <div class="list-header">
+          <button class="back-btn back-folders" (click)="showFolders()">
+            <i class="ti ti-arrow-left"></i>
+          </button>
+          <h3>{{ activeFolderLabel }}</h3>
+          <div class="list-actions">
+            <button class="action-btn"><i class="ti ti-refresh"></i></button>
+            <button class="action-btn"><i class="ti ti-settings"></i></button>
+          </div>
+        </div>
+        <div class="list-body">
+          @for (email of emails; track email.id) {
+            <div class="email-item" [class.unread]="!email.read" (click)="selectEmail(email)">
+              <div class="email-avatar" [style.background]="email.color">{{ email.initials }}</div>
+              <div class="email-content">
+                <div class="email-top">
+                  <span class="email-from" [class.bold]="!email.read">{{ email.from }}</span>
+                  <span class="email-time">{{ email.time }}</span>
+                </div>
+                <span class="email-subject" [class.bold]="!email.read">{{ email.subject }}</span>
+                <span class="email-preview">{{ email.preview }}</span>
+              </div>
+              <button class="star-btn" [class.starred]="email.starred" (click)="toggleStar(email, $event)">
+                <i [class]="email.starred ? 'ti ti-star-filled' : 'ti ti-star'"></i>
+              </button>
+            </div>
+          }
+        </div>
+      </div>
+    } @else {
+      <div class="email-detail card-3d">
+        <div class="detail-header">
+          <button class="back-btn" (click)="goBack()">
+            <i class="ti ti-arrow-left"></i>
+          </button>
+          <div class="detail-info">
+            <div class="detail-avatar" [style.background]="selectedEmail()!.color">{{ selectedEmail()!.initials }}</div>
+            <div>
+              <h3>{{ selectedEmail()!.from }}</h3>
+              <span class="detail-subject">{{ selectedEmail()!.subject }}</span>
+            </div>
+          </div>
+          <div class="detail-actions">
+            <button class="action-btn"><i class="ti ti-reply"></i></button>
+            <button class="action-btn"><i class="ti ti-forward"></i></button>
+            <button class="action-btn danger"><i class="ti ti-trash"></i></button>
+          </div>
+        </div>
+        <div class="detail-body">
+          <p>Hola,</p>
+          <p>{{ selectedEmail()!.preview }}</p>
+          <p>Quedo atento a tu respuesta.</p>
+          <p>Saludos,<br>{{ selectedEmail()!.from }}</p>
+        </div>
+      </div>
+    }
+  </div>
+</div>

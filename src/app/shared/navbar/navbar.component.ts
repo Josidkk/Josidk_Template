@@ -1,28 +1,36 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Output, ChangeDetectionStrategy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { ThemeService } from '../../core/services/theme.service';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss'
 })
 export class NavbarComponent {
   @Output() toggleSidebar = new EventEmitter<void>();
 
-  isDarkMode = false;
+  private theme = inject(ThemeService);
+
+  readonly isDark = this.theme.isDark;
+
+  searchQuery = '';
+
+  user = {
+    name: 'Deyby Josue',
+    initials: 'DJ',
+    avatarUrl: null as string | null,
+  };
 
   onToggle(): void {
     this.toggleSidebar.emit();
   }
 
-  toggleDarkMode(): void {
-    this.isDarkMode = !this.isDarkMode;
-    if (this.isDarkMode) {
-      document.body.classList.add('dark-theme');
-    } else {
-      document.body.classList.remove('dark-theme');
-    }
+  toggleTheme(): void {
+    this.theme.toggle();
   }
 }

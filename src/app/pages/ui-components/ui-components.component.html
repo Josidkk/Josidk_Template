@@ -1,0 +1,181 @@
+<div class="page-container">
+  <app-breadcrumb
+    [breadcrumbs]="breadcrumbs"
+    pageTitle="UI Components"
+    icon="ti ti-palette"
+  ></app-breadcrumb>
+
+  <!-- Snackbar Section -->
+  <section class="demo-section">
+    <div class="section-header">
+      <div class="section-icon snackbar-icon">
+        <i class="ti ti-bell-ringing"></i>
+      </div>
+      <div>
+        <h2 class="section-title">Snackbars</h2>
+        <p class="section-subtitle">Notificaciones con efecto glass y iconos</p>
+      </div>
+    </div>
+    <div class="demo-grid">
+      <button class="demo-btn success" (click)="showSuccess()">
+        <i class="ti ti-circle-check"></i> Success
+      </button>
+      <button class="demo-btn error" (click)="showError()">
+        <i class="ti ti-circle-x"></i> Error
+      </button>
+      <button class="demo-btn warning" (click)="showWarning()">
+        <i class="ti ti-alert-triangle"></i> Warning
+      </button>
+      <button class="demo-btn info" (click)="showInfo()">
+        <i class="ti ti-info-circle"></i> Info
+      </button>
+    </div>
+    <div class="demo-code-hint">
+      <p><strong>Clases disponibles:</strong></p>
+      <ul>
+        <li><code>snackbar-panel</code> — Contenedor posicionado arriba a la derecha</li>
+        <li><code>snackbar-container</code> — Fondo glass/blur con ícono y texto</li>
+        <li><code>.snackbar-success / .snackbar-error / .snackbar-warning / .snackbar-info</code> — Variante de color</li>
+      </ul>
+      <p style="margin-top:8px;"><strong>Uso:</strong> <code>this.notify.success('Mensaje')</code> — inyectar <code>NotificationService</code></p>
+    </div>
+  </section>
+
+  <!-- Confirm Dialog Section -->
+  <section class="demo-section">
+    <div class="section-header">
+      <div class="section-icon confirm-icon">
+        <i class="ti ti-message-circle-question"></i>
+      </div>
+      <div>
+        <h2 class="section-title">Confirmaciones</h2>
+        <p class="section-subtitle">Diálogos modales con efecto glass</p>
+      </div>
+    </div>
+    <div class="demo-grid">
+      <button class="demo-btn danger" (click)="confirmDanger()">
+        <i class="ti ti-trash"></i> Peligro
+      </button>
+      <button class="demo-btn warning" (click)="confirmWarning()">
+        <i class="ti ti-alert-triangle"></i> Advertencia
+      </button>
+      <button class="demo-btn info" (click)="confirmInfo()">
+        <i class="ti ti-info-circle"></i> Información
+      </button>
+    </div>
+    <div class="demo-code-hint">
+      <p><strong>Estructura del componente:</strong></p>
+      <ul>
+        <li><code>.confirm-dialog</code> — Contenedor con padding, ícono, título y acciones</li>
+        <li><code>.dialog-close</code> — Botón X para cerrar (posicionado absoluto)</li>
+        <li><code>.dialog-icon.danger / .warning / .info</code> — Icono circular con color semántico</li>
+        <li><code>.btn-confirm.danger / .warning / .info</code> — Botón de acción principal</li>
+      </ul>
+      <p style="margin-top:8px;"><strong>Uso:</strong> <code>this.dialog.open(ConfirmDialogComponent, &#123; data: &#123; title, message, type &#125; &#125;)</code></p>
+    </div>
+  </section>
+
+  <!-- Modal Demo Section -->
+  <section class="demo-section">
+    <div class="section-header">
+      <div class="section-icon modal-icon">
+        <i class="ti ti-window-maximize"></i>
+      </div>
+      <div>
+        <h2 class="section-title">Modal Genérico</h2>
+        <p class="section-subtitle">Modal reutilizable con icono, título, mensaje y acciones</p>
+      </div>
+    </div>
+    <div class="demo-grid">
+      <button class="demo-btn info" (click)="openInfoModal()">
+        <i class="ti ti-sparkles"></i> Abrir modal de bienvenida
+      </button>
+    </div>
+    <div class="demo-code-hint">
+      <p><strong>Uso:</strong> <code>this.dialog.open(InfoDialogComponent, &#123; data: &#123; title, message, icon &#125; &#125;)</code></p>
+      <p>Componente reutilizable en <code>shared/info-dialog/</code></p>
+    </div>
+  </section>
+
+  <!-- Cards Demo Section -->
+  <section class="demo-section">
+    <div class="section-header">
+      <div class="section-icon cards-icon">
+        <i class="ti ti-layout-grid"></i>
+      </div>
+      <div>
+        <h2 class="section-title">Cards</h2>
+        <p class="section-subtitle">Variantes de tarjetas usando la clase global <code>card-3d</code></p>
+      </div>
+    </div>
+
+    <div class="cards-showcase">
+
+      <!-- Card 1: Básica -->
+      <div class="demo-card card-3d">
+        <div class="demo-card-label">card-3d básica</div>
+        <div class="demo-card-body">
+          <h3 class="demo-card-title">Card Simple</h3>
+          <p class="demo-card-desc">La clase <code>card-3d</code> aplica sombras multi-capa y un borde interno sutil. Funciona en cualquier contenedor.</p>
+        </div>
+      </div>
+
+      <!-- Card 2: Con icono -->
+      <div class="demo-card card-3d">
+        <div class="demo-card-label">card-3d + icono</div>
+        <div class="demo-card-body">
+          <div class="demo-card-icon-wrap">
+            <i class="ti ti-rocket"></i>
+          </div>
+          <h3 class="demo-card-title">Con Icono</h3>
+          <p class="demo-card-desc">Agrega un icono decorativo con fondo semitransparente para darle personalidad a tu card.</p>
+        </div>
+      </div>
+
+      <!-- Card 3: Estadística -->
+      <div class="demo-card card-3d stat-card-style">
+        <div class="demo-card-label">card-3d + .stat-card</div>
+        <div class="demo-card-body stat-card-demo">
+          <div class="stat-icon-demo">
+            <i class="ti ti-shopping-cart"></i>
+          </div>
+          <div class="stat-info-demo">
+            <span class="stat-label-demo">Ventas Hoy</span>
+            <span class="stat-value-demo">$3,240</span>
+          </div>
+          <span class="stat-change-demo positive">+12.5%</span>
+        </div>
+      </div>
+
+      <!-- Card 4: Info / perfil -->
+      <div class="demo-card card-3d">
+        <div class="demo-card-label">card-3d + info</div>
+        <div class="demo-card-body info-card-demo">
+          <div class="info-avatar-demo">
+            <span>JD</span>
+          </div>
+          <div class="info-content-demo">
+            <h3 class="demo-card-title">John Doe</h3>
+            <span class="info-role-demo">Administrador</span>
+            <div class="info-meta-demo">
+              <i class="ti ti-mail"></i>
+              <span>john&#64;ejemplo.com</span>
+            </div>
+          </div>
+          <span class="info-badge-demo active">Activo</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="demo-code-hint">
+      <p><strong>Clases disponibles:</strong></p>
+      <ul>
+        <li><code>card-3d</code> — Sombra multi-capa + borde interno (aplicar al contenedor)</li>
+        <li><code>stat-card</code> — Card de métrica con icono, valor y cambio porcentual</li>
+        <li><code>info-card</code> — Card con avatar, nombre, rol y badge de estado</li>
+      </ul>
+    </div>
+  </section>
+
+</div>
