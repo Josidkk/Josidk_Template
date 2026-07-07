@@ -3,18 +3,12 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { BreadcrumbComponent, BreadcrumbItem } from '../../shared/breadcrumb/breadcrumb.component';
 import { APP_CONFIG } from '../../core/config/app-config';
+import { Activity, MOCK_ACTIVITIES } from './profile.mock';
 
 interface Skill {
   name: string;
   level: number; // 0–100
   color: string;
-}
-
-interface Activity {
-  action: string;
-  detail: string;
-  time: string;
-  icon: string;
 }
 
 @Component({
@@ -41,13 +35,7 @@ export class ProfileComponent {
 
   skills: Skill[] = [...APP_CONFIG.skills];
 
-  activities: Activity[] = [
-    { action: 'Completó tarea', detail: 'Diseñar landing page', time: 'Hace 2h', icon: 'ti ti-check' },
-    { action: 'Subió PR', detail: 'feat: add notification system', time: 'Hace 5h', icon: 'ti ti-git-pull-request' },
-    { action: 'Comentó', detail: 'Revisión del módulo de pagos', time: 'Ayer', icon: 'ti ti-message-2' },
-    { action: 'Creó proyecto', detail: 'Dashboard Analytics v2', time: 'Ayer', icon: 'ti ti-folder-plus' },
-    { action: 'Actualizó perfil', detail: 'Cambió su foto de perfil', time: '3 Jun', icon: 'ti ti-user-edit' },
-  ];
+  activities: Activity[] = MOCK_ACTIVITIES;
 
   editMode = signal(false);
   editedUser = { ...this.user() };

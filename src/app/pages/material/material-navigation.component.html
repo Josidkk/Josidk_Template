@@ -1,0 +1,139 @@
+
+  <div class="mat-page">
+    <app-breadcrumb
+      [breadcrumbs]="breadcrumbs"
+      pageTitle="Navegación"
+      icon="ti ti-navigation">
+    </app-breadcrumb>
+
+    <!-- Tabs -->
+    <section class="mat-card-section card-3d">
+      <div class="section-header">
+        <div class="section-icon"><i class="ti ti-navigation"></i></div>
+        <div>
+          <h2 class="section-title">Tabs</h2>
+          <p class="section-subtitle">Navegación por pestañas</p>
+        </div>
+      </div>
+      <mat-tab-group [(selectedIndex)]="tabIndex" class="tabs-demo">
+        <mat-tab label="Dashboard">
+          <div class="tab-content">
+            <i class="ti ti-chart-bar"></i>
+            <p>Panel con métricas, gráficos y estadísticas en tiempo real.</p>
+          </div>
+        </mat-tab>
+        <mat-tab label="Usuarios">
+          <div class="tab-content">
+            <i class="ti ti-users"></i>
+            <p>Gestión de usuarios con tabla editable y filtros avanzados.</p>
+          </div>
+        </mat-tab>
+        <mat-tab label="Reportes">
+          <div class="tab-content">
+            <i class="ti ti-file-report"></i>
+            <p>Reportes exportables con fechas personalizadas.</p>
+          </div>
+        </mat-tab>
+        <mat-tab label="Configuración">
+          <div class="tab-content">
+            <i class="ti ti-settings"></i>
+            <p>Ajustes del sistema, roles y permisos.</p>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+    </section>
+
+    <!-- Expansion Panels -->
+    <section class="mat-card-section card-3d">
+      <div class="section-header">
+        <div class="section-icon"><i class="ti ti-arrows-vertical"></i></div>
+        <div>
+          <h2 class="section-title">Expansion Panels</h2>
+          <p class="section-subtitle">Secciones colapsables con accordion</p>
+        </div>
+      </div>
+      <div class="demo-block">
+        <h4 class="demo-label">Panel simple <span class="value-hint">{{ panelExpanded() ? 'Expandido' : 'Colapsado' }}</span></h4>
+        <mat-accordion class="expansion-demo">
+          <mat-expansion-panel (opened)="panelExpanded.set(true)" (closed)="panelExpanded.set(false)" hideToggle>
+            <mat-expansion-panel-header>
+              <mat-panel-title>Configuración básica</mat-panel-title>
+              <mat-panel-description>Ajustes principales</mat-panel-description>
+            </mat-expansion-panel-header>
+            <p>Aquí puedes ajustar los parámetros principales de tu aplicación.</p>
+            <mat-action-row>
+              <button mat-button (click)="panelExpanded.set(false)">Cerrar</button>
+            </mat-action-row>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </div>
+      <div class="demo-block">
+        <h4 class="demo-label">Wizard multi-paso</h4>
+        <mat-accordion class="expansion-demo">
+          <mat-expansion-panel [expanded]="step() === 0" (opened)="setStep(0)">
+            <mat-expansion-panel-header>
+              <mat-panel-title>Paso 1</mat-panel-title>
+              <mat-panel-description>Información general</mat-panel-description>
+            </mat-expansion-panel-header>
+            <p>Completa los datos básicos del formulario.</p>
+            <mat-action-row>
+              <button mat-button (click)="nextStep()">Siguiente</button>
+            </mat-action-row>
+          </mat-expansion-panel>
+          <mat-expansion-panel [expanded]="step() === 1" (opened)="setStep(1)">
+            <mat-expansion-panel-header>
+              <mat-panel-title>Paso 2</mat-panel-title>
+              <mat-panel-description>Configuración avanzada</mat-panel-description>
+            </mat-expansion-panel-header>
+            <p>Define las opciones específicas del módulo.</p>
+            <mat-action-row>
+              <button mat-button (click)="prevStep()">Anterior</button>
+              <button mat-button (click)="nextStep()">Siguiente</button>
+            </mat-action-row>
+          </mat-expansion-panel>
+          <mat-expansion-panel [expanded]="step() === 2" (opened)="setStep(2)">
+            <mat-expansion-panel-header>
+              <mat-panel-title>Paso 3</mat-panel-title>
+              <mat-panel-description>Revisión final</mat-panel-description>
+            </mat-expansion-panel-header>
+            <p>Verifica que todo esté correcto antes de finalizar.</p>
+            <mat-action-row>
+              <button mat-button (click)="setStep(0)">Reiniciar</button>
+              <button mat-button (click)="prevStep()">Anterior</button>
+              <button mat-raised-button (click)="completeWizard()">Finalizar</button>
+            </mat-action-row>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </div>
+    </section>
+
+    <!-- Tooltips & Dividers -->
+    <section class="mat-card-section card-3d">
+      <div class="section-header">
+        <div class="section-icon"><i class="ti ti-info-circle"></i></div>
+        <div>
+          <h2 class="section-title">Tooltips & Divisores</h2>
+          <p class="section-subtitle">Información contextual y separadores</p>
+        </div>
+      </div>
+      <div class="demo-block">
+        <h4 class="demo-label">Posiciones</h4>
+        <div class="tooltip-row">
+          <button mat-button matTooltip="Tooltip arriba" matTooltipPosition="above">Arriba</button>
+          <button mat-button matTooltip="Tooltip abajo" matTooltipPosition="below">Abajo</button>
+          <button mat-button matTooltip="Tooltip izquierda" matTooltipPosition="left">Izquierda</button>
+          <button mat-button matTooltip="Tooltip derecha" matTooltipPosition="right">Derecha</button>
+        </div>
+      </div>
+      <div class="demo-block">
+        <h4 class="demo-label">Con delay</h4>
+        <div class="tooltip-row">
+          <button mat-button matTooltip="Aparece en 1s" [matTooltipShowDelay]="1000">Delay 1s</button>
+          <button mat-button matTooltip="Se oculta en 2s" [matTooltipHideDelay]="2000">Hide 2s</button>
+          <span class="tooltip-text" matTooltip="Texto con tooltip">Pasa el mouse aquí</span>
+        </div>
+      </div>
+      <mat-divider class="kit-divider"></mat-divider>
+      <p class="divider-note">Los divisores separan secciones de contenido de forma elegante y visual.</p>
+    </section>
+  </div>

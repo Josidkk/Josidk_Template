@@ -1,0 +1,85 @@
+
+    .mat-page { padding: 24px; display: flex; flex-direction: column; gap: 24px; }
+    .mat-card-section {
+      background: var(--content-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--content-radius);
+      padding: 28px 32px;
+    }
+    .section-header {
+      display: flex; align-items: center; gap: 16px;
+      margin-bottom: 28px; padding-bottom: 20px;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+    body.dark-theme .section-header { border-bottom-color: rgba(255,255,255,0.06); }
+    .section-icon {
+      width: 48px; height: 48px; border-radius: 14px;
+      background: var(--primary-light); color: var(--primary);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      i { font-size: 1.4rem; }
+    }
+    .section-title {
+      font-size: 1.1rem; font-weight: 700; color: var(--text-primary);
+      margin: 0 0 2px;
+    }
+    .section-subtitle {
+      font-size: 0.82rem; color: var(--text-secondary); margin: 0;
+    }
+    .demo-block { margin-bottom: 20px; &:last-child { margin-bottom: 0; } }
+    .demo-label {
+      font-size: 0.8rem; font-weight: 600; color: var(--text-secondary);
+      margin: 0 0 10px; text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .value-hint { font-weight: 400; color: var(--text-muted); font-size: 0.75rem; }
+
+    mat-progress-bar {
+      --mdc-linear-progress-active-indicator-color: var(--primary) !important;
+      --mdc-linear-progress-track-color: var(--primary-light) !important;
+      border-radius: 4px !important; height: 6px !important;
+    }
+    .progress-actions { display: flex; gap: 8px; margin-top: 10px; }
+
+    .spinner-grid {
+      display: flex; gap: 24px; align-items: center; justify-content: center; flex-wrap: wrap;
+    }
+    .spinner-item {
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      span { font-size: 0.72rem; color: var(--text-muted); font-weight: 500; }
+    }
+    mat-spinner, mat-progress-spinner {
+      --mdc-circular-progress-active-indicator-color: var(--primary) !important;
+    }
+
+    .btn-row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+    .snack-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 10px 20px; border-radius: 12px;
+      font-size: 0.85rem; font-weight: 600; cursor: pointer;
+      border: none; transition: all 0.2s; font-family: var(--font-family);
+      i { font-size: 1rem; }
+      &:hover { transform: translateY(-2px); }
+      &.success {
+        background: rgba(42,122,68,0.10); color: var(--success);
+        border: 1px solid rgba(42,122,68,0.18);
+        &:hover { background: rgba(42,122,68,0.16); box-shadow: 0 4px 14px rgba(42,122,68,0.15); }
+      }
+      &.error {
+        background: rgba(168,56,40,0.10); color: var(--danger);
+        border: 1px solid rgba(168,56,40,0.18);
+        &:hover { background: rgba(168,56,40,0.16); box-shadow: 0 4px 14px rgba(168,56,40,0.15); }
+      }
+      &.warning {
+        background: rgba(212,148,10,0.10); color: var(--warning);
+        border: 1px solid rgba(212,148,10,0.18);
+        &:hover { background: rgba(212,148,10,0.16); box-shadow: 0 4px 14px rgba(212,148,10,0.15); }
+      }
+      &.info {
+        background: var(--primary-light); color: var(--primary);
+        border: 1px solid var(--card-border);
+        &:hover { background: color-mix(in srgb, var(--primary) 16%, transparent); box-shadow: 0 4px 14px color-mix(in srgb, var(--primary) 15%, transparent); }
+      }
+    }
+    button[mat-stroked-button] {
+      border-color: var(--card-border) !important; color: var(--text-primary) !important;
+    }

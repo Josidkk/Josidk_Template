@@ -1,0 +1,97 @@
+
+  <div class="mat-page">
+    <app-breadcrumb
+      [breadcrumbs]="breadcrumbs"
+      pageTitle="Feedback"
+      icon="ti ti-bell-ringing">
+    </app-breadcrumb>
+
+    <!-- Progress Bars -->
+    <section class="mat-card-section card-3d">
+      <div class="section-header">
+        <div class="section-icon"><i class="ti ti-chart-bar"></i></div>
+        <div>
+          <h2 class="section-title">Barras de progreso</h2>
+          <p class="section-subtitle">Modos determinada, indeterminada y buffer</p>
+        </div>
+      </div>
+      <div class="demo-block">
+        <h4 class="demo-label">Determinada <span class="value-hint">{{ progressValue() }}%</span></h4>
+        <mat-progress-bar mode="determinate" [value]="progressValue()"></mat-progress-bar>
+        <div class="progress-actions">
+          <button mat-stroked-button (click)="startProgress()"><i class="ti ti-player-play"></i> Iniciar</button>
+          <button mat-stroked-button (click)="resetProgress()"><i class="ti ti-refresh"></i> Reset</button>
+        </div>
+      </div>
+      <div class="demo-block">
+        <h4 class="demo-label">Indeterminada</h4>
+        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+      </div>
+      <div class="demo-block">
+        <h4 class="demo-label">Buffer</h4>
+        <mat-progress-bar mode="buffer" [value]="30" [bufferValue]="60"></mat-progress-bar>
+      </div>
+      <div class="demo-block">
+        <h4 class="demo-label">Query mode</h4>
+        <mat-progress-bar mode="query"></mat-progress-bar>
+      </div>
+    </section>
+
+    <!-- Spinners -->
+    <section class="mat-card-section card-3d">
+      <div class="section-header">
+        <div class="section-icon"><i class="ti ti-loader"></i></div>
+        <div>
+          <h2 class="section-title">Spinners</h2>
+          <p class="section-subtitle">Indicadores circulares de carga</p>
+        </div>
+      </div>
+      <div class="spinner-grid">
+        <div class="spinner-item">
+          <mat-spinner diameter="32"></mat-spinner>
+          <span>32px</span>
+        </div>
+        <div class="spinner-item">
+          <mat-spinner diameter="48"></mat-spinner>
+          <span>48px</span>
+        </div>
+        <div class="spinner-item">
+          <mat-progress-spinner mode="determinate" [value]="25" diameter="48"></mat-progress-spinner>
+          <span>25%</span>
+        </div>
+        <div class="spinner-item">
+          <mat-progress-spinner mode="determinate" [value]="75" diameter="48"></mat-progress-spinner>
+          <span>75%</span>
+        </div>
+        <div class="spinner-item">
+          <mat-progress-spinner mode="determinate" [value]="100" diameter="48"></mat-progress-spinner>
+          <span>Completo</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Snackbars -->
+    <section class="mat-card-section card-3d">
+      <div class="section-header">
+        <div class="section-icon"><i class="ti ti-bell-ringing"></i></div>
+        <div>
+          <h2 class="section-title">Notificaciones (Snackbar)</h2>
+          <p class="section-subtitle">Mensajes temporales con estilo glass</p>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="snack-btn success" (click)="showSuccess()">
+          <i class="ti ti-circle-check"></i> Success
+        </button>
+        <button class="snack-btn error" (click)="showError()">
+          <i class="ti ti-circle-x"></i> Error
+        </button>
+        <button class="snack-btn warning" (click)="showWarning()">
+          <i class="ti ti-alert-triangle"></i> Warning
+        </button>
+        <button class="snack-btn info" (click)="showInfo()">
+          <i class="ti ti-info-circle"></i> Info
+        </button>
+      </div>
+    </section>
+  </div>

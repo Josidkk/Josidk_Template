@@ -1,0 +1,107 @@
+
+  <div class="mat-page">
+    <app-breadcrumb
+      [breadcrumbs]="breadcrumbs"
+      pageTitle="Visualización de datos"
+      icon="ti ti-credit-card">
+    </app-breadcrumb>
+
+    <!-- Cards -->
+    <section class="mat-card-section card-3d">
+      <div class="section-header">
+        <div class="section-icon"><i class="ti ti-credit-card"></i></div>
+        <div>
+          <h2 class="section-title">Tarjetas (MatCard)</h2>
+          <p class="section-subtitle">Contenedores con header, contenido y acciones</p>
+        </div>
+      </div>
+      <div class="card-grid">
+        <mat-card class="mat-card-demo" appearance="outlined">
+          <mat-card-header>
+            <div mat-card-avatar class="card-avatar">JD</div>
+            <mat-card-title>Josidk ERP</mat-card-title>
+            <mat-card-subtitle>Plantilla Angular 18</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <p>Dashboard administrativo moderno con Angular Material, gráficas y componentes reutilizables.</p>
+          </mat-card-content>
+          <mat-card-actions>
+            <button mat-button>ABRIR</button>
+            <button mat-button>COMPARTIR</button>
+          </mat-card-actions>
+        </mat-card>
+
+        <mat-card class="mat-card-demo" appearance="outlined">
+          <mat-card-header>
+            <div mat-card-avatar class="card-avatar">MT</div>
+            <mat-card-title>Material Theming</mat-card-title>
+            <mat-card-subtitle>Personalización visual</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <p>Los colores, bordes y fondos se adaptan automáticamente a las variables CSS del tema.</p>
+          </mat-card-content>
+          <mat-card-actions>
+            <button mat-button>VER</button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+    </section>
+
+    <!-- Chips -->
+    <section class="mat-card-section card-3d">
+      <div class="section-header">
+        <div class="section-icon"><i class="ti ti-tags"></i></div>
+        <div>
+          <h2 class="section-title">Chips</h2>
+          <p class="section-subtitle">Etiquetas seleccionables con estilo temático</p>
+        </div>
+      </div>
+      <div class="demo-block">
+        <h4 class="demo-label">Selecciona tecnologías</h4>
+        <div class="chip-row">
+          @for (chip of chipList; track chip) {
+            <mat-chip
+              [class.mat-mdc-chip-selected]="isChipSelected(chip)"
+              (click)="toggleChip(chip)">
+              {{ chip }}
+            </mat-chip>
+          }
+        </div>
+        <p class="chip-hint">Seleccionados: {{ selectedChips.join(', ') || 'ninguno' }}</p>
+      </div>
+      <div class="demo-block">
+        <h4 class="demo-label">Estilos de chip</h4>
+        <div class="chip-row">
+          <mat-chip [class.mat-mdc-chip-selected]="true">Angular</mat-chip>
+          <mat-chip>React</mat-chip>
+          <mat-chip>Vue</mat-chip>
+          <mat-chip [class.mat-mdc-chip-selected]="true">Svelte</mat-chip>
+        </div>
+      </div>
+    </section>
+
+    <!-- Badges -->
+    <section class="mat-card-section card-3d">
+      <div class="section-header">
+        <div class="section-icon"><i class="ti ti-badge"></i></div>
+        <div>
+          <h2 class="section-title">Badges</h2>
+          <p class="section-subtitle">Indicadores numéricos y de estado</p>
+        </div>
+      </div>
+      <div class="demo-block">
+        <h4 class="demo-label">Ejemplos de badges</h4>
+        <div class="badge-row">
+          <span [matBadge]="badgeCount()" [matBadgeHidden]="badgeHidden()" matBadgePosition="above after">Notificaciones</span>
+          <span matBadge="!" matBadgeOverlap="false">Alerta</span>
+          <span matBadge="New" matBadgeSize="large">Novedad</span>
+          <span matBadge="99+" matBadgeSize="large">Mensajes</span>
+        </div>
+        <div class="badge-actions">
+          <button mat-stroked-button (click)="decrementBadge()"><i class="ti ti-minus"></i></button>
+          <button mat-stroked-button (click)="incrementBadge()"><i class="ti ti-plus"></i></button>
+          <button mat-stroked-button (click)="toggleBadgeHidden()">{{ badgeHidden() ? 'Mostrar' : 'Ocultar' }}</button>
+        </div>
+      </div>
+    </section>
+  </div>

@@ -828,7 +828,7 @@ export class SettingsComponent {
     const routeMap: Record<string, { path: string; importPath: string; component: string }> = {
       register: { path: 'register', importPath: './pages/auth/register/register.component', component: 'RegisterComponent' },
       dashboard: { path: 'dashboard', importPath: './pages/dashboard/dashboard.component', component: 'DashboardComponent' },
-      users: { path: 'users', importPath: './pages/users/user-list/user-list.component', component: 'UserListComponent' },
+      users: { path: 'users', importPath: './pages/users/users.component', component: 'UsersComponent' },
       profile: { path: 'profile', importPath: './pages/profile/profile.component', component: 'ProfileComponent' },
       'ui-components': { path: 'ui-components', importPath: './pages/ui-components/ui-components.component', component: 'UiComponentsComponent' },
       kanban: { path: 'kanban', importPath: './pages/kanban/kanban.component', component: 'KanbanComponent' },
@@ -942,7 +942,7 @@ export class SettingsComponent {
       email: { section: 'Apps', id: 'email', label: 'Email', icon: 'ti ti-mail', route: '/email' },
       kanban: { section: 'Apps', id: 'kanban', label: 'Kanban', icon: 'ti ti-layout-kanban', route: '/kanban' },
       profile: { section: 'Apps', id: 'profile', label: 'Perfil', icon: 'ti ti-user-circle', route: '/profile', badge: 'new' },
-      users: { section: 'Gestión', id: 'usuarios', label: 'Empleados', icon: 'ti ti-users', route: '/users' },
+      users: { section: 'Gestión', id: 'users', label: 'Empleados', icon: 'ti ti-users', route: '/users' },
       'ui-components': { section: 'Gestión', id: 'ui-components', label: 'UI Components', icon: 'ti ti-palette', route: '/ui-components' },
     };
 

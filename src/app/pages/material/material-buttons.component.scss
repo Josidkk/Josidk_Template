@@ -1,0 +1,46 @@
+
+    .mat-page { padding: 24px; display: flex; flex-direction: column; gap: 24px; }
+    .mat-card-section {
+      background: var(--content-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--content-radius);
+      padding: 28px 32px;
+    }
+    .section-header {
+      display: flex; align-items: center; gap: 16px;
+      margin-bottom: 28px; padding-bottom: 20px;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+    body.dark-theme .section-header { border-bottom-color: rgba(255,255,255,0.06); }
+    .section-icon {
+      width: 48px; height: 48px; border-radius: 14px;
+      background: var(--primary-light); color: var(--primary);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      i { font-size: 1.4rem; }
+    }
+    .section-title {
+      font-size: 1.1rem; font-weight: 700; color: var(--text-primary);
+      margin: 0 0 2px;
+    }
+    .section-subtitle {
+      font-size: 0.82rem; color: var(--text-secondary); margin: 0;
+    }
+    .demo-block { margin-bottom: 20px; }
+    .demo-label {
+      font-size: 0.8rem; font-weight: 600; color: var(--text-secondary);
+      margin: 0 0 10px; text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .btn-row {
+      display: flex; gap: 12px; flex-wrap: wrap; align-items: center;
+    }
+    button[mat-raised-button], button[mat-flat-button] {
+      background: var(--primary) !important; color: #fff !important;
+    }
+    button[mat-stroked-button] {
+      border-color: var(--card-border) !important; color: var(--text-primary) !important;
+    }
+    button[mat-icon-button] { color: var(--text-primary) !important; }
+    button[mat-mini-fab], button[mat-fab] {
+      background: var(--primary) !important; color: #fff !important;
+    }

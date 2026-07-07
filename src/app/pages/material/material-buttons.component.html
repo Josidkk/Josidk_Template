@@ -1,0 +1,56 @@
+
+  <div class="mat-page">
+    <app-breadcrumb
+      [breadcrumbs]="breadcrumbs"
+      pageTitle="Botones"
+      icon="ti ti-components">
+    </app-breadcrumb>
+
+    <section class="mat-card-section card-3d">
+      <div class="section-header">
+        <div class="section-icon"><i class="ti ti-components"></i></div>
+        <div>
+          <h2 class="section-title">Botones Material</h2>
+          <p class="section-subtitle">Todas las variantes de botones de Angular Material</p>
+        </div>
+      </div>
+
+      <div class="demo-block">
+        <h4 class="demo-label">Botones básicos</h4>
+        <div class="btn-row">
+          <button mat-button>Basic</button>
+          <button mat-raised-button>Raised</button>
+          <button mat-stroked-button>Stroked</button>
+          <button mat-flat-button>Flat</button>
+        </div>
+      </div>
+
+      <div class="demo-block">
+        <h4 class="demo-label">Botones con icono</h4>
+        <div class="btn-row">
+          <button mat-icon-button matTooltip="Icon button"><i class="ti ti-star"></i></button>
+          <button mat-icon-button matTooltip="Settings"><i class="ti ti-settings"></i></button>
+          <button mat-icon-button matTooltip="Delete"><i class="ti ti-trash"></i></button>
+          <button mat-icon-button matTooltip="Edit"><i class="ti ti-edit"></i></button>
+        </div>
+      </div>
+
+      <div class="demo-block">
+        <h4 class="demo-label">FAB (Floating Action Buttons)</h4>
+        <div class="btn-row">
+          <button mat-mini-fab matTooltip="Mini FAB"><i class="ti ti-plus"></i></button>
+          <button mat-fab matTooltip="FAB"><i class="ti ti-plus"></i></button>
+          <button mat-fab extended matTooltip="Extended FAB"><i class="ti ti-send"></i> Enviar</button>
+        </div>
+      </div>
+
+      <div class="demo-block">
+        <h4 class="demo-label">Estados</h4>
+        <div class="btn-row">
+          <button mat-raised-button [disabled]="true">Deshabilitado</button>
+          <button mat-stroked-button color="primary">Primario</button>
+          <button mat-raised-button color="primary">Primario</button>
+        </div>
+      </div>
+    </section>
+  </div>

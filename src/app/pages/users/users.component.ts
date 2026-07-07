@@ -4,30 +4,20 @@ import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatPaginatorModule, MatPaginator } from '@angular/material/paginator';
 import { MatSortModule, MatSort } from '@angular/material/sort';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { BreadcrumbComponent, BreadcrumbItem } from '../../../shared/breadcrumb/breadcrumb.component';
-import { NotificationService } from '../../../core/services/notification.service';
-import { ConfirmDialogComponent, ConfirmDialogData } from '../../../shared/confirm-dialog/confirm-dialog.component';
-
-export interface User {
-  id: string;
-  name: string;
-  email: string;
-  role: string;
-  status: 'Active' | 'Pending' | 'Inactive';
-  avatar?: string;
-  lastLogin: string;
-}
+import { BreadcrumbComponent, BreadcrumbItem } from '../../shared/breadcrumb/breadcrumb.component';
+import { NotificationService } from '../../core/services/notification.service';
+import { ConfirmDialogComponent, ConfirmDialogData } from '../../shared/confirm-dialog/confirm-dialog.component';
+import { User, MOCK_USERS } from './users.mock';
 
 @Component({
-  selector: 'app-user-list',
+  selector: 'app-users',
   standalone: true,
   imports: [CommonModule, MatTableModule, MatPaginatorModule, MatSortModule, BreadcrumbComponent, MatDialogModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  templateUrl: './user-list.component.html',
-  styleUrl: './user-list.component.scss'
+  templateUrl: './users.component.html',
+  styleUrl: './users.component.scss'
 })
-
-export class UserListComponent implements OnInit, AfterViewInit {
+export class UsersComponent implements OnInit, AfterViewInit {
   private notify = inject(NotificationService);
   private dialog = inject(MatDialog);
 
@@ -43,16 +33,7 @@ export class UserListComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  // Mock data for demo
-  users: User[] = [
-    { id: 'USR-001', name: 'Deyby Josue', email: 'deyby@josidk.com', role: 'Admin', status: 'Active', lastLogin: 'Hace 2 horas', avatar: 'ti ti-user-circle' },
-    { id: 'USR-002', name: 'Ana Rodriguez', email: 'ana.r@josidk.com', role: 'Editor', status: 'Active', lastLogin: 'Hace 5 horas' },
-    { id: 'USR-003', name: 'Carlos Mendez', email: 'carlos.m@josidk.com', role: 'Viewer', status: 'Pending', lastLogin: 'Nunca' },
-    { id: 'USR-004', name: 'Laura Sanchez', email: 'laura.s@josidk.com', role: 'Editor', status: 'Inactive', lastLogin: 'Hace 2 días' },
-    { id: 'USR-005', name: 'Roberto Gomez', email: 'roberto.g@josidk.com', role: 'Viewer', status: 'Active', lastLogin: 'Hace 1 hora' },
-    { id: 'USR-006', name: 'Maria Lopez', email: 'maria.l@josidk.com', role: 'Viewer', status: 'Active', lastLogin: 'Ayer' },
-    { id: 'USR-007', name: 'Jorge Perez', email: 'jorge.p@josidk.com', role: 'Admin', status: 'Inactive', lastLogin: 'Hace 1 semana' }
-  ];
+  users: User[] = MOCK_USERS;
 
   ngOnInit() {
     this.dataSource.data = this.users;

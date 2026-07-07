@@ -1,0 +1,137 @@
+
+  <div class="mat-page">
+    <app-breadcrumb
+      [breadcrumbs]="breadcrumbs"
+      pageTitle="Gráficas"
+      icon="ti ti-chart-bar">
+    </app-breadcrumb>
+
+    <!-- Bar Chart -->
+    <section class="mat-card-section card-3d">
+      <div class="section-header">
+        <div class="section-icon"><i class="ti ti-chart-bar"></i></div>
+        <div>
+          <h2 class="section-title">Barras agrupadas</h2>
+          <p class="section-subtitle">Comparativa de ingresos vs gastos mensuales</p>
+        </div>
+      </div>
+      <div class="chart-container">
+        <canvas baseChart
+          [data]="barChartData"
+          [options]="barChartOptions"
+          [type]="'bar'"
+          height="250">
+        </canvas>
+      </div>
+      <div class="chart-legend-custom">
+        <span class="legend-item-custom"><span class="legend-dot" style="background:var(--primary)"></span> Ingresos</span>
+        <span class="legend-item-custom"><span class="legend-dot" style="background:var(--accent-warm)"></span> Gastos</span>
+      </div>
+    </section>
+
+    <!-- Line Chart -->
+    <section class="mat-card-section card-3d">
+      <div class="section-header">
+        <div class="section-icon"><i class="ti ti-chart-line"></i></div>
+        <div>
+          <h2 class="section-title">Línea</h2>
+          <p class="section-subtitle">Tendencia de usuarios nuevos vs recurrentes</p>
+        </div>
+      </div>
+      <div class="chart-controls">
+        <label class="toggle-label">
+          <input type="checkbox" [ngModel]="lineFilled()" (ngModelChange)="lineFilled.set($event)">
+          <span>Área rellena</span>
+        </label>
+        <label class="toggle-label">
+          <input type="checkbox" [ngModel]="linePoints()" (ngModelChange)="linePoints.set($event)">
+          <span>Mostrar puntos</span>
+        </label>
+      </div>
+      <div class="chart-container">
+        <canvas baseChart
+          [data]="lineChartData"
+          [options]="lineChartOptions"
+          [type]="'line'"
+          height="250">
+        </canvas>
+      </div>
+    </section>
+
+    <!-- Pie & Doughnut -->
+    <div class="chart-row">
+      <section class="mat-card-section card-3d chart-half">
+        <div class="section-header">
+          <div class="section-icon"><i class="ti ti-chart-pie"></i></div>
+          <div>
+            <h2 class="section-title">Pastel</h2>
+            <p class="section-subtitle">Distribución por región</p>
+          </div>
+        </div>
+        <div class="chart-container chart-container--sm">
+          <canvas baseChart
+            [data]="pieData"
+            [options]="pieOptions"
+            [type]="'pie'"
+            height="240">
+          </canvas>
+        </div>
+      </section>
+
+      <section class="mat-card-section card-3d chart-half">
+        <div class="section-header">
+          <div class="section-icon"><i class="ti ti-chart-donut"></i></div>
+          <div>
+            <h2 class="section-title">Dona</h2>
+            <p class="section-subtitle">Porcentaje del presupuesto</p>
+          </div>
+        </div>
+        <div class="chart-container chart-container--sm">
+          <canvas baseChart
+            [data]="doughnutData"
+            [options]="doughnutOptions"
+            [type]="'doughnut'"
+            height="240">
+          </canvas>
+        </div>
+      </section>
+    </div>
+
+    <!-- Radar Chart -->
+    <section class="mat-card-section card-3d">
+      <div class="section-header">
+        <div class="section-icon"><i class="ti ti-radar"></i></div>
+        <div>
+          <h2 class="section-title">Radar</h2>
+          <p class="section-subtitle">Comparativa de habilidades por equipo</p>
+        </div>
+      </div>
+      <div class="chart-container">
+        <canvas baseChart
+          [data]="radarData"
+          [options]="radarOptions"
+          [type]="'radar'"
+          height="260">
+        </canvas>
+      </div>
+    </section>
+
+    <!-- Polar Area -->
+    <section class="mat-card-section card-3d">
+      <div class="section-header">
+        <div class="section-icon"><i class="ti ti-chart-donut-2"></i></div>
+        <div>
+          <h2 class="section-title">Polar</h2>
+          <p class="section-subtitle">Ventas por categoría de producto</p>
+        </div>
+      </div>
+      <div class="chart-container chart-container--sm">
+        <canvas baseChart
+          [data]="polarData"
+          [options]="polarOptions"
+          [type]="'polarArea'"
+          height="260">
+        </canvas>
+      </div>
+    </section>
+  </div>

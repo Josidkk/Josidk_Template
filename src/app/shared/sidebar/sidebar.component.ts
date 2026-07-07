@@ -71,7 +71,7 @@ export class SidebarComponent {
     {
       title: 'Gestión',
       items: [
-        { id: 'usuarios', label: 'Empleados', icon: 'ti ti-users', route: '/users' },
+        { id: 'users', label: 'Empleados', icon: 'ti ti-users', route: '/users' },
         { id: 'settings', label: 'Configuración', icon: 'ti ti-settings-2', route: '/settings', badge: 'important' },
         { id: 'ui-components', label: 'UI Components', icon: 'ti ti-palette', route: '/ui-components' },
       ]

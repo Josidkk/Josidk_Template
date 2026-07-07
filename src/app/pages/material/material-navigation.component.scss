@@ -1,0 +1,81 @@
+
+    .mat-page { padding: 24px; display: flex; flex-direction: column; gap: 24px; }
+    .mat-card-section {
+      background: var(--content-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--content-radius);
+      padding: 28px 32px;
+    }
+    .section-header {
+      display: flex; align-items: center; gap: 16px;
+      margin-bottom: 28px; padding-bottom: 20px;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+    body.dark-theme .section-header { border-bottom-color: rgba(255,255,255,0.06); }
+    .section-icon {
+      width: 48px; height: 48px; border-radius: 14px;
+      background: var(--primary-light); color: var(--primary);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      i { font-size: 1.4rem; }
+    }
+    .section-title {
+      font-size: 1.1rem; font-weight: 700; color: var(--text-primary);
+      margin: 0 0 2px;
+    }
+    .section-subtitle {
+      font-size: 0.82rem; color: var(--text-secondary); margin: 0;
+    }
+    .demo-block { margin-bottom: 20px; &:last-child { margin-bottom: 0; } }
+    .demo-label {
+      font-size: 0.8rem; font-weight: 600; color: var(--text-secondary);
+      margin: 0 0 10px; text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .value-hint { font-weight: 400; color: var(--text-muted); font-size: 0.75rem; }
+
+    :host ::ng-deep .tabs-demo {
+      .mat-mdc-tab-header { border-bottom: 1px solid var(--card-border) !important; }
+      .mat-mdc-tab { font-size: 0.85rem !important; font-weight: 500 !important; }
+      .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label { color: var(--primary) !important; }
+      .mat-mdc-tab .mdc-tab__text-label { color: var(--text-secondary) !important; }
+      .mat-mdc-tab-indicator { --mdc-tab-indicator-active-indicator-color: var(--primary) !important; }
+      .mat-mdc-tab-body-content { padding: 20px 4px !important; }
+    }
+    .tab-content {
+      display: flex; flex-direction: column; align-items: center; gap: 10px;
+      padding: 20px; text-align: center;
+      i { font-size: 2.2rem; color: var(--primary); opacity: 0.3; }
+      p { font-size: 0.85rem; color: var(--text-secondary); margin: 0; max-width: 300px; line-height: 1.6; }
+    }
+
+    :host ::ng-deep .expansion-demo {
+      .mat-expansion-panel {
+        background: var(--content-bg) !important;
+        border: 1px solid var(--card-border) !important;
+        border-radius: 10px !important; margin-bottom: 8px !important;
+        &:not([class*=mat-elevation-z]) { box-shadow: none !important; }
+      }
+      .mat-expansion-panel-header {
+        padding: 0 16px !important; font-size: 0.85rem !important;
+        .mat-expansion-panel-header-title { color: var(--text-primary) !important; font-weight: 600 !important; font-size: 0.85rem !important; }
+        .mat-expansion-panel-header-description { color: var(--text-secondary) !important; font-size: 0.78rem !important; }
+      }
+      .mat-expansion-panel-body {
+        padding: 0 16px 16px !important; font-size: 0.82rem !important;
+        color: var(--text-secondary) !important; line-height: 1.6 !important;
+      }
+      .mat-action-row { border-top-color: var(--card-border) !important; padding: 12px 8px 8px !important; }
+    }
+
+    .tooltip-row {
+      display: flex; gap: 10px; flex-wrap: wrap; align-items: center;
+    }
+    .tooltip-text {
+      font-size: 0.82rem; color: var(--text-secondary);
+      border-bottom: 1px dashed var(--card-border); cursor: help; padding: 4px 0;
+    }
+    :host ::ng-deep .kit-divider { margin: 8px 0 !important; border-top-color: var(--card-border) !important; }
+    .divider-note { font-size: 0.78rem; color: var(--text-muted); margin: 4px 0 0; font-style: italic; }
+
+    button[mat-button] { color: var(--text-primary) !important; }
+    button[mat-raised-button] { background: var(--primary) !important; color: #fff !important; }

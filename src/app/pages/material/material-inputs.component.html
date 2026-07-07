@@ -1,0 +1,75 @@
+
+  <div class="mat-page">
+    <app-breadcrumb
+      [breadcrumbs]="breadcrumbs"
+      pageTitle="Inputs"
+      icon="ti ti-toggle-left">
+    </app-breadcrumb>
+
+    <!-- Slide Toggles -->
+    <section class="mat-card-section card-3d">
+      <div class="section-header">
+        <div class="section-icon"><i class="ti ti-toggle-left"></i></div>
+        <div>
+          <h2 class="section-title">Slide Toggle</h2>
+          <p class="section-subtitle">Interruptores de dos estados</p>
+        </div>
+      </div>
+      <div class="demo-block">
+        <h4 class="demo-label">Básico</h4>
+        <mat-slide-toggle [ngModel]="toggleValue()" (ngModelChange)="toggleValue.set($event)">
+          Modo {{ toggleValue() ? 'activado' : 'desactivado' }}
+        </mat-slide-toggle>
+      </div>
+      <div class="demo-block">
+        <h4 class="demo-label">Deshabilitado</h4>
+        <mat-slide-toggle [checked]="true" [disabled]="true">Opción fija</mat-slide-toggle>
+      </div>
+      <div class="demo-block">
+        <h4 class="demo-label">Etiqueta al inicio</h4>
+        <mat-slide-toggle [checked]="true" labelPosition="before">Notificaciones</mat-slide-toggle>
+      </div>
+      <div class="demo-block">
+        <h4 class="demo-label">Con color personalizado</h4>
+        <mat-slide-toggle [checked]="true" color="primary">Color primario</mat-slide-toggle>
+      </div>
+    </section>
+
+    <!-- Sliders -->
+    <section class="mat-card-section card-3d">
+      <div class="section-header">
+        <div class="section-icon"><i class="ti ti-adjustments-horizontal"></i></div>
+        <div>
+          <h2 class="section-title">Sliders</h2>
+          <p class="section-subtitle">Selección de valor con rango</p>
+        </div>
+      </div>
+      <div class="demo-block">
+        <h4 class="demo-label">Valor único: <strong>{{ sliderValue() }}</strong></h4>
+        <mat-slider min="0" max="100" step="1">
+          <input matSliderThumb [ngModel]="sliderValue()" (ngModelChange)="sliderValue.set($event)">
+        </mat-slider>
+      </div>
+      <div class="demo-block">
+        <h4 class="demo-label">Incrementos de 10</h4>
+        <mat-slider min="0" max="100" step="10" discrete>
+          <input matSliderThumb [ngModel]="stepValue()" (ngModelChange)="stepValue.set($event)">
+        </mat-slider>
+        <span class="slider-hint">Valor: {{ stepValue() }}</span>
+      </div>
+      <div class="demo-block">
+        <h4 class="demo-label">Rango: {{ rangeStart() }} — {{ rangeEnd() }}</h4>
+        <mat-slider min="0" max="100" step="5">
+          <input matSliderStartThumb [ngModel]="rangeStart()" (ngModelChange)="rangeStart.set($event)">
+          <input matSliderEndThumb [ngModel]="rangeEnd()" (ngModelChange)="rangeEnd.set($event)">
+        </mat-slider>
+      </div>
+      <div class="demo-block">
+        <h4 class="demo-label">Vertical</h4>
+        <mat-slider min="0" max="100" step="1" inverted vertical style="height: 150px;">
+          <input matSliderThumb [ngModel]="vertValue()" (ngModelChange)="vertValue.set($event)">
+        </mat-slider>
+        <span class="slider-hint">Valor: {{ vertValue() }}</span>
+      </div>
+    </section>
+  </div>
