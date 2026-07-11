@@ -38,6 +38,8 @@
     width: 0;
     min-width: 0;
     padding: 0;
+    margin: 0; /* margin-left:auto/8px de badges y chevron rompe el centrado flex */
+    border: none;
     overflow: hidden;
     pointer-events: none;
   }
