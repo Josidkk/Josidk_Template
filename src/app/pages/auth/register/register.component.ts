@@ -38,7 +38,12 @@ export class RegisterComponent {
   register(): void {
     this.submitted = true;
     this.cdr.markForCheck();
-    if (this.registerForm.invalid) return;
+    if (this.registerForm.invalid) {
+      // Con el teclado móvil abierto el error puede quedar fuera del viewport:
+      // enfocar el primer campo inválido lo trae a la vista en cualquier dispositivo
+      setTimeout(() => document.querySelector<HTMLInputElement>('.input-wrapper.input-error input')?.focus());
+      return;
+    }
 
     // TODO: Replace with real auth service
     const { email } = this.registerForm.value;

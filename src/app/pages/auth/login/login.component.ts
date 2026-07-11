@@ -37,7 +37,12 @@ export class LoginComponent {
   login(): void {
     this.submitted = true;
     this.cdr.markForCheck();
-    if (this.loginForm.invalid) return;
+    if (this.loginForm.invalid) {
+      // Con el teclado móvil abierto el error puede quedar fuera del viewport:
+      // enfocar el primer campo inválido lo trae a la vista en cualquier dispositivo
+      setTimeout(() => document.querySelector<HTMLInputElement>('.input-wrapper.input-error input')?.focus());
+      return;
+    }
 
     // TODO: Replace with real auth service and store actual JWT token
     const { email } = this.loginForm.value;

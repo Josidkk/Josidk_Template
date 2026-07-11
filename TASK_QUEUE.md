@@ -28,6 +28,7 @@ Convention:
 - [x] **T-010** Contraste WCAG AA del tema claro: tokens `--text-secondary`/`--text-muted` (styles.scss + 7 paletas del configurador), links y hover del CTA en login/register vía `color-mix()`. Verificado con cálculo WCAG (todos ≥5:1). *(D-011)*
 - [ ] **T-009** Robustez del login/register: estado loading/disabled en submit, `aria-invalid`/`aria-describedby`/`role="alert"` en errores, ruta demo para «¿olvidaste tu contraseña?» (hoy `href="#"`), toggle de ver contraseña, `prefers-reduced-motion` global. *(D-011; snapshot en `.impeccable/critique/`. El recorte por `min-height: 800px` quedó resuelto por el full-bleed de T-011.)*
 - [x] **T-011** Login/Register full-bleed: quitar el marco de tarjeta del split (se recortaba en viewports bajos), panel de formulario con `clamp()` + scroll interno; móvil scrollea el wrapper. *(D-012)*
+- [x] **T-012** Responsive móvil real del auth: `100dvh`, inputs 16px (anti auto-zoom iOS), targets táctiles ≥44px, `safe-area-inset` + `viewport-fit=cover`, hero con `clamp(dvh)`, media query landscape, `hover: none`, focus al primer campo inválido en submit. *(D-013)*
 
 ---
 

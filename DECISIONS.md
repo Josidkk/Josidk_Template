@@ -199,3 +199,22 @@ Para casi todos los módulos `id === path`, así que funciona. **Excepto `materi
 - Validado visualmente por el owner ("está perfecto").
 
 **Consequence:** El scroll en pantallas bajas es interno del panel del formulario (importante en register, que es más largo); en móvil ahora scrollea el wrapper (`height: 100vh; overflow-y: auto`), lo que además arregla el recorte con teclado abierto. Para volver al marco de tarjeta: restaurar en `.login-split-layout` los valores documentados arriba y el padding de 20px del wrapper.
+
+---
+
+## D-013: Convenciones responsive móvil (establecidas en el auth, aplicables a toda la plantilla)
+
+**Date:** 2026-07-11
+
+**Decision:** El auth (login/register) fija las convenciones móviles de la plantilla:
+1. **Alturas de viewport con `100dvh` + fallback `100vh`** (dos declaraciones consecutivas): `100vh` en móvil incluye la barra del navegador y recorta/descentra.
+2. **Inputs a `font-size: 16px` mínimo en móvil**: por debajo, iOS Safari hace auto-zoom al enfocar.
+3. **Targets táctiles ≥44px**: padding vertical en links inline (agranda el área de toque sin mover layout), toggles a 44px.
+4. **Safe areas**: `viewport-fit=cover` en `index.html` + `env(safe-area-inset-*)` con `max()` para notch/home indicator.
+5. **`@media (hover: none)`** para neutralizar efectos hover que quedan pegados tras el tap.
+6. **Landscape corto** (`max-width: 900px and max-height: 500px`): los elementos decorativos ceden el alto al contenido funcional.
+7. **Submit inválido → `focus()` al primer campo con error** (login/register `.component.ts`): con el teclado abierto el mensaje puede quedar fuera del viewport.
+
+**Rationale:** Salidas del critique del login (persona móvil) y de la pasada `adapt` (2026-07-11). Son los fallos móviles más comunes de plantillas admin y todos son baratos de calcar en páginas nuevas.
+
+**Consequence:** Al crear páginas nuevas o tocar las demo existentes, seguir estas convenciones (especialmente 1, 2 y 3 en cualquier formulario). El resto de páginas demo aún no las aplican sistemáticamente — auditoría pendiente si se quiere uniformidad total.
