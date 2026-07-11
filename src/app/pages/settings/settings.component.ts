@@ -115,7 +115,7 @@ export class SettingsComponent {
         '--navbar-bg': '#FDFAF5',
         '--navbar-border': 'rgba(0,0,0,0.07)',
         '--text-primary': '#1A1208',
-        '--text-secondary': 'rgba(0, 0, 0, 0.42)',
+        '--text-secondary': '#5C5348',
       },
       darkVariables: {
         '--primary': '#D4A853',
@@ -157,7 +157,7 @@ export class SettingsComponent {
         '--navbar-bg': '#FFFFFF',
         '--navbar-border': 'rgba(0,0,0,0.07)',
         '--text-primary': '#1A2332',
-        '--text-secondary': 'rgba(26, 35, 50, 0.45)',
+        '--text-secondary': 'rgba(26, 35, 50, 0.70)',
       },
       darkVariables: {
         '--primary': '#7BA7D4',
@@ -199,7 +199,7 @@ export class SettingsComponent {
         '--navbar-bg': '#FCFEFB',
         '--navbar-border': 'rgba(0,0,0,0.07)',
         '--text-primary': '#1E2E14',
-        '--text-secondary': 'rgba(30, 46, 20, 0.45)',
+        '--text-secondary': 'rgba(30, 46, 20, 0.70)',
       },
       darkVariables: {
         '--primary': '#8FAA7B',
@@ -241,7 +241,7 @@ export class SettingsComponent {
         '--navbar-bg': '#FEFCFF',
         '--navbar-border': 'rgba(0,0,0,0.07)',
         '--text-primary': '#1E1433',
-        '--text-secondary': 'rgba(30, 20, 51, 0.45)',
+        '--text-secondary': 'rgba(30, 20, 51, 0.70)',
       },
       darkVariables: {
         '--primary': '#C9A2E8',
@@ -283,7 +283,7 @@ export class SettingsComponent {
         '--navbar-bg': '#FFFCFA',
         '--navbar-border': 'rgba(0,0,0,0.07)',
         '--text-primary': '#2C1610',
-        '--text-secondary': 'rgba(44, 22, 16, 0.45)',
+        '--text-secondary': 'rgba(44, 22, 16, 0.70)',
       },
       darkVariables: {
         '--primary': '#E8997A',
@@ -325,7 +325,7 @@ export class SettingsComponent {
         '--navbar-bg': '#FFFFFF',
         '--navbar-border': 'rgba(0,0,0,0.07)',
         '--text-primary': '#1A1A1A',
-        '--text-secondary': 'rgba(0, 0, 0, 0.40)',
+        '--text-secondary': 'rgba(0, 0, 0, 0.65)',
       },
       darkVariables: {
         '--primary': '#CCCCCC',
@@ -369,7 +369,7 @@ export class SettingsComponent {
         '--navbar-bg': '#FDFAF5',
         '--navbar-border': 'rgba(0,0,0,0.07)',
         '--text-primary': '#1A1208',
-        '--text-secondary': 'rgba(0, 0, 0, 0.42)',
+        '--text-secondary': '#5C5348',
       },
       darkVariables: {
         '--primary': '#D4A853',

@@ -6,8 +6,8 @@ Updated when state shifts, not on every commit.
 
 ## Status
 
-**Phase:** v1.0.0 funcional — plantilla usable como base visual; saldo de defectos del configurador
-**Last update:** 2026-07-04
+**Phase:** v1.0.0 funcional — plantilla usable como base visual; saldo de defectos del configurador y pulido de accesibilidad en curso
+**Last update:** 2026-07-11
 **Owner:** Grupo Platino (develop@grupoplatino.hn)
 
 ## What's live
@@ -23,6 +23,7 @@ Updated when state shifts, not on every commit.
 
 - Metadata para agentes recién añadida (AGENTS/CLAUDE/OBJECTIVES/DECISIONS/PROJECT_STATE/TASK_QUEUE/TOOLING) — generada leyendo el código real el 2026-07-04. README y DOCUMENTACION.md permanecen intactos (propiedad del autor).
 - Tres defectos del configurador destapados y documentados (ver DECISIONS D-006, D-007, D-008) — pendientes de corrección.
+- Pulido de diseño/accesibilidad iniciado (2026-07-11): critique del login (24/40, snapshot en `.impeccable/critique/`), contraste WCAG AA del tema claro corregido (D-011, T-010), auth full-bleed sin marco de tarjeta (D-012, T-011). Contexto de diseño en `PRODUCT.md`. Pendiente: T-009 (loading/ARIA/reduced-motion del auth).
 
 ## Blockers
 

@@ -64,8 +64,8 @@
   --danger: #A83828;
   --danger-light: rgba(196, 80, 57, 0.10);
   --text-primary: #1A1208;
-  --text-secondary: rgba(0, 0, 0, 0.42);
-  --text-muted: rgba(0, 0, 0, 0.28);
+  --text-secondary: #5C5348; /* WCAG AA ~6.7:1 sobre --main-bg; no aclarar por debajo de 4.5:1 */
+  --text-muted: #6E6659; /* WCAG AA ~5.0:1 sobre --main-bg (placeholders incluidos) */
 
   /* Bordes redondeados */
   --radius-sm: 6px;

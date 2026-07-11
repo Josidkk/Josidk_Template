@@ -168,3 +168,34 @@ Para casi todos los módulos `id === path`, así que funciona. **Excepto `materi
 - Es inofensivo (borrar una clave inexistente del `Map` no hace nada), pero delata código heredado de un pipeline anterior y confunde sobre qué scripts existen.
 
 **Consequence:** Retirar la referencia muerta al limpiar el configurador. Registrado como **T-006** (baja prioridad).
+
+---
+
+## D-011: **DEFECTO corregido** — contraste WCAG AA roto en los tokens de texto del tema claro
+
+**Date:** 2026-07-11
+
+**Decision:** Los tokens de texto del tema claro violaban WCAG AA y se corrigieron cambiando **alfa por hue** (gris cálido opaco, manteniendo la personalidad de la marca): `--text-secondary` `rgba(0,0,0,0.42)` (≈3.0:1) → `#5C5348` (≈6.7:1) y `--text-muted` `rgba(0,0,0,0.28)` (≈2.0:1, placeholders) → `#6E6659` (≈5.1:1) en `styles.scss`. Las 7 paletas claras del configurador (`settings.component.ts`) también definían `--text-secondary` a alfa 0.40–0.45 y se subieron a 0.65–0.70 (≈5.4–7.0:1) para que el fix sobreviva al cambio de paleta y al ZIP. En login/register, los links pequeños (`#9A8560` ≈3.4:1) y el hover del CTA (blanco sobre `#9A8560` ≈3.6:1) se corrigieron con `color-mix()` sobre variables existentes (`58% accent-warm-dark + text-primary` ≈6.9:1; `85% primary + white` ≈12:1), sin tokens nuevos, para que se auto-adapten a cualquier paleta.
+
+**Rationale:**
+- Detectado en el critique de diseño del login (2026-07-11, snapshot en `.impeccable/critique/`); ratios verificados con cálculo WCAG programático antes y después.
+- Se descartó añadir un token `--accent-warm-darker` porque las paletas del configurador y `custom-color-dialog` no lo tematizarían; `color-mix()` en el punto de uso respeta el sistema existente.
+- El tema oscuro ya cumplía AA y no se tocó.
+
+**Consequence:** No aclarar estos tokens por debajo de 4.5:1 (hay comentarios en `styles.scss` marcándolo). Pendientes del mismo critique (P1/P2): loading/ARIA del login, link muerto de "¿olvidaste tu contraseña?", toggle de contraseña, `prefers-reduced-motion` global — registrados como **T-009**.
+
+---
+
+## D-012: Login/Register a pantalla completa (full-bleed split), sin marco de tarjeta
+
+**Date:** 2026-07-11
+
+**Decision:** Las pantallas de auth dejan de ser una tarjeta flotante que contiene un split-screen y pasan a ser el split **a pantalla completa**: `.login-split-layout` ocupa `100vh` sin `max-width`/`border-radius`/sombras, el panel del formulario usa `flex-basis: clamp(420px, 34vw, 560px)` con `overflow-y: auto`, y `.login-card` se centra con `margin: auto 0` (centrado idéntico al de `align-items: center` pero que no recorta el tope cuando el contenido desborda). Aplicado por igual en `login.component.scss` y `register.component.scss`.
+
+**Rationale:**
+- El marco anterior (`max-width: 1200px; min-height: 800px; border-radius: 24px`) se recortaba en viewports de menos de ~840px de alto porque el `body` global lleva `overflow: hidden` — la tarjeta simplemente se cortaba sin scroll (reportado por el owner con screenshot, 2026-07-11).
+- El media query móvil ya iba full-bleed; desktop y móvil usaban dos lenguajes distintos. Unificar simplificó el propio media query (la mitad de sus resets deshacían el marco).
+- Full-bleed es el patrón de familiaridad del split-screen (registro *product*), y la ilustración/`deco-title` ganan presencia.
+- Validado visualmente por el owner ("está perfecto").
+
+**Consequence:** El scroll en pantallas bajas es interno del panel del formulario (importante en register, que es más largo); en móvil ahora scrollea el wrapper (`height: 100vh; overflow-y: auto`), lo que además arregla el recorte con teclado abierto. Para volver al marco de tarjeta: restaurar en `.login-split-layout` los valores documentados arriba y el padding de 20px del wrapper.

@@ -12,48 +12,38 @@
   justify-content: center;
   position: relative;
   overflow: hidden;
-  padding: 20px;
   background: var(--main-bg);
   transition: background 0.4s ease;
 }
 
 /* ─── Split Layout Container ───────────────────── */
+/* Full-bleed: el split ES la página (sin marco de tarjeta que se recorte en viewports bajos) */
 .login-split-layout {
   display: flex;
   width: 100%;
-  max-width: 1200px;
-  min-height: 800px;
-  border-radius: 24px;
+  height: 100vh;
   overflow: hidden;
-  box-shadow:
-    0 2px 8px rgba(0, 0, 0, 0.04),
-    0 8px 32px rgba(0, 0, 0, 0.06),
-    0 20px 60px rgba(0, 0, 0, 0.04);
-}
-
-body.dark-theme .login-split-layout {
-  box-shadow:
-    0 4px 24px rgba(0, 0, 0, 0.30),
-    0 16px 56px rgba(0, 0, 0, 0.25);
 }
 
 /* =============================================
    LEFT PANEL — Form
    ============================================= */
 .login-left {
-  flex: 0 0 38%;
+  flex: 0 0 clamp(420px, 34vw, 560px);
   display: flex;
-  align-items: center;
   justify-content: center;
   padding: 52px 44px;
   background: var(--content-bg);
   position: relative;
   z-index: 1;
+  overflow-y: auto;
 }
 
 .login-card {
   width: 100%;
   max-width: 360px;
+  /* margin auto vertical: centra como align-items pero sin recortar el tope al desbordar */
+  margin: auto 0;
 }
 
 /* ─── Brand Logo ───────────────────────────────── */
@@ -229,7 +219,8 @@ body.dark-theme .input-wrapper {
   }
 
   .forgot-password {
-    color: var(--accent-warm-dark);
+    /* accent-warm-dark puro queda ~3.4:1 en texto pequeño; se oscurece hacia text-primary para AA */
+    color: color-mix(in srgb, var(--accent-warm-dark) 58%, var(--text-primary));
     text-decoration: none;
     font-weight: 600;
     transition: opacity 0.2s ease;
@@ -268,7 +259,8 @@ body.dark-theme .form-actions {
   overflow: hidden;
 
   &:hover {
-    background: var(--accent-warm-dark);
+    /* aclarar --primary (no saltar a accent) mantiene el texto blanco ≥4.5:1 en hover */
+    background: color-mix(in srgb, var(--primary) 85%, white);
     transform: translateY(-2px);
     box-shadow: 0 6px 24px color-mix(in srgb, var(--primary) 25%, transparent);
   }
@@ -329,7 +321,7 @@ body.dark-theme .input-error {
   text-align: center;
 
   a {
-    color: var(--accent-warm-dark);
+    color: color-mix(in srgb, var(--accent-warm-dark) 58%, var(--text-primary));
     text-decoration: none;
     font-weight: 600;
     transition: opacity 0.2s ease;
@@ -524,18 +516,15 @@ body.dark-theme .deco-subtitle-bottom .deco-subtitle {
    ============================================= */
 @media (max-width: 900px) {
   .login-wrapper {
-    padding: 0;
     align-items: flex-start;
+    height: 100vh;
+    overflow-y: auto;
   }
 
   .login-split-layout {
-    margin: 0;
-    width: 100%;
-    max-width: 100%;
+    height: auto;
     min-height: 100vh;
     flex-direction: column-reverse;
-    border-radius: 0;
-    box-shadow: none;
   }
 
   /* ── Right panel becomes mobile hero ── */
@@ -635,6 +624,7 @@ body.dark-theme .deco-subtitle-bottom .deco-subtitle {
 
   .login-card {
     max-width: 100%;
+    margin: 0;
   }
 
   .brand-logo {
